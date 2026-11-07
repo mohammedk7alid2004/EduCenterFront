@@ -2,4 +2,115 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base { * { @apply border-border; } html { @apply bg-background text-foreground; } body { @apply min-h-screen bg-background font-sans antialiased; } button, input, select, textarea { font: inherit; } }
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    @apply bg-background text-foreground;
+  }
+  body {
+    @apply min-h-screen bg-background font-sans antialiased;
+  }
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+}
+
+@keyframes floatSlow {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes pulseGlow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 8px rgba(244, 177, 59, 0.4),
+      0 0 16px rgba(244, 177, 59, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow:
+      0 0 18px rgba(244, 177, 59, 0.9),
+      0 0 30px rgba(244, 177, 59, 0.5);
+    transform: scale(1.2);
+  }
+}
+
+@keyframes cardEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(28px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes heroEntrance {
+  0% {
+    opacity: 0;
+    transform: translateX(-32px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes checkmarkPop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes progressSweep {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.animate-float-slow {
+  animation: floatSlow 5s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+.animate-card-entrance {
+  animation: cardEntrance 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-hero-entrance {
+  animation: heroEntrance 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-checkmark-pop {
+  animation: checkmarkPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.animate-progress-sweep {
+  animation: progressSweep 1.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}

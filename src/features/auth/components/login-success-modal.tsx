@@ -14,25 +14,25 @@ export function LoginSuccessModal({ open }: LoginSuccessModalProps): JSX.Element
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm bg-black/50 animate-in fade-in duration-300"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md bg-black/60 transition-all duration-300"
     >
-      <div className="w-full max-w-sm rounded-3xl border border-border bg-card p-8 text-center shadow-2xl animate-in zoom-in-95 duration-300">
-        {/* Success Icon */}
-        <div className="mx-auto mb-5 flex size-16 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700">
+      <div className="w-full max-w-sm rounded-[32px] border border-white/20 bg-white p-8 text-center shadow-2xl animate-card-entrance">
+        {/* Animated Checkmark Circle */}
+        <div className="mx-auto mb-5 flex size-16 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700 shadow-lg shadow-emerald-500/20 animate-checkmark-pop">
           <Icon name="check" className="size-8 stroke-[3]" />
         </div>
 
         {/* Heading */}
-        <h3 className="mb-2 text-xl font-bold tracking-tight text-foreground">
+        <h3 className="mb-2 text-xl font-bold tracking-tight text-[#1E293B]">
           {t('auth.login.successTitle')}
         </h3>
 
         {/* Subtitle */}
-        <p className="text-sm text-muted">{t('auth.login.successMessage')}</p>
+        <p className="text-sm text-[#64748B]">{t('auth.login.successMessage')}</p>
 
-        {/* Loading redirect bar */}
-        <div className="mt-6 flex items-center justify-center gap-2 text-xs text-muted">
-          <Icon name="loader" className="size-3.5 animate-spin text-primary" />
+        {/* Loading redirect indicator */}
+        <div className="mt-6 flex items-center justify-center gap-2 text-xs font-medium text-[#0F3D3A]">
+          <Icon name="loader" className="size-3.5 animate-spin" />
           <span>{t('auth.login.redirecting')}</span>
         </div>
       </div>

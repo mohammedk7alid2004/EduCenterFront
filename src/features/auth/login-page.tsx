@@ -61,21 +61,21 @@ export function LoginPage(): JSX.Element {
           backgroundRepeat: 'no-repeat',
         }}
       >
-        {/* Top-Left Logo: only golden dot on A, matching Figma exactly */}
-        <header className="absolute top-8 start-8 z-20 sm:top-12 sm:start-14 lg:top-14 lg:start-20">
+        {/* Top-Left Logo with smooth fade-in */}
+        <header className="absolute top-8 start-8 z-20 sm:top-12 sm:start-14 lg:top-14 lg:start-20 transition-opacity duration-700">
           <AuthLogo variant="light" size="md" showLeadingDot={false} />
         </header>
 
         {/* Content container */}
         <div className="relative z-10 flex min-h-screen w-full max-w-[1400px] items-center justify-between px-6 py-24 sm:px-12 lg:px-20 xl:px-24">
           <div className="flex w-full flex-col items-center justify-between gap-12 lg:flex-row lg:items-center">
-            {/* Left Hero Section */}
-            <div className="w-full lg:w-1/2">
+            {/* Left Hero Section with smooth entrance */}
+            <div className="w-full lg:w-1/2 animate-hero-entrance">
               <LoginHero />
             </div>
 
-            {/* Right Login Card */}
-            <div className="flex w-full justify-center lg:w-1/2 lg:justify-end">
+            {/* Right Login Card with spring entrance */}
+            <div className="flex w-full justify-center lg:w-1/2 lg:justify-end animate-card-entrance">
               <LoginForm
                 onSubmit={handleLoginSubmit}
                 isLoading={loginMutation.isPending || showSuccess}
