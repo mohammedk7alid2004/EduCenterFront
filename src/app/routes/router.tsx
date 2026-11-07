@@ -18,17 +18,22 @@ export const router = createBrowserRouter([
     errorElement: <RouteErrorBoundary />,
   },
   {
+    path: '/Login',
+    element: <Navigate replace to={ROUTES.login} />,
+  },
+  {
+    path: ROUTES.home,
+    element: <Navigate replace to={ROUTES.login} />,
+  },
+  {
     element: (
       <ProtectedRoute>
         <AppLayout />
       </ProtectedRoute>
     ),
     errorElement: <RouteErrorBoundary />,
-    children: [
-      { path: ROUTES.dashboard, element: <DashboardPage /> },
-      { path: ROUTES.home, element: <Navigate replace to={ROUTES.dashboard} /> },
-    ],
+    children: [{ path: ROUTES.dashboard, element: <DashboardPage /> }],
   },
   { path: ROUTES.forbidden, element: <SimplePage translationKey="pages.forbidden.title" /> },
-  { path: '*', element: <SimplePage translationKey="pages.notFound.title" /> },
+  { path: '*', element: <Navigate replace to={ROUTES.login} /> },
 ]);
