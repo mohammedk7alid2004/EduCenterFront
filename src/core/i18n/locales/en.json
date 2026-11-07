@@ -1,1 +1,82 @@
-{"app":{"name":"EduCenter"},"common":{"loading":"Loading…","retry":"Try again","empty":"Nothing to show","confirm":"Confirm","cancel":"Cancel","delete":"Delete","logout":"Log out"},"errors":{"network":"You appear to be offline. Please try again.","timeout":"The request timed out. Please try again.","bad_request":"The request could not be completed.","unauthorized":"Your session has expired.","forbidden":"You do not have permission to view this page.","not_found":"The requested item was not found.","conflict":"This change conflicts with an existing record.","validation":"Please correct the highlighted fields.","server":"A server error occurred. Please try again.","unknown":"Something went wrong."},"pages":{"dashboard":{"title":"Dashboard","intro":"Your EduCenter foundation is ready."},"login":{"title":"Welcome back"},"forbidden":{"title":"Access denied"},"notFound":{"title":"Page not found"}},"nav":{"dashboard":"Dashboard"}}
+{
+  "app": {
+    "name": "EduCenter"
+  },
+  "common": {
+    "loading": "Loading…",
+    "retry": "Try again",
+    "empty": "Nothing to show",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "logout": "Log out"
+  },
+  "errors": {
+    "network": "You appear to be offline. Please try again.",
+    "timeout": "The request timed out. Please try again.",
+    "bad_request": "The request could not be completed.",
+    "unauthorized": "Your session has expired.",
+    "forbidden": "You do not have permission to view this page.",
+    "not_found": "The requested item was not found.",
+    "conflict": "This change conflicts with an existing record.",
+    "validation": "Please correct the highlighted fields.",
+    "server": "A server error occurred. Please try again.",
+    "unknown": "Something went wrong."
+  },
+  "pages": {
+    "dashboard": {
+      "title": "Dashboard",
+      "intro": "Your EduCenter foundation is ready."
+    },
+    "login": {
+      "title": "Welcome back"
+    },
+    "forbidden": {
+      "title": "Access denied"
+    },
+    "notFound": {
+      "title": "Page not found"
+    }
+  },
+  "nav": {
+    "dashboard": "Dashboard"
+  },
+  "auth": {
+    "splash": {
+      "tagline": "Educational Management Platform",
+      "skip": "Click anywhere to skip"
+    },
+    "hero": {
+      "badge": "Smart Education Platform",
+      "titlePart1": "Manage Your Center",
+      "titlePart2": "Empower Every Student",
+      "subtitle": "All Your Educational Center Operations In One Place.",
+      "tagline": "Smart Management. Seamless Learning. Better Results."
+    },
+    "login": {
+      "welcome": "Welcome Back",
+      "subtitle": "Welcome Back! If Today Is Your First Step Toward Success, We'll Make Your Journey Toward Excellence Easier",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Mahmoud_Alaa@Gmail.Com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "••••••••••••••••",
+      "rememberMe": "Remember Me",
+      "forgotPassword": "Forget Password?",
+      "submit": "Submit Access Login",
+      "submitting": "Signing in...",
+      "successTitle": "Login Completed",
+      "successMessage": "Login Completed Successfully.",
+      "redirecting": "Redirecting to your dashboard..."
+    },
+    "validation": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email address",
+      "passwordRequired": "Password is required"
+    },
+    "forgotPasswordModal": {
+      "title": "Reset Your Password",
+      "description": "Please contact your center administrator or enter your registered email to receive reset instructions.",
+      "close": "Close"
+    }
+  }
+}
