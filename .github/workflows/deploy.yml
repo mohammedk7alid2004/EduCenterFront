@@ -1,0 +1,54 @@
+name: Build and Deploy to MonsterASP
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-monsterasp
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Project
+        run: npm run build
+
+      - name: Deploy to MonsterASP via WebDeploy
+        shell: powershell
+        env:
+          DEPLOY_USER: ${{ secrets.WEBDEPLOY_USERNAME || 'site105749' }}
+          DEPLOY_PASS: ${{ secrets.WEBDEPLOY_PASSWORD || '4d+E@6Apt?2Y' }}
+          DEPLOY_SITE: 'site105749'
+          DEPLOY_URL: 'https://site105749.siteasp.net:8172/msdeploy.axd?site=site105749'
+        run: |
+          $msdeploy = "C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe"
+          if (-not (Test-Path $msdeploy)) {
+              $msdeploy = "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe"
+          }
+
+          Write-Host "Deploying to MonsterASP ($env:DEPLOY_SITE)..." -ForegroundColor Cyan
+
+          & $msdeploy `
+            -verb:sync `
+            -source:contentPath="${{ github.workspace }}\dist" `
+            -dest:contentPath="$env:DEPLOY_SITE",computerName="$env:DEPLOY_URL",userName="$env:DEPLOY_USER",password="$env:DEPLOY_PASS",authType="Basic" `
+            -allowUntrusted
+
+          Write-Host "Deployment finished successfully to http://adminaducenter.runasp.net/!" -ForegroundColor Green
