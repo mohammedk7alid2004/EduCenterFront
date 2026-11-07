@@ -1,6 +1,21 @@
 # Build and publish script for MonsterASP / RunASP
 $ErrorActionPreference = "Stop"
 
+$user = $env:WEBDEPLOY_USERNAME
+$pass = $env:WEBDEPLOY_PASSWORD
+
+if (-not $user -or -not $pass) {
+    Write-Host "Please enter WebDeploy credentials (or set `$env:WEBDEPLOY_USERNAME and `$env:WEBDEPLOY_PASSWORD):" -ForegroundColor Yellow
+    if (-not $user) {
+        $user = Read-Host "Username"
+    }
+    if (-not $pass) {
+        $pass = Read-Host "Password" -AsSecureString
+        $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($pass)
+        $pass = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
+    }
+}
+
 Write-Host "1. Building project..." -ForegroundColor Cyan
 npm run build
 
@@ -19,7 +34,7 @@ Write-Host "2. Publishing via Web Deploy to http://adminaducenter.runasp.net/...
 & $msdeployPath `
     -verb:sync `
     -source:contentPath="$PSScriptRoot\dist" `
-    -dest:contentPath="site105749",computerName="https://site105749.siteasp.net:8172/msdeploy.axd?site=site105749",userName="site105749",password="4d+E@6Apt?2Y",authType="Basic" `
+    -dest:contentPath="site105749",computerName="https://site105749.siteasp.net:8172/msdeploy.axd?site=site105749",userName="$user",password="$pass",authType="Basic" `
     -allowUntrusted
 
 Write-Host "`nSuccessfully published to http://adminaducenter.runasp.net/!" -ForegroundColor Green

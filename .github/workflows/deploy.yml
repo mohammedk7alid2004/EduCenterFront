@@ -33,11 +33,16 @@ jobs:
       - name: Deploy to MonsterASP via WebDeploy
         shell: powershell
         env:
-          DEPLOY_USER: ${{ secrets.WEBDEPLOY_USERNAME || 'site105749' }}
-          DEPLOY_PASS: ${{ secrets.WEBDEPLOY_PASSWORD || '4d+E@6Apt?2Y' }}
+          DEPLOY_USER: ${{ secrets.WEBDEPLOY_USERNAME }}
+          DEPLOY_PASS: ${{ secrets.WEBDEPLOY_PASSWORD }}
           DEPLOY_SITE: 'site105749'
           DEPLOY_URL: 'https://site105749.siteasp.net:8172/msdeploy.axd?site=site105749'
         run: |
+          if (-not $env:DEPLOY_USER -or -not $env:DEPLOY_PASS) {
+              Write-Error "WEBDEPLOY_USERNAME and WEBDEPLOY_PASSWORD secrets must be configured in GitHub repository settings."
+              exit 1
+          }
+
           $msdeploy = "C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe"
           if (-not (Test-Path $msdeploy)) {
               $msdeploy = "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe"
