@@ -1,0 +1,1 @@
+import { RouterProvider } from 'react-router-dom'; import { AppProviders } from '@/core/providers/app-providers'; import { router } from './routes/router'; export function App(): JSX.Element { return <AppProviders><RouterProvider router={router} /></AppProviders>; }

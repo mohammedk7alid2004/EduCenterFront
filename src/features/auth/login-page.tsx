@@ -1,0 +1,1 @@
+import { useTranslation } from 'react-i18next'; export function LoginPage(): JSX.Element { const { t } = useTranslation(); return <main className="grid min-h-screen place-items-center p-4"><section className="w-full max-w-sm rounded-lg border bg-card p-6"><h1 className="text-xl font-semibold">{t('pages.login.title')}</h1></section></main>; }

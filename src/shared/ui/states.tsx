@@ -1,0 +1,5 @@
+import type { ReactNode } from 'react'; import { useTranslation } from 'react-i18next'; import { Button } from './button'; import { Icon } from './icon';
+function StateFrame({ children }: { children: ReactNode }): JSX.Element { return <div className="grid min-h-40 place-items-center rounded-lg border bg-card p-6 text-center text-muted">{children}</div>; }
+export function LoadingState(): JSX.Element { const { t } = useTranslation(); return <StateFrame><span className="inline-flex items-center gap-2"><Icon name="loader" className="size-5 animate-spin" />{t('common.loading')}</span></StateFrame>; }
+export function EmptyState(): JSX.Element { const { t } = useTranslation(); return <StateFrame>{t('common.empty')}</StateFrame>; }
+export function ErrorState({ onRetry }: { onRetry?: () => void }): JSX.Element { const { t } = useTranslation(); return <StateFrame><div className="space-y-3"><Icon name="alert" className="mx-auto size-7 text-danger" /><p>{t('errors.unknown')}</p>{onRetry && <Button variant="secondary" onClick={onRetry}>{t('common.retry')}</Button>}</div></StateFrame>; }

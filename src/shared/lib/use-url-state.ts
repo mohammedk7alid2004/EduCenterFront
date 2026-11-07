@@ -1,0 +1,1 @@
+import { useSearchParams } from 'react-router-dom'; export function useUrlState<T extends string>(key: string, fallback: T): readonly [T, (value: T) => void] { const [params, setParams] = useSearchParams(); return [((params.get(key) ?? fallback) as T), (value) => setParams((current) => { current.set(key, value); return current; })] as const; }
