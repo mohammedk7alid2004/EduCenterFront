@@ -48,18 +48,18 @@ export function LoginForm({
   });
 
   return (
-    <div className="w-full max-w-[460px] rounded-[32px] bg-white p-8 sm:p-10 shadow-2xl text-start select-none">
-      {/* Centered Logo */}
+    <div className="w-full max-w-[480px] rounded-[38px] border-2 border-[#0F3D3A] bg-white p-8 shadow-2xl sm:p-11 text-start select-none font-sans">
+      {/* Centered Logo with leading & trailing golden dots */}
       <div className="flex justify-center text-center">
-        <AuthLogo variant="dark" size="lg" />
+        <AuthLogo variant="dark" size="lg" showLeadingDot={true} />
       </div>
 
       {/* Heading & Subtitle */}
-      <div className="mt-3 text-center">
-        <h2 className="text-2xl font-bold tracking-tight text-[#1E293B] sm:text-[28px]">
+      <div className="mt-4 text-center">
+        <h2 className="text-2xl font-bold tracking-tight text-[#1E293B] sm:text-[27px]">
           {t('auth.login.welcome')}
         </h2>
-        <p className="mx-auto mt-2 max-w-[320px] text-xs leading-[1.6] text-[#64748B] sm:text-[13px]">
+        <p className="mx-auto mt-2 max-w-[340px] text-[13px] leading-[1.65] text-[#64748B]">
           {t('auth.login.subtitle')}
         </p>
       </div>
@@ -76,14 +76,14 @@ export function LoginForm({
       )}
 
       {/* Form */}
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4" noValidate>
+      <form onSubmit={handleSubmit(onSubmit)} className="mt-7 space-y-5" noValidate>
         {/* Email Field */}
         <div>
-          <label htmlFor="email" className="mb-1.5 block text-xs font-semibold text-[#1E293B]">
+          <label htmlFor="email" className="mb-2 block text-xs font-semibold text-[#1E293B]">
             {t('auth.login.emailLabel')} : <span className="text-[#E0745E]">*</span>
           </label>
           <div className="relative flex items-center">
-            <div className="pointer-events-none absolute start-3.5 flex items-center text-[#64748B]">
+            <div className="pointer-events-none absolute start-4 flex items-center text-[#0F3D3A]">
               <Icon name="mail" className="size-5" />
             </div>
             <input
@@ -92,24 +92,24 @@ export function LoginForm({
               autoComplete="email"
               placeholder={t('auth.login.emailPlaceholder')}
               disabled={isLoading}
-              className={`h-[48px] w-full rounded-xl border bg-white pe-4 ps-11 text-sm text-[#1E293B] placeholder:text-[#94A3B8] transition focus:border-[#0F3D3A] focus:outline-none focus:ring-1 focus:ring-[#0F3D3A] disabled:cursor-not-allowed disabled:opacity-50 ${
-                errors.email ? 'border-danger' : 'border-slate-300'
+              className={`h-[52px] w-full rounded-[14px] border bg-white pe-4 ps-12 text-sm font-normal text-[#1E293B] placeholder:text-[#64748B]/60 transition focus:outline-none focus:ring-2 focus:ring-[#0F3D3A]/20 disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.email ? 'border-danger focus:border-danger' : 'border-[#0F3D3A]'
               }`}
               {...register('email')}
             />
           </div>
           {errors.email?.message && (
-            <p className="mt-1 text-xs text-danger">{errors.email.message}</p>
+            <p className="mt-1.5 text-xs text-danger">{errors.email.message}</p>
           )}
         </div>
 
         {/* Password Field */}
         <div>
-          <label htmlFor="password" className="mb-1.5 block text-xs font-semibold text-[#1E293B]">
+          <label htmlFor="password" className="mb-2 block text-xs font-semibold text-[#1E293B]">
             {t('auth.login.passwordLabel')} : <span className="text-[#E0745E]">*</span>
           </label>
           <div className="relative flex items-center">
-            <div className="pointer-events-none absolute start-3.5 flex items-center text-[#64748B]">
+            <div className="pointer-events-none absolute start-4 flex items-center text-[#94A3B8]">
               <Icon name="lock" className="size-5" />
             </div>
             <input
@@ -118,31 +118,33 @@ export function LoginForm({
               autoComplete="current-password"
               placeholder={t('auth.login.passwordPlaceholder')}
               disabled={isLoading}
-              className={`h-[48px] w-full rounded-xl border bg-white pe-11 ps-11 text-sm text-[#1E293B] placeholder:text-[#94A3B8] transition focus:border-[#0F3D3A] focus:outline-none focus:ring-1 focus:ring-[#0F3D3A] disabled:cursor-not-allowed disabled:opacity-50 ${
-                errors.password ? 'border-danger' : 'border-slate-300'
+              className={`h-[52px] w-full rounded-[14px] border bg-white pe-12 ps-12 text-sm font-normal text-[#1E293B] placeholder:text-[#64748B]/60 transition focus:outline-none focus:ring-2 focus:ring-[#0F3D3A]/20 disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.password
+                  ? 'border-danger focus:border-danger'
+                  : 'border-slate-300 focus:border-[#0F3D3A]'
               }`}
               {...register('password')}
             />
             <button
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
-              className="absolute end-3.5 flex items-center text-[#64748B] transition hover:text-[#1E293B]"
+              className="absolute end-4 flex items-center text-[#94A3B8] transition hover:text-[#1E293B]"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               <Icon name={showPassword ? 'eyeOff' : 'eye'} className="size-5" />
             </button>
           </div>
           {errors.password?.message && (
-            <p className="mt-1 text-xs text-danger">{errors.password.message}</p>
+            <p className="mt-1.5 text-xs text-danger">{errors.password.message}</p>
           )}
         </div>
 
         {/* Remember Me & Forget Password */}
-        <div className="flex items-center justify-between pt-0.5 text-xs">
+        <div className="flex items-center justify-between pt-1 text-[13px]">
           <label className="flex cursor-pointer items-center gap-2 select-none">
             <input
               type="checkbox"
-              className="size-4 rounded border-slate-300 text-[#0F3D3A] accent-[#0F3D3A] focus:ring-[#0F3D3A]"
+              className="size-4 rounded border-slate-300 text-[#0F3D3A] accent-[#0F3D3A] focus:ring-[#0F3D3A]/20"
               disabled={isLoading}
               {...register('rememberMe')}
             />
@@ -163,10 +165,10 @@ export function LoginForm({
           <Button
             type="submit"
             loading={isLoading}
-            className="h-[48px] w-full rounded-xl bg-[#0F3D3A] text-sm font-semibold text-white transition hover:bg-[#0F3D3A]/90 hover:opacity-100"
+            className="h-[52px] w-full rounded-[14px] bg-[#0F3D3A] text-sm font-semibold text-white shadow-lg shadow-[#0F3D3A]/20 transition hover:bg-[#0F3D3A]/90 hover:opacity-100"
           >
             <span>{isLoading ? t('auth.login.submitting') : t('auth.login.submit')}</span>
-            {!isLoading && <Icon name="checkCircle" className="ms-2 size-4" />}
+            {!isLoading && <Icon name="checkCircle" className="ms-2 size-5" />}
           </Button>
         </div>
       </form>

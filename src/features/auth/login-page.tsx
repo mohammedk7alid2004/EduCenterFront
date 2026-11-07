@@ -52,7 +52,7 @@ export function LoginPage(): JSX.Element {
       {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
 
       <main
-        className="relative flex min-h-screen w-full items-center justify-center overflow-x-hidden bg-black text-white"
+        className="relative flex min-h-screen w-full items-center justify-center overflow-x-hidden bg-black text-white font-sans"
         style={{
           background:
             "linear-gradient(270deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.77) 100%), url('/images/auth-bg.jpg')",
@@ -61,13 +61,13 @@ export function LoginPage(): JSX.Element {
           backgroundRepeat: 'no-repeat',
         }}
       >
-        {/* Top-Left Logo matching Figma header */}
-        <header className="absolute top-8 start-8 z-20 sm:top-12 sm:start-12 lg:top-14 lg:start-20">
-          <AuthLogo variant="light" size="md" />
+        {/* Top-Left Logo: only golden dot on A, matching Figma exactly */}
+        <header className="absolute top-8 start-8 z-20 sm:top-12 sm:start-14 lg:top-14 lg:start-20">
+          <AuthLogo variant="light" size="md" showLeadingDot={false} />
         </header>
 
         {/* Content container */}
-        <div className="relative z-10 flex min-h-screen w-full max-w-[1380px] items-center justify-between px-6 py-24 sm:px-12 lg:px-20">
+        <div className="relative z-10 flex min-h-screen w-full max-w-[1400px] items-center justify-between px-6 py-24 sm:px-12 lg:px-20 xl:px-24">
           <div className="flex w-full flex-col items-center justify-between gap-12 lg:flex-row lg:items-center">
             {/* Left Hero Section */}
             <div className="w-full lg:w-1/2">
