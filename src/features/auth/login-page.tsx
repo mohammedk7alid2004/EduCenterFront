@@ -7,7 +7,6 @@ import { AuthLogo } from './components/auth-logo';
 import { LoginHero } from './components/login-hero';
 import { LoginForm } from './components/login-form';
 import { LoginSuccessModal } from './components/login-success-modal';
-import { ForgotPasswordModal } from './components/forgot-password-modal';
 import { SplashScreen } from './components/splash-screen';
 import type { LoginCredentials } from './types';
 
@@ -21,7 +20,6 @@ export function LoginPage(): JSX.Element {
   });
 
   const [showSuccess, setShowSuccess] = useState(false);
-  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   const loginMutation = useLogin();
 
@@ -80,7 +78,7 @@ export function LoginPage(): JSX.Element {
                 onSubmit={handleLoginSubmit}
                 isLoading={loginMutation.isPending || showSuccess}
                 errorMessage={errorMessage}
-                onForgotPasswordClick={() => setShowForgotPassword(true)}
+                onForgotPasswordClick={() => navigate(ROUTES.forgotPassword)}
               />
             </div>
           </div>
@@ -88,12 +86,6 @@ export function LoginPage(): JSX.Element {
 
         {/* Success Modal */}
         <LoginSuccessModal open={showSuccess} />
-
-        {/* Forgot Password Modal */}
-        <ForgotPasswordModal
-          open={showForgotPassword}
-          onClose={() => setShowForgotPassword(false)}
-        />
       </main>
     </>
   );

@@ -1,5 +1,7 @@
 import {
   AlertCircle,
+  ArrowLeft,
+  ArrowRight,
   Check,
   CheckCircle2,
   ChevronLeft,
@@ -16,6 +18,8 @@ import {
 
 export const icons = {
   alert: AlertCircle,
+  arrowLeft: ArrowLeft,
+  arrowRight: ArrowRight,
   check: Check,
   checkCircle: CheckCircle2,
   chevronLeft: ChevronLeft,

@@ -10,6 +10,7 @@ export const STORAGE_KEYS = {
 export const ROUTES = {
   home: '/',
   login: '/login',
+  forgotPassword: '/forgot-password',
   forbidden: '/403',
   notFound: '/404',
   dashboard: '/dashboard',
@@ -20,6 +21,8 @@ export const API_ENDPOINTS = {
     refresh: '/Auth/refresh-token',
     logout: '/Auth/logout',
     forgotPassword: '/Auth/forgot-password',
+    verifyResetOtp: '/Auth/verify-reset-otp',
+    resetPassword: '/Auth/reset-password',
   },
   template: {
     detail: (id: string) => `/template/${id}`,

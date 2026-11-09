@@ -77,6 +77,32 @@
       "title": "Reset Your Password",
       "description": "Please contact your center administrator or enter your registered email to receive reset instructions.",
       "close": "Close"
+    },
+    "recovery": {
+      "title": "Forgot Password?",
+      "emailDescription": "Enter your registered email address and we will send you a verification code.",
+      "emailLabel": "Email",
+      "sendCode": "Send verification code",
+      "sendingCode": "Sending code…",
+      "codeDescription": "Enter the verification code sent to {{email}}.",
+      "codeLabel": "Verification code",
+      "codeDigit": "Verification code digit {{number}}",
+      "resendHint": "Didn't receive a code? You can request another one shortly.",
+      "verifyCode": "Verify code",
+      "verifyingCode": "Verifying code…",
+      "passwordDescription": "Choose a strong new password for your account.",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm new password",
+      "resetPassword": "Reset password",
+      "resettingPassword": "Resetting password…",
+      "successTitle": "Password reset successfully",
+      "successDescription": "Your password was updated. You can now sign in with your new password.",
+      "backToLogin": "Back to login",
+      "validation": {
+        "code": "Enter the 6-digit verification code",
+        "passwordStrength": "Use 8+ characters with uppercase, lowercase, number, and symbol",
+        "passwordMatch": "Passwords do not match"
+      }
     }
   }
 }

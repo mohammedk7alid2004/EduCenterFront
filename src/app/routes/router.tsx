@@ -1,7 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { ROUTES } from '@/config';
 import { DashboardPage } from '@/features/dashboard';
-import { LoginPage } from '@/features/auth';
+import { LoginPage, PasswordRecoveryPage } from '@/features/auth';
 import { AppLayout } from '../layouts/app-layout';
 import { RouteErrorBoundary } from '../error-boundary';
 import { GuestRoute, ProtectedRoute } from './guards';
@@ -15,6 +15,11 @@ export const router = createBrowserRouter([
         <LoginPage />
       </GuestRoute>
     ),
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: ROUTES.forgotPassword,
+    element: <PasswordRecoveryPage />,
     errorElement: <RouteErrorBoundary />,
   },
   {
