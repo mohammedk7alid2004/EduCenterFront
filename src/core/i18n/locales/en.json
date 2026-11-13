@@ -9,7 +9,13 @@
     "confirm": "Confirm",
     "cancel": "Cancel",
     "delete": "Delete",
-    "logout": "Log out"
+    "logout": "Log out",
+    "edit": "Edit",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "active": "Active",
+    "inactive": "Inactive",
+    "pagination": "Page {{page}} of {{total}}"
   },
   "errors": {
     "network": "You appear to be offline. Please try again.",
@@ -39,7 +45,9 @@
     }
   },
   "nav": {
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "subjects": "Subjects",
+    "teachers": "Teachers"
   },
   "auth": {
     "splash": {
@@ -103,6 +111,63 @@
         "passwordStrength": "Use 8+ characters with uppercase, lowercase, number, and symbol",
         "passwordMatch": "Passwords do not match"
       }
+    }
+  },
+  "subjects": {
+    "title": "Subjects",
+    "create": "Add Subject",
+    "search": "Search subjects…",
+    "table": {
+      "name": "Name",
+      "note": "Note",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "form": {
+      "createTitle": "Create Subject",
+      "editTitle": "Edit Subject",
+      "nameAr": "Name (Arabic)",
+      "nameEn": "Name (English)",
+      "noteAr": "Note (Arabic)",
+      "noteEn": "Note (English)",
+      "create": "Create",
+      "update": "Update"
+    },
+    "delete": {
+      "confirmTitle": "Delete Subject",
+      "confirmDescription": "Are you sure you want to delete this subject? This action cannot be undone."
+    }
+  },
+  "teachers": {
+    "title": "Teachers",
+    "create": "Add Teacher",
+    "search": "Search teachers…",
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "subjects": "Subjects",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "form": {
+      "createTitle": "Create Teacher",
+      "editTitle": "Edit Teacher",
+      "fullName": "Full Name",
+      "email": "Email",
+      "phone": "Phone Number",
+      "password": "Password",
+      "passwordHelp": "Leave blank to keep the current password.",
+      "notes": "Notes",
+      "subjects": "Subjects",
+      "noSubjects": "No subjects available.",
+      "isActive": "Active",
+      "create": "Create",
+      "update": "Update"
+    },
+    "delete": {
+      "confirmTitle": "Delete Teacher",
+      "confirmDescription": "Are you sure you want to delete this teacher? This action cannot be undone."
     }
   }
 }

@@ -1,69 +1,108 @@
 interface AuthLogoProps {
-  variant?: 'light' | 'dark';
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  variant?: 'light' | 'dark' | 'white' | 'primary';
+  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  animated?: boolean;
   showLeadingDot?: boolean;
   className?: string;
 }
 
+const SIZE_MAP = {
+  sm: 'h-7 w-auto',
+  md: 'h-10 w-auto',
+  lg: 'h-14 w-auto',
+  xl: 'h-20 w-auto',
+  '2xl': 'h-28 w-auto',
+} as const;
+
 export function AuthLogo({
   variant = 'dark',
   size = 'md',
+  animated = false,
   showLeadingDot = true,
   className = '',
 }: AuthLogoProps): JSX.Element {
-  const textColor = variant === 'light' ? '#FFFFFF' : '#0F3D3A';
+  const strokeColor = variant === 'light' || variant === 'white' ? '#FFFFFF' : '#0F3D3A';
   const dotColor = '#F4B13B';
-
-  const sizes = {
-    sm: 'text-2xl',
-    md: 'text-3xl',
-    lg: 'text-4xl',
-    xl: 'text-5xl md:text-6xl',
-  };
 
   return (
     <div
-      className={`inline-flex select-none items-center font-black ${sizes[size]} ${className}`}
-      aria-label="3m2A"
+      className={`inline-flex items-center justify-center select-none transition-transform duration-300 hover:scale-[1.02] ${className}`}
+      aria-label="3M2A Logo"
     >
-      <div className="relative inline-flex items-center leading-none">
-        {/* Leading golden dot (only if showLeadingDot is true) */}
-        {showLeadingDot && (
-          <span
-            className="me-2 inline-block rounded-full shrink-0"
-            style={{
-              backgroundColor: dotColor,
-              width: '0.22em',
-              height: '0.22em',
-              marginBottom: '0.04em',
-            }}
-            aria-hidden="true"
+      <svg
+        viewBox="0 0 406 193"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className={`${SIZE_MAP[size]} overflow-visible drop-shadow-sm`}
+      >
+        <g id="3M2A_flat1_wordmark">
+          {/* Letter: 3 */}
+          <path
+            id="letter-3"
+            d="M48.3333 57.9H73.4667C78.5942 57.9 83.5117 59.9334 87.1374 63.5528C90.7631 67.1723 92.8 72.0813 92.8 77.2C92.8 82.3187 90.7631 87.2277 87.1374 90.8472C83.5117 94.4666 78.5942 96.5 73.4667 96.5M73.4667 96.5C78.5942 96.5 83.5117 98.5334 87.1374 102.153C90.7631 105.772 92.8 110.681 92.8 115.8C92.8 120.919 90.7631 125.828 87.1374 129.447C83.5117 133.067 78.5942 135.1 73.4667 135.1H48.3333M73.4667 96.5H63.8"
+            strokeWidth="17"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeMiterlimit="2.4"
+            stroke={strokeColor}
+            className={animated ? 'animate-draw-1' : undefined}
           />
-        )}
 
-        {/* 3m2A wordmark - lowercase m, uppercase A */}
-        <span
-          style={{
-            color: textColor,
-            fontFamily: "'Poppins', sans-serif",
-            fontWeight: 800,
-            letterSpacing: '-0.02em',
-          }}
-        >
-          3m2A
-        </span>
+          {/* Letter: M */}
+          <path
+            id="letter-M"
+            d="M123.733 144.75V76.235C123.733 71.3723 125.668 66.7087 129.113 63.2702C132.557 59.8317 137.229 57.9 142.1 57.9C146.971 57.9 151.643 59.8317 155.087 63.2702C158.532 66.7087 160.467 71.3723 160.467 76.235M160.467 76.235V144.75M160.467 76.235C160.467 71.3723 162.402 66.7087 165.846 63.2702C169.291 59.8317 173.962 57.9 178.833 57.9C183.704 57.9 188.376 59.8317 191.821 63.2702C195.265 66.7087 197.2 71.3723 197.2 76.235V144.75"
+            strokeWidth="17"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeMiterlimit="2.4"
+            stroke={strokeColor}
+            className={animated ? 'animate-draw-2' : undefined}
+          />
 
-        {/* Trailing upper golden dot */}
-        <span
-          className="absolute -top-[0.14em] -end-[0.38em] rounded-full shrink-0"
-          style={{
-            backgroundColor: dotColor,
-            width: '0.24em',
-            height: '0.24em',
-          }}
-          aria-hidden="true"
-        />
-      </div>
+          {/* Letter: 2 */}
+          <path
+            id="letter-2"
+            d="M230.067 77.2C230.067 72.0813 232.104 67.1723 235.729 63.5528C239.355 59.9334 244.272 57.9 249.4 57.9C254.528 57.9 259.445 59.9334 263.071 63.5528C266.696 67.1723 268.733 72.0813 268.733 77.2C268.733 102.29 230.067 108.08 230.067 135.1H272.6"
+            strokeWidth="17"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeMiterlimit="2.4"
+            stroke={strokeColor}
+            className={animated ? 'animate-draw-3' : undefined}
+          />
+
+          {/* Letter: A */}
+          <path
+            id="letter-A"
+            d="M305.467 144.75V108.08M305.467 108.08V77.2C305.467 72.0813 307.504 67.1723 311.129 63.5528C314.755 59.9334 319.672 57.9 324.8 57.9C329.927 57.9 334.845 59.9334 338.471 63.5528C342.096 67.1723 344.133 72.0813 344.133 77.2V108.08M305.467 108.08H344.133M344.133 108.08V144.75"
+            strokeWidth="17"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeMiterlimit="2.4"
+            stroke={strokeColor}
+            className={animated ? 'animate-draw-4' : undefined}
+          />
+
+          {/* Left Golden Dot */}
+          {showLeadingDot && (
+            <path
+              id="dot-left"
+              d="M44.4667 104.22C48.7377 104.22 52.2 100.764 52.2 96.5C52.2 92.2364 48.7377 88.78 44.4667 88.78C40.1957 88.78 36.7333 92.2364 36.7333 96.5C36.7333 100.764 40.1957 104.22 44.4667 104.22Z"
+              fill={dotColor}
+              className={animated ? 'animate-dot-1' : undefined}
+            />
+          )}
+
+          {/* Top-Right Golden Dot */}
+          <path
+            id="dot-right"
+            d="M365.4 55.005C372.34 55.005 377.967 49.3884 377.967 42.46C377.967 35.5316 372.34 29.915 365.4 29.915C358.46 29.915 352.833 35.5316 352.833 42.46C352.833 49.3884 358.46 55.005 365.4 55.005Z"
+            fill={dotColor}
+            className={animated ? 'animate-dot-2' : undefined}
+          />
+        </g>
+      </svg>
     </div>
   );
 }

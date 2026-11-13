@@ -14,6 +14,8 @@ export const ROUTES = {
   forbidden: '/403',
   notFound: '/404',
   dashboard: '/dashboard',
+  subjects: '/subjects',
+  teachers: '/teachers',
 } as const;
 export const API_ENDPOINTS = {
   auth: {
@@ -27,7 +29,25 @@ export const API_ENDPOINTS = {
   template: {
     detail: (id: string) => `/template/${id}`,
   },
+  subjects: {
+    getAll: '/Subjects/GetAll',
+    getById: (id: string) => `/Subjects/ShowOneDetails/${id}`,
+    create: '/Subjects/Create',
+    update: '/Subjects/Update',
+    delete: '/Subjects/Delete',
+    toggleStatus: (id: string) => `/Subjects/ToggleStatus/${id}`,
+  },
+  teachers: {
+    getAll: '/Teachers',
+    getById: (id: string) => `/Teachers/${id}`,
+    create: '/Teachers',
+    update: '/Teachers',
+    delete: '/Teachers',
+    toggleStatus: (id: string) => `/Teachers/toggle-status/${id}`,
+  },
 } as const;
 export const QUERY_KEYS = {
   auth: ['auth'],
+  subjects: ['subjects'],
+  teachers: ['teachers'],
 } as const;

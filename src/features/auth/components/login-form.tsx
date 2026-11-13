@@ -48,7 +48,7 @@ export function LoginForm({
   });
 
   return (
-    <div className="w-full max-w-[480px] rounded-[38px] border-2 border-[#0F3D3A] bg-white p-8 shadow-2xl sm:p-11 text-start select-none font-sans">
+    <div className="w-full max-w-[480px] rounded-[32px] border-2 border-[#0F3D3A] bg-white px-10 py-12 shadow-2xl text-start select-none font-sans">
       {/* Centered Logo with leading & trailing golden dots */}
       <div className="flex justify-center text-center">
         <AuthLogo variant="dark" size="lg" showLeadingDot={true} />
@@ -56,10 +56,10 @@ export function LoginForm({
 
       {/* Heading & Subtitle */}
       <div className="mt-4 text-center">
-        <h2 className="text-2xl font-bold tracking-tight text-[#1E293B] sm:text-[27px]">
+        <h2 className="text-2xl font-bold tracking-tight text-[#333] sm:text-[27px]">
           {t('auth.login.welcome')}
         </h2>
-        <p className="mx-auto mt-2 max-w-[340px] text-[13px] leading-[1.65] text-[#64748B]">
+        <p className="mx-auto mt-2 max-w-[340px] text-[13px] leading-[1.65] text-[#a5a5a5]">
           {t('auth.login.subtitle')}
         </p>
       </div>
@@ -79,7 +79,7 @@ export function LoginForm({
       <form onSubmit={handleSubmit(onSubmit)} className="mt-7 space-y-5" noValidate>
         {/* Email Field */}
         <div>
-          <label htmlFor="email" className="mb-2 block text-xs font-semibold text-[#1E293B]">
+          <label htmlFor="email" className="mb-2 block text-sm font-semibold text-[#1E293B]">
             {t('auth.login.emailLabel')} : <span className="text-[#E0745E]">*</span>
           </label>
           <div className="relative flex items-center">
@@ -92,7 +92,7 @@ export function LoginForm({
               autoComplete="email"
               placeholder={t('auth.login.emailPlaceholder')}
               disabled={isLoading}
-              className={`h-[52px] w-full rounded-[14px] border bg-white pe-4 ps-12 text-sm font-normal text-[#1E293B] placeholder:text-[#64748B]/60 transition focus:outline-none focus:ring-2 focus:ring-[#0F3D3A]/20 disabled:cursor-not-allowed disabled:opacity-50 ${
+              className={`h-[52px] w-full rounded-[12px] border bg-white pe-4 ps-12 text-sm font-normal text-[#1E293B] placeholder:text-[#64748B]/60 transition focus:outline-none focus:ring-2 focus:ring-[#0F3D3A]/20 disabled:cursor-not-allowed disabled:opacity-50 ${
                 errors.email ? 'border-danger focus:border-danger' : 'border-[#0F3D3A]'
               }`}
               {...register('email')}
@@ -105,7 +105,7 @@ export function LoginForm({
 
         {/* Password Field */}
         <div>
-          <label htmlFor="password" className="mb-2 block text-xs font-semibold text-[#1E293B]">
+          <label htmlFor="password" className="mb-2 block text-base font-medium text-[#1E293B]">
             {t('auth.login.passwordLabel')} : <span className="text-[#E0745E]">*</span>
           </label>
           <div className="relative flex items-center">
@@ -118,10 +118,10 @@ export function LoginForm({
               autoComplete="current-password"
               placeholder={t('auth.login.passwordPlaceholder')}
               disabled={isLoading}
-              className={`h-[52px] w-full rounded-[14px] border bg-white pe-12 ps-12 text-sm font-normal text-[#1E293B] placeholder:text-[#64748B]/60 transition focus:outline-none focus:ring-2 focus:ring-[#0F3D3A]/20 disabled:cursor-not-allowed disabled:opacity-50 ${
+              className={`h-[52px] w-full rounded-[12px] border bg-white pe-12 ps-12 text-sm font-normal text-[#1E293B] placeholder:text-[#64748B]/60 transition focus:outline-none focus:ring-2 focus:ring-[#0F3D3A]/20 disabled:cursor-not-allowed disabled:opacity-50 ${
                 errors.password
                   ? 'border-danger focus:border-danger'
-                  : 'border-slate-300 focus:border-[#0F3D3A]'
+                  : 'border-[#a5a5a5] focus:border-[#0F3D3A]'
               }`}
               {...register('password')}
             />
@@ -144,7 +144,7 @@ export function LoginForm({
           <label className="flex cursor-pointer items-center gap-2 select-none">
             <input
               type="checkbox"
-              className="size-4 rounded border-slate-300 text-[#0F3D3A] accent-[#0F3D3A] focus:ring-[#0F3D3A]/20"
+              className="size-4 rounded-[4px] border-[1.5px] border-primary text-primary accent-primary focus:ring-primary/20"
               disabled={isLoading}
               {...register('rememberMe')}
             />
@@ -154,7 +154,7 @@ export function LoginForm({
           <button
             type="button"
             onClick={onForgotPasswordClick}
-            className="font-medium text-[#1E293B] transition hover:text-[#0F3D3A] hover:underline"
+            className="font-medium text-primary transition hover:text-primary/80 hover:underline"
           >
             {t('auth.login.forgotPassword')}
           </button>
@@ -165,7 +165,7 @@ export function LoginForm({
           <Button
             type="submit"
             loading={isLoading}
-            className="h-[52px] w-full rounded-[14px] bg-[#0F3D3A] text-sm font-semibold text-white shadow-lg shadow-[#0F3D3A]/20 transition hover:bg-[#0F3D3A]/90 hover:opacity-100"
+            className="h-[52px] w-full rounded-[12px] bg-[#0F3D3A] text-sm font-semibold text-white shadow-lg shadow-[#0F3D3A]/20 transition hover:bg-[#0F3D3A]/90 hover:opacity-100"
           >
             <span>{isLoading ? t('auth.login.submitting') : t('auth.login.submit')}</span>
             {!isLoading && <Icon name="checkCircle" className="ms-2 size-5" />}
