@@ -15,7 +15,45 @@
     "deactivate": "إيقاف",
     "active": "نشط",
     "inactive": "غير نشط",
-    "pagination": "صفحة {{page}} من {{total}}"
+    "pagination": "صفحة {{page}} من {{total}}",
+    "close": "إغلاق",
+    "back": "رجوع",
+    "search": "بحث",
+    "searchPlaceholder": "بحث ......",
+    "filter": "تصفية",
+    "status": "الحالة",
+    "all": "الكل",
+    "clearFilters": "مسح التصفية",
+    "perPage": "عدد العناصر في الصفحة",
+    "paginationLabel": "ترقيم الصفحات",
+    "previousPage": "الصفحة السابقة",
+    "nextPage": "الصفحة التالية",
+    "selected": "تم تحديد {{count}}",
+    "selectAll": "تحديد كل عناصر الصفحة",
+    "selectRow": "تحديد العنصر {{id}}",
+    "deleteSelected": "حذف المحدد",
+    "deleteSelection": "هل تريد حذف العناصر المحددة وعددها {{count}}؟",
+    "id": "المعرف",
+    "actions": "الإجراءات",
+    "view": "عرض",
+    "noValue": "—",
+    "createdAt": "تاريخ الإنشاء",
+    "save": "حفظ",
+    "saveChanges": "حفظ التغييرات",
+    "on": "مفعل",
+    "off": "متوقف",
+    "no": "لا",
+    "yes": "نعم",
+    "done": "تم",
+    "loadMore": "عرض المزيد",
+    "comingSoon": "قريبًا",
+    "mainNavigation": "القائمة الرئيسية",
+    "toggleNavigation": "فتح أو إغلاق القائمة",
+    "changeLanguage": "تغيير اللغة",
+    "noNotifications": "لا توجد إشعارات جديدة",
+    "showPassword": "إظهار كلمة المرور",
+    "hidePassword": "إخفاء كلمة المرور",
+    "toggle": "تبديل"
   },
   "errors": {
     "network": "يبدو أنك غير متصل بالإنترنت.",
@@ -32,7 +70,11 @@
   "pages": {
     "dashboard": {
       "title": "لوحة التحكم",
-      "intro": "أساس إديو سنتر جاهز."
+      "intro": "إدارة مركزك التعليمي من مكان واحد.",
+      "teachersDescription": "عرض وإدارة المدرسين والمواد المسندة إليهم.",
+      "subjectsDescription": "إدارة المواد الدراسية وحالتها وملاحظاتها.",
+      "open": "فتح القسم",
+      "welcome": "مرحبًا، {{name}}"
     },
     "login": {
       "title": "مرحباً بعودتك"
@@ -47,7 +89,21 @@
   "nav": {
     "dashboard": "لوحة التحكم",
     "subjects": "المواد الدراسية",
-    "teachers": "المعلمون"
+    "teachers": "المعلمون",
+    "schedule": "إدارة الجدول",
+    "appointments": "المواعيد",
+    "groups": "المجموعات",
+    "classrooms": "الفصول والقاعات",
+    "expenses": "إدارة المصروفات",
+    "purchases": "إدارة المشتريات",
+    "blogs": "إدارة المقالات",
+    "geographic": "البيانات الجغرافية",
+    "currency": "العملات",
+    "services": "الخدمات",
+    "contact": "اتصل بنا",
+    "settings": "الإعدادات العامة",
+    "permissions": "الصلاحيات",
+    "orders": "إدارة الطلبات"
   },
   "auth": {
     "splash": {
@@ -65,7 +121,7 @@
       "welcome": "أهلاً بك مجدداً",
       "subtitle": "أهلاً بك! إذا كانت اليوم خطوتك الأولى نحو النجاح، فسنعمل على جعل رحلتك نحو التميز أكثر سهولة",
       "emailLabel": "البريد الإلكتروني",
-      "emailPlaceholder": "Mahmoud_Alaa@Gmail.Com",
+      "emailPlaceholder": "أدخل البريد الإلكتروني",
       "passwordLabel": "كلمة المرور",
       "passwordPlaceholder": "••••••••••••••••",
       "rememberMe": "تذكرني",
@@ -110,12 +166,13 @@
         "code": "أدخل رمز التحقق المكون من 6 أرقام",
         "passwordStrength": "استخدم 8 أحرف أو أكثر تشمل حرفًا كبيرًا وصغيرًا ورقمًا ورمزًا",
         "passwordMatch": "كلمتا المرور غير متطابقتين"
-      }
+      },
+      "restart": "تغيير البريد الإلكتروني"
     }
   },
   "subjects": {
     "title": "المواد الدراسية",
-    "create": "إضافة مادة",
+    "create": "إضافة مادة جديدة",
     "search": "البحث في المواد…",
     "table": {
       "name": "الاسم",
@@ -124,23 +181,33 @@
       "actions": "الإجراءات"
     },
     "form": {
-      "createTitle": "إنشاء مادة دراسية",
-      "editTitle": "تعديل المادة الدراسية",
+      "createTitle": "إضافة مادة جديدة",
+      "editTitle": "تعديل المادة",
       "nameAr": "الاسم (بالعربية)",
       "nameEn": "الاسم (بالإنجليزية)",
       "noteAr": "ملاحظة (بالعربية)",
       "noteEn": "ملاحظة (بالإنجليزية)",
       "create": "إنشاء",
-      "update": "تحديث"
+      "update": "تحديث",
+      "namePlaceholder": "أدخل اسم المادة",
+      "languageHint": "يكفي إدخال اسم بإحدى اللغتين."
     },
     "delete": {
       "confirmTitle": "حذف المادة الدراسية",
-      "confirmDescription": "هل أنت متأكد من حذف هذه المادة؟ لا يمكن التراجع عن هذا الإجراء."
+      "confirmDescription": "هل تريد حذف المادة؟",
+      "bulkTitle": "حذف المواد المحددة"
+    },
+    "description": "إدارة المواد الدراسية والملاحظات",
+    "viewTitle": "عرض المادة",
+    "feedback": {
+      "created": "تمت إضافة المادة بنجاح.",
+      "updated": "تم حفظ التغييرات بنجاح.",
+      "deleted": "تم الحذف بنجاح."
     }
   },
   "teachers": {
     "title": "المعلمون",
-    "create": "إضافة معلم",
+    "create": "إضافة مدرس جديد",
     "search": "البحث في المعلمين…",
     "table": {
       "name": "الاسم",
@@ -151,8 +218,8 @@
       "actions": "الإجراءات"
     },
     "form": {
-      "createTitle": "إنشاء معلم",
-      "editTitle": "تعديل المعلم",
+      "createTitle": "إضافة مدرس جديد",
+      "editTitle": "تعديل المدرس",
       "fullName": "الاسم الكامل",
       "email": "البريد الإلكتروني",
       "phone": "رقم الهاتف",
@@ -163,11 +230,40 @@
       "noSubjects": "لا توجد مواد دراسية متاحة.",
       "isActive": "نشط",
       "create": "إنشاء",
-      "update": "تحديث"
+      "update": "تحديث",
+      "namePlaceholder": "أدخل الاسم الكامل",
+      "phonePlaceholder": "أدخل رقم الهاتف",
+      "emailPlaceholder": "أدخل البريد الإلكتروني",
+      "passwordPlaceholder": "أدخل كلمة المرور",
+      "notesPlaceholder": "أدخل الملاحظات...",
+      "selectSubjects": "اختر المواد الدراسية"
     },
     "delete": {
       "confirmTitle": "حذف المعلم",
-      "confirmDescription": "هل أنت متأكد من حذف هذا المعلم؟ لا يمكن التراجع عن هذا الإجراء."
+      "confirmDescription": "هل تريد حذف المدرس؟",
+      "bulkTitle": "حذف المدرسين المحددين"
+    },
+    "description": "إدارة المدرسين وتعيين موادهم الدراسية",
+    "viewTitle": "عرض المدرس",
+    "feedback": {
+      "created": "تمت إضافة المدرس بنجاح.",
+      "updated": "تم حفظ التغييرات بنجاح.",
+      "deleted": "تم الحذف بنجاح."
     }
+  },
+  "roles": {
+    "admin": "مدير",
+    "superadmin": "مدير النظام",
+    "teacher": "مدرس",
+    "student": "طالب",
+    "customer": "عميل",
+    "staff": "موظف"
+  },
+  "validation": {
+    "required": "هذا الحقل مطلوب",
+    "maxLength": "الحد الأقصى {{count}} حرفًا",
+    "phone": "أدخل رقم هاتف صحيحًا",
+    "subjects": "اختر مادة واحدة على الأقل",
+    "subjectName": "أدخل اسم المادة بالعربية أو الإنجليزية"
   }
 }

@@ -277,7 +277,7 @@ export function PasswordRecoveryCard(props: PasswordRecoveryCardProps): JSX.Elem
           className="mx-auto mt-6 flex items-center gap-2 text-sm font-medium text-primary hover:underline disabled:opacity-50"
         >
           <Icon name="arrowLeft" className="size-4 rtl:rotate-180" />
-          {t('auth.recovery.backToLogin')}
+          {t(props.step === 'email' ? 'auth.recovery.backToLogin' : 'auth.recovery.restart')}
         </button>
       )}
     </section>
@@ -312,19 +312,26 @@ function VerificationCodeInput({
 }): JSX.Element {
   const { t } = useTranslation();
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
-  const digits = Array.from({ length: CODE_LENGTH }, (_, index) => value[index] ?? '');
+  const digits = Array.from({ length: CODE_LENGTH }, (_, index) => value[index]?.trim() ?? '');
 
   const setDigit = (index: number, rawValue: string) => {
-    const digit = rawValue.replace(/\D/g, '').slice(-1);
+    const numeric = rawValue.replace(/\D/g, '');
+    if (numeric.length > 1) {
+      onChange(numeric.slice(0, CODE_LENGTH));
+      inputRefs.current[Math.min(numeric.length, CODE_LENGTH) - 1]?.focus();
+      return;
+    }
+    const digit = numeric.slice(-1);
     const nextValue = digits
-      .map((item, itemIndex) => (itemIndex === index ? digit : item))
-      .join('');
+      .map((item, itemIndex) => (itemIndex === index ? digit || ' ' : item || ' '))
+      .join('')
+      .trimEnd();
     onChange(nextValue);
     if (digit && index < CODE_LENGTH - 1) inputRefs.current[index + 1]?.focus();
   };
 
   return (
-    <div className="flex justify-center gap-3" dir="ltr">
+    <div className="flex justify-center gap-1.5 sm:gap-3" dir="ltr">
       {digits.map((digit, index) => (
         <input
           key={index}
@@ -332,10 +339,21 @@ function VerificationCodeInput({
             inputRefs.current[index] = element;
           }}
           aria-label={t('auth.recovery.codeDigit', { number: index + 1 })}
-          className="size-12 rounded-xl border border-border bg-card text-center text-lg font-semibold outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50"
+          className="h-12 min-w-0 flex-1 rounded-xl sm:size-12 sm:flex-none border border-border bg-card text-center text-lg font-semibold outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50"
           disabled={disabled}
           inputMode="numeric"
           maxLength={1}
+          autoComplete={index === 0 ? 'one-time-code' : 'off'}
+          onPaste={(event) => {
+            const pasted = event.clipboardData
+              .getData('text')
+              .replace(/\D/g, '')
+              .slice(0, CODE_LENGTH);
+            if (!pasted) return;
+            event.preventDefault();
+            onChange(pasted);
+            inputRefs.current[pasted.length - 1]?.focus();
+          }}
           type="text"
           value={digit}
           onChange={(event) => setDigit(index, event.target.value)}

@@ -1,5 +1,6 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { API_BASE_URL, API_ENDPOINTS } from '@/config';
+import i18n from '@/core/i18n';
 import { useAuthStore } from '@/core/auth/auth-store';
 
 export const apiClient = axios.create({
@@ -34,7 +35,7 @@ async function requestNewAccessToken(): Promise<string | null> {
       .post<RefreshTokenBackendResponse>(
         `${API_BASE_URL}${API_ENDPOINTS.auth.refresh}`,
         { refreshToken: currentRefreshToken },
-        { timeout: 10_000 },
+        { timeout: 10_000, headers: { 'Accept-Language': i18n.resolvedLanguage ?? i18n.language } },
       )
       .then(({ data }) => {
         const payload = data.data;
@@ -58,6 +59,7 @@ async function requestNewAccessToken(): Promise<string | null> {
 }
 
 apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  config.headers['Accept-Language'] = i18n.resolvedLanguage ?? i18n.language;
   const token = useAuthStore.getState().accessToken;
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;

@@ -1,5 +1,5 @@
 import { API_ENDPOINTS } from '@/config';
-import { apiClient, normalizeApiError } from '@/core/api';
+import { apiClient, assertApiSuccess, normalizeApiError } from '@/core/api';
 import type {
   ApiResult,
   CreateSubjectPayload,
@@ -26,6 +26,7 @@ export async function fetchSubjects(
       API_ENDPOINTS.subjects.getAll,
       { params, signal },
     );
+    assertApiSuccess(data);
     return data.data;
   } catch (error) {
     throw normalizeApiError(error);
@@ -38,6 +39,7 @@ export async function fetchSubject(id: string, signal?: AbortSignal): Promise<Su
       API_ENDPOINTS.subjects.getById(id),
       { signal },
     );
+    assertApiSuccess(data);
     return data.data;
   } catch (error) {
     throw normalizeApiError(error);
@@ -47,9 +49,15 @@ export async function fetchSubject(id: string, signal?: AbortSignal): Promise<Su
 export async function createSubject(
   payload: CreateSubjectPayload,
   signal?: AbortSignal,
-): Promise<void> {
+): Promise<string> {
   try {
-    await apiClient.post(API_ENDPOINTS.subjects.create, payload, { signal });
+    const { data } = await apiClient.post<ApiResult<string>>(
+      API_ENDPOINTS.subjects.create,
+      payload,
+      { signal },
+    );
+    assertApiSuccess(data);
+    return data.data;
   } catch (error) {
     throw normalizeApiError(error);
   }
@@ -60,7 +68,12 @@ export async function updateSubject(
   signal?: AbortSignal,
 ): Promise<void> {
   try {
-    await apiClient.put(API_ENDPOINTS.subjects.update, payload, { signal });
+    const { data } = await apiClient.put<ApiResult<unknown>>(
+      API_ENDPOINTS.subjects.update,
+      payload,
+      { signal },
+    );
+    assertApiSuccess(data);
   } catch (error) {
     throw normalizeApiError(error);
   }
@@ -71,7 +84,11 @@ export async function deleteSubjects(
   signal?: AbortSignal,
 ): Promise<void> {
   try {
-    await apiClient.delete(API_ENDPOINTS.subjects.delete, { data: payload, signal });
+    const { data } = await apiClient.delete<ApiResult<unknown>>(API_ENDPOINTS.subjects.delete, {
+      data: payload,
+      signal,
+    });
+    assertApiSuccess(data);
   } catch (error) {
     throw normalizeApiError(error);
   }
@@ -79,7 +96,12 @@ export async function deleteSubjects(
 
 export async function toggleSubjectStatus(id: string, signal?: AbortSignal): Promise<void> {
   try {
-    await apiClient.patch(API_ENDPOINTS.subjects.toggleStatus(id), null, { signal });
+    const { data } = await apiClient.patch<ApiResult<unknown>>(
+      API_ENDPOINTS.subjects.toggleStatus(id),
+      null,
+      { signal },
+    );
+    assertApiSuccess(data);
   } catch (error) {
     throw normalizeApiError(error);
   }

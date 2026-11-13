@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { forwardRef, type InputHTMLAttributes } from 'react';
 import { Icon } from './icon';
 import type { IconName } from '@/config';
@@ -28,6 +29,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     },
     ref,
   ) => {
+    const { t } = useTranslation();
     const inputId = id || props.name;
 
     return (
@@ -47,10 +49,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           <input
             id={inputId}
             ref={ref}
-            className={`w-full rounded-2xl border bg-card py-3 text-sm text-foreground transition placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50 ${
+            aria-invalid={Boolean(error)}
+            aria-describedby={error || helperText ? `${inputId}-hint` : undefined}
+            className={`w-full h-10 rounded-full border bg-card py-2 text-sm text-foreground transition placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50 ${
               startIcon ? 'ps-11' : 'ps-4'
             } ${endIcon ? 'pe-11' : 'pe-4'} ${
-              error ? 'border-danger focus:border-danger focus:ring-danger/20' : 'border-border'
+              error ? 'border-danger focus:border-danger focus:ring-danger/20' : 'border-muted/60'
             } ${className}`}
             {...props}
           />
@@ -59,6 +63,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               type="button"
               tabIndex={onEndIconClick ? 0 : -1}
               onClick={onEndIconClick}
+              aria-label={t(
+                endIcon === 'eyeOff'
+                  ? 'common.hidePassword'
+                  : endIcon === 'eye'
+                    ? 'common.showPassword'
+                    : 'common.toggle',
+              )}
+              disabled={props.disabled}
               className={`absolute end-3.5 flex items-center text-muted transition hover:text-foreground ${
                 onEndIconClick ? 'cursor-pointer' : 'pointer-events-none'
               }`}
@@ -68,9 +80,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           )}
         </div>
         {error ? (
-          <p className="mt-1.5 text-xs text-danger">{error}</p>
+          <p id={`${inputId}-hint`} className="mt-1.5 text-xs text-danger">
+            {error}
+          </p>
         ) : helperText ? (
-          <p className="mt-1.5 text-xs text-muted">{helperText}</p>
+          <p id={`${inputId}-hint`} className="mt-1.5 text-xs text-muted">
+            {helperText}
+          </p>
         ) : null}
       </div>
     );

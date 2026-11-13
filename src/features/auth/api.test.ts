@@ -50,6 +50,24 @@ describe('loginUser', () => {
     expect(result.user.roles).toContain('admin');
   });
 
+  it('keeps the backend SuperAdmin role without casting an unknown role', async () => {
+    vi.mocked(apiClient.post).mockResolvedValueOnce({
+      data: {
+        isSuccess: true,
+        statusCode: 200,
+        data: {
+          token: 'token',
+          refreshToken: 'refresh',
+          userId: 'id',
+          fullName: 'Admin',
+          role: 'SuperAdmin',
+        },
+      },
+    });
+    const result = await loginUser({ email: 'admin@example.com', password: 'Password123!' });
+    expect(result.user.roles).toEqual(['superadmin']);
+  });
+
   it('throws ApiError when isSuccess is false', async () => {
     const mockResponse = {
       data: {

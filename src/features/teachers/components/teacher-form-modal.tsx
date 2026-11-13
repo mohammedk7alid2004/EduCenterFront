@@ -1,265 +1,216 @@
-import { useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
-import { Button, Icon, Input } from '@/shared/ui';
-import { setServerErrors } from '@/shared/lib';
+import { Button, FeedbackDialog, Icon, Input, Modal, StatusSwitch } from '@/shared/ui';
+import { setServerErrors, useOnline } from '@/shared/lib';
 import type { ApiError } from '@/core/api';
-import { useSubjects } from '@/features/subjects';
 import type { TeacherDto } from '../teachers.types';
 import { useCreateTeacher, useUpdateTeacher } from '../teachers.queries';
+import { TeacherSubjectsPicker } from './teacher-subjects-picker';
 
-const createSchema = z.object({
-  fullName: z.string().min(1),
-  email: z.string().email(),
-  phoneNumber: z.string().optional(),
-  password: z.string().min(6),
-  subjectIds: z.array(z.string()).min(1),
-  notes: z.string().optional(),
-  isActive: z.boolean(),
-});
-
-const editSchema = z.object({
-  fullName: z.string().min(1).optional(),
-  email: z.string().email().optional(),
-  phoneNumber: z.string().optional(),
-  password: z.string().min(6).optional().or(z.literal('')),
-  subjectIds: z.array(z.string()).optional(),
-  notes: z.string().optional(),
-  isActive: z.boolean().optional(),
-});
-
-type CreateFormValues = z.infer<typeof createSchema>;
-type EditFormValues = z.infer<typeof editSchema>;
-type FormValues = CreateFormValues & EditFormValues;
-
-interface TeacherFormModalProps {
+export function TeacherFormModal({
+  teacher,
+  onClose,
+}: {
   teacher?: TeacherDto | null;
   onClose: () => void;
-}
-
-export function TeacherFormModal({ teacher, onClose }: TeacherFormModalProps): JSX.Element {
-  const { t, i18n } = useTranslation();
-  const lang = i18n.language as 'ar' | 'en';
+}): JSX.Element {
+  const { t } = useTranslation();
   const isEdit = Boolean(teacher);
-
-  const { data: subjectsData } = useSubjects({ pageSize: 100 });
-  const allSubjects = subjectsData?.items ?? [];
-
+  const online = useOnline();
+  const [success, setSuccess] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const schema = z.object({
+    fullName: z
+      .string()
+      .trim()
+      .min(1, t('validation.required'))
+      .max(50, t('validation.maxLength', { count: 50 })),
+    email: z
+      .string()
+      .trim()
+      .min(1, t('validation.required'))
+      .email(t('auth.validation.emailInvalid'))
+      .max(150, t('validation.maxLength', { count: 150 })),
+    phoneNumber: z
+      .string()
+      .trim()
+      .min(1, t('validation.required'))
+      .max(20, t('validation.maxLength', { count: 20 }))
+      .regex(/^\+?[0-9\s\-()]+$/, t('validation.phone')),
+    password: z
+      .string()
+      .refine(
+        (value) =>
+          (isEdit && !value) ||
+          (value.length >= 8 &&
+            /[A-Z]/.test(value) &&
+            /[a-z]/.test(value) &&
+            /[0-9]/.test(value) &&
+            /[\W_]/.test(value)),
+        t('auth.recovery.validation.passwordStrength'),
+      ),
+    subjectIds: z.array(z.string()).min(1, t('validation.subjects')),
+    notes: z.string(),
+    isActive: z.boolean(),
+  });
+  type Values = z.infer<typeof schema>;
   const {
     register,
     handleSubmit,
     setError,
-    reset,
     control,
-    watch,
-    setValue,
     formState: { errors },
-  } = useForm<FormValues>({
-    resolver: zodResolver(isEdit ? editSchema : createSchema),
+  } = useForm<Values>({
+    resolver: zodResolver(schema),
     defaultValues: {
       fullName: teacher?.name ?? '',
       email: teacher?.email ?? '',
       phoneNumber: teacher?.phoneNumber ?? '',
       password: '',
-      subjectIds: teacher?.subjects.map((s) => s.id) ?? [],
+      subjectIds: teacher?.subjects.map((subject) => subject.id) ?? [],
       notes: teacher?.notes ?? '',
       isActive: teacher?.isActive ?? true,
     },
   });
-
-  useEffect(() => {
-    reset({
-      fullName: teacher?.name ?? '',
-      email: teacher?.email ?? '',
-      phoneNumber: teacher?.phoneNumber ?? '',
-      password: '',
-      subjectIds: teacher?.subjects.map((s) => s.id) ?? [],
-      notes: teacher?.notes ?? '',
-      isActive: teacher?.isActive ?? true,
-    });
-  }, [teacher, reset]);
-
-  const createMutation = useCreateTeacher();
-  const updateMutation = useUpdateTeacher();
-  const isPending = createMutation.isPending || updateMutation.isPending;
-
-  const selectedSubjectIds = watch('subjectIds') ?? [];
-
-  function toggleSubject(id: string) {
-    const current = selectedSubjectIds as string[];
-    if (current.includes(id)) {
-      setValue(
-        'subjectIds',
-        current.filter((s) => s !== id),
-        { shouldValidate: true },
-      );
-    } else {
-      setValue('subjectIds', [...current, id], { shouldValidate: true });
-    }
-  }
-
-  function onSubmit(values: FormValues) {
-    const handleError = (error: ApiError) => {
-      setServerErrors(error, setError);
+  const create = useCreateTeacher();
+  const update = useUpdateTeacher();
+  const pending = create.isPending || update.isPending;
+  const failure = create.error || update.error;
+  function submit(values: Values) {
+    if (!online) return;
+    const callbacks = {
+      onSuccess: () => setSuccess(true),
+      onError: (error: ApiError) => setServerErrors(error, setError),
     };
-
-    if (isEdit && teacher) {
-      const payload = {
-        id: teacher.id,
-        fullName: values.fullName || undefined,
-        email: values.email || undefined,
-        phoneNumber: values.phoneNumber || undefined,
-        password: values.password || undefined,
-        subjectIds: values.subjectIds,
-        notes: values.notes || undefined,
-        isActive: values.isActive,
-      };
-      updateMutation.mutate(payload, { onSuccess: onClose, onError: handleError });
-    } else {
-      createMutation.mutate(
-        {
-          fullName: values.fullName!,
-          email: values.email!,
-          phoneNumber: values.phoneNumber || undefined,
-          password: values.password!,
-          subjectIds: values.subjectIds ?? [],
-          notes: values.notes || undefined,
-          isActive: values.isActive ?? true,
-        },
-        { onSuccess: onClose, onError: handleError },
+    if (teacher)
+      update.mutate(
+        { ...values, id: teacher.id, password: values.password || undefined },
+        callbacks,
       );
-    }
+    else create.mutate(values, callbacks);
   }
-
+  const title = t(isEdit ? 'teachers.form.editTitle' : 'teachers.form.createTitle');
+  if (success)
+    return (
+      <FeedbackDialog
+        title={title}
+        description={t(isEdit ? 'teachers.feedback.updated' : 'teachers.feedback.created')}
+        onClose={onClose}
+      />
+    );
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      className="fixed inset-0 z-50 grid place-items-center bg-foreground/40 p-4"
-    >
-      <div className="w-full max-w-2xl rounded-lg bg-card p-6 shadow-xl">
-        <h2 className="mb-5 text-lg font-semibold text-foreground">
-          {isEdit ? t('teachers.form.editTitle') : t('teachers.form.createTitle')}
-        </h2>
-
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <Input
-              {...register('fullName')}
-              label={t('teachers.form.fullName')}
-              requiredAsterisk={!isEdit}
-              error={errors.fullName?.message}
-            />
-            <Input
-              {...register('email')}
-              type="email"
-              label={t('teachers.form.email')}
-              requiredAsterisk={!isEdit}
-              startIcon="atSign"
-              error={errors.email?.message}
-            />
-          </div>
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <Input
-              {...register('phoneNumber')}
-              type="tel"
-              label={t('teachers.form.phone')}
-              startIcon="phone"
-              error={errors.phoneNumber?.message}
-            />
-            <Input
-              {...register('password')}
-              type="password"
-              label={t('teachers.form.password')}
-              requiredAsterisk={!isEdit}
-              startIcon="lock"
-              error={errors.password?.message}
-              helperText={isEdit ? t('teachers.form.passwordHelp') : undefined}
-            />
-          </div>
-
+    <Modal title={title} icon="graduationCap" onClose={onClose} pending={pending}>
+      <form onSubmit={handleSubmit(submit)} noValidate>
+        {(!online || failure) && (
+          <p role="alert" className="mb-5 rounded-xl bg-danger/10 p-3 text-sm text-danger">
+            {!online
+              ? t('errors.network')
+              : t(failure?.message ?? 'errors.unknown', { defaultValue: failure?.message })}
+          </p>
+        )}
+        <fieldset
+          disabled={pending}
+          className="grid min-w-0 grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 disabled:opacity-60"
+        >
           <Input
-            {...register('notes')}
-            label={t('teachers.form.notes')}
-            startIcon="stickyNote"
-            error={errors.notes?.message}
+            {...register('fullName')}
+            label={t('teachers.form.fullName')}
+            placeholder={t('teachers.form.namePlaceholder')}
+            requiredAsterisk={!isEdit}
+            error={errors.fullName?.message}
+            autoComplete="name"
           />
-
-          {/* Subjects multi-select */}
-          <div>
-            <p className="mb-2 text-sm font-medium text-foreground">
-              {t('teachers.form.subjects')}
-              {!isEdit && <span className="ms-1 font-semibold text-danger">*</span>}
-            </p>
-            {allSubjects.length === 0 ? (
-              <p className="text-sm text-muted">{t('teachers.form.noSubjects')}</p>
-            ) : (
-              <div className="flex flex-wrap gap-2">
-                {allSubjects.map((subject) => {
-                  const label =
-                    subject.name[lang] ?? subject.name.en ?? subject.name.ar ?? subject.id;
-                  const selected = (selectedSubjectIds as string[]).includes(subject.id);
-                  return (
-                    <button
-                      key={subject.id}
-                      type="button"
-                      onClick={() => toggleSubject(subject.id)}
-                      className={`rounded-full border px-3 py-1 text-sm transition ${
-                        selected
-                          ? 'border-primary bg-primary text-card'
-                          : 'border-border bg-card text-foreground hover:border-primary hover:text-primary'
-                      }`}
-                    >
-                      {selected && <Icon name="check" className="me-1 inline size-3" />}
-                      {label}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-            {errors.subjectIds && (
-              <p className="mt-1.5 text-xs text-danger">{errors.subjectIds.message}</p>
-            )}
-          </div>
-
-          {/* isActive toggle */}
+          <Input
+            {...register('phoneNumber')}
+            label={t('teachers.form.phone')}
+            placeholder={t('teachers.form.phonePlaceholder')}
+            requiredAsterisk={!isEdit}
+            error={errors.phoneNumber?.message}
+            type="tel"
+            autoComplete="tel"
+          />
+          <Input
+            {...register('email')}
+            label={t('teachers.form.email')}
+            placeholder={t('teachers.form.emailPlaceholder')}
+            requiredAsterisk
+            error={errors.email?.message}
+            type="email"
+            autoComplete="email"
+          />
+          <Input
+            {...register('password')}
+            label={t('teachers.form.password')}
+            placeholder={t('teachers.form.passwordPlaceholder')}
+            requiredAsterisk={!isEdit}
+            error={errors.password?.message}
+            type={showPassword ? 'text' : 'password'}
+            autoComplete="new-password"
+            endIcon={showPassword ? 'eyeOff' : 'eye'}
+            onEndIconClick={() => setShowPassword(!showPassword)}
+            helperText={isEdit ? t('teachers.form.passwordHelp') : undefined}
+          />
           <Controller
-            name="isActive"
+            name="subjectIds"
             control={control}
             render={({ field }) => (
-              <label className="flex cursor-pointer items-center gap-3">
-                <span className="text-sm font-medium text-foreground">
-                  {t('teachers.form.isActive')}
-                </span>
-                <button
-                  type="button"
-                  role="switch"
-                  aria-checked={field.value}
-                  onClick={() => field.onChange(!field.value)}
-                  className="focus:outline-none"
-                >
-                  <Icon
-                    name={field.value ? 'toggleRight' : 'toggleLeft'}
-                    className={`size-8 ${field.value ? 'text-success' : 'text-muted'}`}
-                  />
-                </button>
-              </label>
+              <TeacherSubjectsPicker
+                selected={field.value}
+                onChange={field.onChange}
+                initialSubjects={teacher?.subjects ?? []}
+                error={errors.subjectIds?.message}
+              />
             )}
           />
-
-          <div className="mt-6 flex justify-end gap-2">
-            <Button type="button" variant="ghost" onClick={onClose} disabled={isPending}>
-              {t('common.cancel')}
-            </Button>
-            <Button type="submit" loading={isPending}>
-              {isEdit ? t('teachers.form.update') : t('teachers.form.create')}
-            </Button>
+          <div className="flex items-end">
+            <div className="flex h-10 w-full items-center justify-between rounded-full border border-muted/60 px-3">
+              <span className="text-sm">{t('common.status')}</span>
+              <Controller
+                name="isActive"
+                control={control}
+                render={({ field }) => (
+                  <StatusSwitch
+                    active={field.value}
+                    onChange={() => field.onChange(!field.value)}
+                    disabled={pending}
+                  />
+                )}
+              />
+            </div>
           </div>
-        </form>
-      </div>
-    </div>
+          <div className="sm:col-span-2">
+            <label htmlFor="teacher-notes" className="mb-2 block text-sm font-medium">
+              {t('teachers.form.notes')}
+            </label>
+            <textarea
+              id="teacher-notes"
+              {...register('notes')}
+              rows={3}
+              placeholder={t('teachers.form.notesPlaceholder')}
+              className="w-full resize-y rounded-2xl border border-muted/60 bg-card p-3 text-sm outline-none placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/10"
+            />
+          </div>
+        </fieldset>
+        <div className="mt-8 flex justify-end gap-4">
+          <Button
+            type="button"
+            variant="ghost"
+            className="rounded-xl border border-primary text-primary"
+            onClick={onClose}
+            disabled={pending}
+          >
+            {t('common.cancel')}
+            <Icon name="close" className="size-4" />
+          </Button>
+          <Button type="submit" loading={pending} disabled={!online} className="rounded-xl px-6">
+            {t(isEdit ? 'common.saveChanges' : 'common.save')}
+            <Icon name="checkCircle" className="size-5" />
+          </Button>
+        </div>
+      </form>
+    </Modal>
   );
 }

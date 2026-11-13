@@ -31,6 +31,7 @@ export interface LoginResult {
     id: string;
     name: string;
     roles: Role[];
+    roleName?: string;
     permissions?: string[];
   };
 }

@@ -1,5 +1,5 @@
 import { API_ENDPOINTS } from '@/config';
-import { apiClient, normalizeApiError } from '@/core/api';
+import { apiClient, assertApiSuccess, normalizeApiError } from '@/core/api';
 import type {
   ApiResult,
   CreateTeacherPayload,
@@ -28,6 +28,7 @@ export async function fetchTeachers(
       API_ENDPOINTS.teachers.getAll,
       { params, signal },
     );
+    assertApiSuccess(data);
     return data.data;
   } catch (error) {
     throw normalizeApiError(error);
@@ -40,6 +41,7 @@ export async function fetchTeacher(id: string, signal?: AbortSignal): Promise<Te
       API_ENDPOINTS.teachers.getById(id),
       { signal },
     );
+    assertApiSuccess(data);
     return data.data;
   } catch (error) {
     throw normalizeApiError(error);
@@ -51,7 +53,12 @@ export async function createTeacher(
   signal?: AbortSignal,
 ): Promise<void> {
   try {
-    await apiClient.post(API_ENDPOINTS.teachers.create, payload, { signal });
+    const { data } = await apiClient.post<ApiResult<unknown>>(
+      API_ENDPOINTS.teachers.create,
+      payload,
+      { signal },
+    );
+    assertApiSuccess(data);
   } catch (error) {
     throw normalizeApiError(error);
   }
@@ -62,7 +69,12 @@ export async function updateTeacher(
   signal?: AbortSignal,
 ): Promise<void> {
   try {
-    await apiClient.put(API_ENDPOINTS.teachers.update, payload, { signal });
+    const { data } = await apiClient.put<ApiResult<unknown>>(
+      API_ENDPOINTS.teachers.update,
+      payload,
+      { signal },
+    );
+    assertApiSuccess(data);
   } catch (error) {
     throw normalizeApiError(error);
   }
@@ -73,7 +85,11 @@ export async function deleteTeachers(
   signal?: AbortSignal,
 ): Promise<void> {
   try {
-    await apiClient.delete(API_ENDPOINTS.teachers.delete, { data: payload, signal });
+    const { data } = await apiClient.delete<ApiResult<unknown>>(API_ENDPOINTS.teachers.delete, {
+      data: payload,
+      signal,
+    });
+    assertApiSuccess(data);
   } catch (error) {
     throw normalizeApiError(error);
   }
@@ -81,7 +97,12 @@ export async function deleteTeachers(
 
 export async function toggleTeacherStatus(id: string, signal?: AbortSignal): Promise<void> {
   try {
-    await apiClient.patch(API_ENDPOINTS.teachers.toggleStatus(id), null, { signal });
+    const { data } = await apiClient.patch<ApiResult<unknown>>(
+      API_ENDPOINTS.teachers.toggleStatus(id),
+      null,
+      { signal },
+    );
+    assertApiSuccess(data);
   } catch (error) {
     throw normalizeApiError(error);
   }

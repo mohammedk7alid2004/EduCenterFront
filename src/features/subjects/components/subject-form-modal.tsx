@@ -1,130 +1,145 @@
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
-import { Button, Input } from '@/shared/ui';
-import { setServerErrors } from '@/shared/lib';
+import { Button, FeedbackDialog, Icon, Input, Modal, StatusSwitch } from '@/shared/ui';
+import { setServerErrors, useOnline } from '@/shared/lib';
 import type { ApiError } from '@/core/api';
 import type { SubjectDto } from '../subjects.types';
-import { useCreateSubject, useUpdateSubject } from '../subjects.queries';
-
-const subjectSchema = z.object({
-  nameAr: z.string().min(1),
-  nameEn: z.string().min(1),
-  noteAr: z.string().optional(),
-  noteEn: z.string().optional(),
-});
-
-type SubjectFormValues = z.infer<typeof subjectSchema>;
-
-interface SubjectFormModalProps {
+import { useSaveSubject } from '../subjects.queries';
+export function SubjectFormModal({
+  subject,
+  onClose,
+}: {
   subject?: SubjectDto | null;
   onClose: () => void;
-}
-
-export function SubjectFormModal({ subject, onClose }: SubjectFormModalProps): JSX.Element {
-  const { t } = useTranslation();
+}): JSX.Element {
+  const { t, i18n } = useTranslation();
+  const arabic = i18n.language.startsWith('ar');
   const isEdit = Boolean(subject);
-
+  const online = useOnline();
+  const [success, setSuccess] = useState(false);
+  const schema = z
+    .object({
+      nameAr: z.string().trim(),
+      nameEn: z.string().trim(),
+      noteAr: z.string(),
+      noteEn: z.string(),
+      isActive: z.boolean(),
+    })
+    .refine((values) => values.nameAr || values.nameEn, {
+      path: [arabic ? 'nameAr' : 'nameEn'],
+      message: t('validation.subjectName'),
+    });
+  type Values = z.infer<typeof schema>;
   const {
     register,
     handleSubmit,
     setError,
-    reset,
+    control,
     formState: { errors },
-  } = useForm<SubjectFormValues>({
-    resolver: zodResolver(subjectSchema),
+  } = useForm<Values>({
+    resolver: zodResolver(schema),
     defaultValues: {
       nameAr: subject?.name.ar ?? '',
       nameEn: subject?.name.en ?? '',
       noteAr: subject?.note.ar ?? '',
       noteEn: subject?.note.en ?? '',
+      isActive: subject?.isActive ?? true,
     },
   });
-
-  useEffect(() => {
-    reset({
-      nameAr: subject?.name.ar ?? '',
-      nameEn: subject?.name.en ?? '',
-      noteAr: subject?.note.ar ?? '',
-      noteEn: subject?.note.en ?? '',
+  const mutation = useSaveSubject(subject?.id);
+  function submit(values: Values) {
+    if (!online) return;
+    mutation.mutate(values, {
+      onSuccess: () => setSuccess(true),
+      onError: (error: ApiError) => setServerErrors(error, setError),
     });
-  }, [subject, reset]);
-
-  const createMutation = useCreateSubject();
-  const updateMutation = useUpdateSubject();
-  const isPending = createMutation.isPending || updateMutation.isPending;
-
-  function onSubmit(values: SubjectFormValues) {
-    const handleError = (error: ApiError) => {
-      setServerErrors(error, setError);
-    };
-
-    if (isEdit && subject) {
-      updateMutation.mutate(
-        { id: subject.id, ...values },
-        { onSuccess: onClose, onError: handleError },
-      );
-    } else {
-      createMutation.mutate(values, { onSuccess: onClose, onError: handleError });
-    }
   }
-
+  const title = t(isEdit ? 'subjects.form.editTitle' : 'subjects.form.createTitle');
+  if (success)
+    return (
+      <FeedbackDialog
+        title={title}
+        description={t(isEdit ? 'subjects.feedback.updated' : 'subjects.feedback.created')}
+        onClose={onClose}
+      />
+    );
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      className="fixed inset-0 z-50 grid place-items-center bg-foreground/40 p-4"
-    >
-      <div className="w-full max-w-lg rounded-lg bg-card p-6 shadow-xl">
-        <h2 className="mb-5 text-lg font-semibold text-foreground">
-          {isEdit ? t('subjects.form.editTitle') : t('subjects.form.createTitle')}
-        </h2>
-
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <Modal title={title} icon="bookOpen" onClose={onClose} pending={mutation.isPending}>
+      <form onSubmit={handleSubmit(submit)} noValidate>
+        {(!online || mutation.error) && (
+          <p role="alert" className="mb-5 rounded-xl bg-danger/10 p-3 text-sm text-danger">
+            {!online
+              ? t('errors.network')
+              : t(mutation.error?.message ?? 'errors.unknown', {
+                  defaultValue: mutation.error?.message,
+                })}
+          </p>
+        )}
+        <fieldset
+          disabled={mutation.isPending}
+          className="grid min-w-0 grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 disabled:opacity-60"
+        >
+          <div className="sm:col-span-2">
             <Input
-              {...register('nameAr')}
-              label={t('subjects.form.nameAr')}
+              {...register(arabic ? 'nameAr' : 'nameEn')}
+              label={t('subjects.table.name')}
+              placeholder={t('subjects.form.namePlaceholder')}
               requiredAsterisk
-              error={errors.nameAr?.message}
-              dir="rtl"
-            />
-            <Input
-              {...register('nameEn')}
-              label={t('subjects.form.nameEn')}
-              requiredAsterisk
-              error={errors.nameEn?.message}
-              dir="ltr"
+              error={arabic ? errors.nameAr?.message : errors.nameEn?.message}
             />
           </div>
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <Input
-              {...register('noteAr')}
-              label={t('subjects.form.noteAr')}
-              error={errors.noteAr?.message}
-              dir="rtl"
-            />
-            <Input
-              {...register('noteEn')}
-              label={t('subjects.form.noteEn')}
-              error={errors.noteEn?.message}
-              dir="ltr"
+          <div className="flex h-10 items-center justify-between rounded-full border border-muted/60 px-3">
+            <span className="text-sm">{t('common.status')}</span>
+            <Controller
+              name="isActive"
+              control={control}
+              render={({ field }) => (
+                <StatusSwitch
+                  active={field.value}
+                  onChange={() => field.onChange(!field.value)}
+                  disabled={mutation.isPending}
+                />
+              )}
             />
           </div>
-
-          <div className="mt-6 flex justify-end gap-2">
-            <Button type="button" variant="ghost" onClick={onClose} disabled={isPending}>
-              {t('common.cancel')}
-            </Button>
-            <Button type="submit" loading={isPending}>
-              {isEdit ? t('subjects.form.update') : t('subjects.form.create')}
-            </Button>
+          <div className="sm:col-span-2">
+            <label htmlFor="subject-notes" className="mb-2 block text-sm font-medium">
+              {t('subjects.table.note')}
+            </label>
+            <textarea
+              id="subject-notes"
+              {...register(arabic ? 'noteAr' : 'noteEn')}
+              rows={3}
+              placeholder={t('teachers.form.notesPlaceholder')}
+              className="w-full resize-y rounded-2xl border border-muted/60 bg-card p-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
+            />
           </div>
-        </form>
-      </div>
-    </div>
+        </fieldset>
+        <div className="mt-8 flex justify-end gap-4">
+          <Button
+            type="button"
+            variant="ghost"
+            className="rounded-xl border border-primary text-primary"
+            onClick={onClose}
+            disabled={mutation.isPending}
+          >
+            {t('common.cancel')}
+            <Icon name="close" className="size-4" />
+          </Button>
+          <Button
+            type="submit"
+            loading={mutation.isPending}
+            disabled={!online}
+            className="rounded-xl px-6"
+          >
+            {t(isEdit ? 'common.saveChanges' : 'common.save')}
+            <Icon name="checkCircle" className="size-5" />
+          </Button>
+        </div>
+      </form>
+    </Modal>
   );
 }

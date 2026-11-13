@@ -5,10 +5,12 @@ import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import { Button, Icon } from '@/shared/ui';
 import { AuthLogo } from './auth-logo';
+import { ApiError } from '@/core/api';
+import { setServerErrors, useOnline } from '@/shared/lib';
 import type { LoginCredentials } from '../types';
 
 interface LoginFormProps {
-  onSubmit: (data: LoginCredentials) => void;
+  onSubmit: (data: LoginCredentials) => Promise<void>;
   isLoading: boolean;
   errorMessage?: string | null;
   onForgotPasswordClick?: () => void;
@@ -21,6 +23,7 @@ export function LoginForm({
   onForgotPasswordClick,
 }: LoginFormProps): JSX.Element {
   const { t } = useTranslation();
+  const online = useOnline();
   const [showPassword, setShowPassword] = useState(false);
 
   const loginSchema = z.object({
@@ -37,6 +40,7 @@ export function LoginForm({
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -47,8 +51,16 @@ export function LoginForm({
     },
   });
 
+  async function submit(values: LoginFormValues) {
+    if (!online) return;
+    try {
+      await onSubmit(values);
+    } catch (error) {
+      if (error instanceof ApiError) setServerErrors(error, setError);
+    }
+  }
   return (
-    <div className="w-full max-w-[480px] rounded-[32px] border-2 border-[#0F3D3A] bg-white px-10 py-12 shadow-2xl text-start select-none font-sans">
+    <div className="w-full max-w-[480px] rounded-[32px] border-2 border-primary bg-card px-6 py-8 sm:px-10 sm:py-10 shadow-2xl text-start select-none font-sans">
       {/* Centered Logo with leading & trailing golden dots */}
       <div className="flex justify-center text-center">
         <AuthLogo variant="dark" size="lg" showLeadingDot={true} />
@@ -56,34 +68,34 @@ export function LoginForm({
 
       {/* Heading & Subtitle */}
       <div className="mt-4 text-center">
-        <h2 className="text-2xl font-bold tracking-tight text-[#333] sm:text-[27px]">
+        <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-[27px]">
           {t('auth.login.welcome')}
         </h2>
-        <p className="mx-auto mt-2 max-w-[340px] text-[13px] leading-[1.65] text-[#a5a5a5]">
+        <p className="mx-auto mt-2 max-w-[340px] text-[13px] leading-[1.65] text-muted">
           {t('auth.login.subtitle')}
         </p>
       </div>
 
       {/* Error Alert Banner */}
-      {errorMessage && (
+      {(errorMessage || !online) && (
         <div
           role="alert"
           className="mt-5 flex items-start gap-2.5 rounded-xl border border-danger/30 bg-danger/10 p-3 text-xs text-danger"
         >
           <Icon name="alert" className="mt-0.5 size-4 shrink-0" />
-          <span className="flex-1 font-medium">{errorMessage}</span>
+          <span className="flex-1 font-medium">{online ? errorMessage : t('errors.network')}</span>
         </div>
       )}
 
       {/* Form */}
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-7 space-y-5" noValidate>
+      <form onSubmit={handleSubmit(submit)} className="mt-7 space-y-5" noValidate>
         {/* Email Field */}
         <div>
-          <label htmlFor="email" className="mb-2 block text-sm font-semibold text-[#1E293B]">
-            {t('auth.login.emailLabel')} : <span className="text-[#E0745E]">*</span>
+          <label htmlFor="email" className="mb-2 block text-sm font-semibold text-foreground">
+            {t('auth.login.emailLabel')} : <span className="text-danger">*</span>
           </label>
           <div className="relative flex items-center">
-            <div className="pointer-events-none absolute start-4 flex items-center text-[#0F3D3A]">
+            <div className="pointer-events-none absolute start-4 flex items-center text-primary">
               <Icon name="mail" className="size-5" />
             </div>
             <input
@@ -91,9 +103,9 @@ export function LoginForm({
               type="email"
               autoComplete="email"
               placeholder={t('auth.login.emailPlaceholder')}
-              disabled={isLoading}
-              className={`h-[52px] w-full rounded-[12px] border bg-white pe-4 ps-12 text-sm font-normal text-[#1E293B] placeholder:text-[#64748B]/60 transition focus:outline-none focus:ring-2 focus:ring-[#0F3D3A]/20 disabled:cursor-not-allowed disabled:opacity-50 ${
-                errors.email ? 'border-danger focus:border-danger' : 'border-[#0F3D3A]'
+              disabled={isLoading || !online}
+              className={`h-[52px] w-full rounded-[12px] border bg-card pe-4 ps-12 text-sm font-normal text-foreground placeholder:text-muted/60 transition focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50 ${
+                errors.email ? 'border-danger focus:border-danger' : 'border-primary'
               }`}
               {...register('email')}
             />
@@ -105,11 +117,11 @@ export function LoginForm({
 
         {/* Password Field */}
         <div>
-          <label htmlFor="password" className="mb-2 block text-base font-medium text-[#1E293B]">
-            {t('auth.login.passwordLabel')} : <span className="text-[#E0745E]">*</span>
+          <label htmlFor="password" className="mb-2 block text-base font-medium text-foreground">
+            {t('auth.login.passwordLabel')} : <span className="text-danger">*</span>
           </label>
           <div className="relative flex items-center">
-            <div className="pointer-events-none absolute start-4 flex items-center text-[#94A3B8]">
+            <div className="pointer-events-none absolute start-4 flex items-center text-muted">
               <Icon name="lock" className="size-5" />
             </div>
             <input
@@ -117,19 +129,19 @@ export function LoginForm({
               type={showPassword ? 'text' : 'password'}
               autoComplete="current-password"
               placeholder={t('auth.login.passwordPlaceholder')}
-              disabled={isLoading}
-              className={`h-[52px] w-full rounded-[12px] border bg-white pe-12 ps-12 text-sm font-normal text-[#1E293B] placeholder:text-[#64748B]/60 transition focus:outline-none focus:ring-2 focus:ring-[#0F3D3A]/20 disabled:cursor-not-allowed disabled:opacity-50 ${
+              disabled={isLoading || !online}
+              className={`h-[52px] w-full rounded-[12px] border bg-card pe-12 ps-12 text-sm font-normal text-foreground placeholder:text-muted/60 transition focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50 ${
                 errors.password
                   ? 'border-danger focus:border-danger'
-                  : 'border-[#a5a5a5] focus:border-[#0F3D3A]'
+                  : 'border-muted focus:border-primary'
               }`}
               {...register('password')}
             />
             <button
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
-              className="absolute end-4 flex items-center text-[#94A3B8] transition hover:text-[#1E293B]"
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              className="absolute end-4 flex items-center text-muted transition hover:text-foreground"
+              aria-label={t(showPassword ? 'common.hidePassword' : 'common.showPassword')}
             >
               <Icon name={showPassword ? 'eyeOff' : 'eye'} className="size-5" />
             </button>
@@ -145,10 +157,10 @@ export function LoginForm({
             <input
               type="checkbox"
               className="size-4 rounded-[4px] border-[1.5px] border-primary text-primary accent-primary focus:ring-primary/20"
-              disabled={isLoading}
+              disabled={isLoading || !online}
               {...register('rememberMe')}
             />
-            <span className="font-medium text-[#1E293B]">{t('auth.login.rememberMe')}</span>
+            <span className="font-medium text-foreground">{t('auth.login.rememberMe')}</span>
           </label>
 
           <button
@@ -165,7 +177,8 @@ export function LoginForm({
           <Button
             type="submit"
             loading={isLoading}
-            className="h-[52px] w-full rounded-[12px] bg-[#0F3D3A] text-sm font-semibold text-white shadow-lg shadow-[#0F3D3A]/20 transition hover:bg-[#0F3D3A]/90 hover:opacity-100"
+            disabled={!online}
+            className="h-[52px] w-full rounded-[12px] bg-primary text-sm font-semibold text-card shadow-lg shadow-primary/20 transition hover:bg-primary/90 hover:opacity-100"
           >
             <span>{isLoading ? t('auth.login.submitting') : t('auth.login.submit')}</span>
             {!isLoading && <Icon name="checkCircle" className="ms-2 size-5" />}

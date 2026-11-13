@@ -18,7 +18,7 @@ export function ForgotPasswordModal({
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm bg-black/50 animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm bg-overlay/50 animate-in fade-in duration-200"
     >
       <div className="w-full max-w-sm rounded-3xl border border-border bg-card p-6 text-center shadow-2xl animate-in zoom-in-95 duration-200">
         <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-2xl bg-accent/20 text-accent">

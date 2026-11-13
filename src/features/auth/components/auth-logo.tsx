@@ -21,12 +21,12 @@ export function AuthLogo({
   showLeadingDot = true,
   className = '',
 }: AuthLogoProps): JSX.Element {
-  const strokeColor = variant === 'light' || variant === 'white' ? '#FFFFFF' : '#0F3D3A';
-  const dotColor = '#F4B13B';
+  const strokeColor = 'currentColor';
+  const dotColor = 'rgb(var(--color-accent))';
 
   return (
     <div
-      className={`inline-flex items-center justify-center select-none transition-transform duration-300 hover:scale-[1.02] ${className}`}
+      className={`inline-flex items-center justify-center select-none ${variant === 'light' || variant === 'white' ? 'text-card' : 'text-primary'} transition-transform duration-300 hover:scale-[1.02] ${className}`}
       aria-label="3M2A Logo"
     >
       <svg

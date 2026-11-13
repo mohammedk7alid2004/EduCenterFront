@@ -15,7 +15,45 @@
     "deactivate": "Deactivate",
     "active": "Active",
     "inactive": "Inactive",
-    "pagination": "Page {{page}} of {{total}}"
+    "pagination": "Page {{page}} of {{total}}",
+    "close": "Close",
+    "back": "Go back",
+    "search": "Search",
+    "searchPlaceholder": "Search ......",
+    "filter": "Filter",
+    "status": "Status",
+    "all": "All",
+    "clearFilters": "Clear filters",
+    "perPage": "Showing Per Page",
+    "paginationLabel": "Pagination",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "selected": "{{count}} selected",
+    "selectAll": "Select all rows on this page",
+    "selectRow": "Select row {{id}}",
+    "deleteSelected": "Delete selected",
+    "deleteSelection": "Do you want to delete the {{count}} selected records?",
+    "id": "ID",
+    "actions": "Actions",
+    "view": "View",
+    "noValue": "—",
+    "createdAt": "Created Date",
+    "save": "Save",
+    "saveChanges": "Save Changes",
+    "on": "On",
+    "off": "Off",
+    "no": "No",
+    "yes": "Yes",
+    "done": "Done",
+    "loadMore": "Load more",
+    "comingSoon": "Coming soon",
+    "mainNavigation": "Main navigation",
+    "toggleNavigation": "Toggle navigation",
+    "changeLanguage": "Change language",
+    "noNotifications": "No new notifications",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "toggle": "Toggle"
   },
   "errors": {
     "network": "You appear to be offline. Please try again.",
@@ -32,7 +70,11 @@
   "pages": {
     "dashboard": {
       "title": "Dashboard",
-      "intro": "Your EduCenter foundation is ready."
+      "intro": "Manage your educational center from one place.",
+      "teachersDescription": "View and manage teachers and their assigned subjects.",
+      "subjectsDescription": "Manage subjects, their status, and curriculum notes.",
+      "open": "Open section",
+      "welcome": "Welcome, {{name}}"
     },
     "login": {
       "title": "Welcome back"
@@ -47,7 +89,21 @@
   "nav": {
     "dashboard": "Dashboard",
     "subjects": "Subjects",
-    "teachers": "Teachers"
+    "teachers": "Teachers",
+    "schedule": "Schedule Management",
+    "appointments": "Appointments",
+    "groups": "Groups",
+    "classrooms": "Classrooms",
+    "expenses": "Expenses Management",
+    "purchases": "Purchases Management",
+    "blogs": "Blogs Management",
+    "geographic": "Geographic Data",
+    "currency": "Currency",
+    "services": "Services",
+    "contact": "Contact Us",
+    "settings": "General Setting",
+    "permissions": "Permission",
+    "orders": "Orders Management"
   },
   "auth": {
     "splash": {
@@ -65,7 +121,7 @@
       "welcome": "Welcome Back",
       "subtitle": "Welcome Back! If Today Is Your First Step Toward Success, We'll Make Your Journey Toward Excellence Easier",
       "emailLabel": "Email",
-      "emailPlaceholder": "Mahmoud_Alaa@Gmail.Com",
+      "emailPlaceholder": "Enter your email",
       "passwordLabel": "Password",
       "passwordPlaceholder": "••••••••••••••••",
       "rememberMe": "Remember Me",
@@ -110,12 +166,13 @@
         "code": "Enter the 6-digit verification code",
         "passwordStrength": "Use 8+ characters with uppercase, lowercase, number, and symbol",
         "passwordMatch": "Passwords do not match"
-      }
+      },
+      "restart": "Use another email"
     }
   },
   "subjects": {
     "title": "Subjects",
-    "create": "Add Subject",
+    "create": "Add New Subject",
     "search": "Search subjects…",
     "table": {
       "name": "Name",
@@ -124,23 +181,33 @@
       "actions": "Actions"
     },
     "form": {
-      "createTitle": "Create Subject",
+      "createTitle": "Add New Subject",
       "editTitle": "Edit Subject",
       "nameAr": "Name (Arabic)",
       "nameEn": "Name (English)",
       "noteAr": "Note (Arabic)",
       "noteEn": "Note (English)",
       "create": "Create",
-      "update": "Update"
+      "update": "Update",
+      "namePlaceholder": "Enter Subject Name",
+      "languageHint": "A name in either language is sufficient."
     },
     "delete": {
       "confirmTitle": "Delete Subject",
-      "confirmDescription": "Are you sure you want to delete this subject? This action cannot be undone."
+      "confirmDescription": "Do You Want To Delete This Subject?",
+      "bulkTitle": "Delete Selected Subjects"
+    },
+    "description": "Manage your educational subjects and curriculum",
+    "viewTitle": "View Subject",
+    "feedback": {
+      "created": "The Subject Was Successfully Added.",
+      "updated": "The Changes Have Been Saved Successfully.",
+      "deleted": "Deleted Successfully."
     }
   },
   "teachers": {
     "title": "Teachers",
-    "create": "Add Teacher",
+    "create": "Add New Teacher",
     "search": "Search teachers…",
     "table": {
       "name": "Name",
@@ -151,7 +218,7 @@
       "actions": "Actions"
     },
     "form": {
-      "createTitle": "Create Teacher",
+      "createTitle": "Add New Teacher",
       "editTitle": "Edit Teacher",
       "fullName": "Full Name",
       "email": "Email",
@@ -163,11 +230,40 @@
       "noSubjects": "No subjects available.",
       "isActive": "Active",
       "create": "Create",
-      "update": "Update"
+      "update": "Update",
+      "namePlaceholder": "Enter Full Name",
+      "phonePlaceholder": "Enter Phone Number",
+      "emailPlaceholder": "Enter Email",
+      "passwordPlaceholder": "Enter Password",
+      "notesPlaceholder": "Enter Notes...",
+      "selectSubjects": "Select Subjects"
     },
     "delete": {
       "confirmTitle": "Delete Teacher",
-      "confirmDescription": "Are you sure you want to delete this teacher? This action cannot be undone."
+      "confirmDescription": "Do You Want To Delete This Teacher?",
+      "bulkTitle": "Delete Selected Teachers"
+    },
+    "description": "Manage your teachers and their assigned subjects",
+    "viewTitle": "View Teacher",
+    "feedback": {
+      "created": "The Teacher Was Successfully Added.",
+      "updated": "The Changes Have Been Saved Successfully.",
+      "deleted": "Deleted Successfully."
     }
+  },
+  "roles": {
+    "admin": "Admin",
+    "superadmin": "Super Admin",
+    "teacher": "Teacher",
+    "student": "Student",
+    "customer": "Customer",
+    "staff": "Staff"
+  },
+  "validation": {
+    "required": "This field is required",
+    "maxLength": "Maximum {{count}} characters",
+    "phone": "Enter a valid phone number",
+    "subjects": "Select at least one subject",
+    "subjectName": "Enter the subject name in Arabic or English"
   }
 }

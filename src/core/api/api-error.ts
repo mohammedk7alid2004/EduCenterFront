@@ -22,6 +22,7 @@ export class ApiError extends Error {
   }
 }
 export function normalizeApiError(error: unknown): ApiError {
+  if (error instanceof ApiError) return error;
   const axiosError = error as AxiosError<{ message?: string; errors?: Record<string, string[]> }>;
   if (axiosError.code === 'ECONNABORTED') return new ApiError('TIMEOUT');
   if (!axiosError.response) return new ApiError('NETWORK');

@@ -1,8 +1,17 @@
 export const APP_NAME = import.meta.env.VITE_APP_NAME ?? 'EduCenter';
+export const LIST_PARAMS = {
+  search: 'q',
+  page: 'page',
+  pageSize: 'size',
+  status: 'status',
+} as const;
+export const PAGE_SIZES = [10, 25, 50] as const;
+export const STATUS_FILTER = { all: '', active: 'active', inactive: 'inactive' } as const;
 export const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ?? 'https://educenter2.runasp.net/api';
 export const STORAGE_KEYS = {
   auth: 'educenter.auth',
+  rememberSession: 'educenter.remember_session',
   ui: 'educenter.ui',
   language: 'educenter.language',
   splashShown: 'educenter.splash_shown',
@@ -47,6 +56,7 @@ export const API_ENDPOINTS = {
   },
 } as const;
 export const QUERY_KEYS = {
+  options: 'options',
   auth: ['auth'],
   subjects: ['subjects'],
   teachers: ['teachers'],

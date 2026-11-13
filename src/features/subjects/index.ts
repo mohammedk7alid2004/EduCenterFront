@@ -17,3 +17,5 @@ export {
   useDeleteSubjects,
   useToggleSubjectStatus,
 } from './subjects.queries';
+
+export { useSubjectOptions } from './subjects.queries';

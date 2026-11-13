@@ -1,5 +1,8 @@
 import {
   AlertCircle,
+  CalendarDays,
+  Home,
+  PanelLeft,
   ArrowLeft,
   ArrowRight,
   AtSign,
@@ -36,6 +39,9 @@ import {
 
 export const icons = {
   alert: AlertCircle,
+  calendar: CalendarDays,
+  home: Home,
+  panel: PanelLeft,
   arrowLeft: ArrowLeft,
   arrowRight: ArrowRight,
   atSign: AtSign,

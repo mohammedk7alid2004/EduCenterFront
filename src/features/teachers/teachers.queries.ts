@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/config';
 import type { ApiError } from '@/core/api';
@@ -19,15 +20,17 @@ import type {
 } from './teachers.types';
 
 export function useTeachers(filters: TeacherFilters = {}) {
+  const { i18n } = useTranslation();
   return useQuery<PaginatedList<TeacherDto>, ApiError>({
-    queryKey: [...QUERY_KEYS.teachers, filters],
+    queryKey: [...QUERY_KEYS.teachers, i18n.language, filters],
     queryFn: ({ signal }) => fetchTeachers(filters, signal),
   });
 }
 
 export function useTeacher(id: string) {
+  const { i18n } = useTranslation();
   return useQuery<TeacherDto, ApiError>({
-    queryKey: [...QUERY_KEYS.teachers, id],
+    queryKey: [...QUERY_KEYS.teachers, i18n.language, id],
     queryFn: ({ signal }) => fetchTeacher(id, signal),
     enabled: Boolean(id),
   });

@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { normalizeApiError } from './api-error';
+import { ApiError, normalizeApiError } from './api-error';
 describe('normalizeApiError', () => {
+  it('preserves an already-normalized backend failure', () => {
+    const error = new ApiError('FORBIDDEN', 403, { FullName: ['Invalid'] });
+    expect(normalizeApiError(error)).toBe(error);
+  });
   it('maps 422 errors and fields', () => {
     const error = normalizeApiError({
       response: { status: 422, data: { errors: { email: ['Invalid email'] } } },
