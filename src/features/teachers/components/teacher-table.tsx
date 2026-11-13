@@ -23,7 +23,7 @@ export function TeacherTable({
   const columns: Column<TeacherDto>[] = [
     {
       id: 'id',
-      headerClassName: 'w-16',
+      headerClassName: 'w-28',
       header: t('common.id'),
       cell: (row) => (
         <span className="block max-w-24 truncate" title={row.id}>
@@ -33,7 +33,7 @@ export function TeacherTable({
     },
     {
       id: 'name',
-      headerClassName: 'w-28',
+      headerClassName: 'w-48',
       header: t('teachers.form.fullName'),
       cell: (row) => (
         <button type="button" className="text-start hover:text-primary" onClick={() => onView(row)}>
@@ -43,19 +43,19 @@ export function TeacherTable({
     },
     {
       id: 'phone',
-      headerClassName: 'w-28',
+      headerClassName: 'w-48',
       header: t('teachers.form.phone'),
       cell: (row) => <bdi>{row.phoneNumber || t('common.noValue')}</bdi>,
     },
     {
       id: 'email',
-      headerClassName: 'w-44',
+      headerClassName: 'w-64',
       header: t('teachers.form.email'),
       cell: (row) => <bdi title={row.email}>{row.email}</bdi>,
     },
     {
       id: 'subjects',
-      headerClassName: 'w-28',
+      headerClassName: 'w-48',
       header: t('teachers.form.subjects'),
       cell: (row) =>
         row.subjects
@@ -65,17 +65,17 @@ export function TeacherTable({
     },
     {
       id: 'notes',
-      headerClassName: 'w-28',
+      headerClassName: 'w-48',
       header: t('teachers.form.notes'),
       cell: (row) => (
-        <span className="block max-w-48 truncate" title={row.notes ?? undefined}>
+        <span className="block max-w-64 truncate" title={row.notes ?? undefined}>
           {row.notes || t('common.noValue')}
         </span>
       ),
     },
     {
       id: 'status',
-      headerClassName: 'w-24',
+      headerClassName: 'w-40',
       header: t('common.status'),
       cell: (row) => (
         <StatusSwitch
@@ -91,7 +91,7 @@ export function TeacherTable({
     },
     {
       id: 'actions',
-      headerClassName: 'w-36',
+      headerClassName: 'w-52',
       header: t('common.actions'),
       cell: (row) => (
         <TeacherRowActions
@@ -116,7 +116,7 @@ export function TeacherTable({
     <>
       {dialog}
       <DataTable
-        className="[&_table]:min-w-[1080px]"
+        className="[&_table]:min-w-[1792px]"
         columns={columns}
         rows={rows}
         pending={!online || remove.isPending}

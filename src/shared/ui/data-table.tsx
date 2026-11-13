@@ -43,11 +43,11 @@ export function DataTable<T extends { id: string }>({
           )}
         </div>
       )}
-      <div className="overflow-x-auto rounded-t-xl border border-border">
-        <table className="w-full min-w-[760px] table-fixed border-collapse whitespace-nowrap text-start text-xs">
-          <thead className="bg-table text-muted">
+      <div className="overflow-x-auto rounded-t-[14px] border-x border-b border-border">
+        <table className="w-full min-w-[980px] table-auto border-collapse whitespace-nowrap text-start text-sm">
+          <thead className="bg-table text-tableHeading">
             <tr>
-              <th className="w-9 px-2 py-4">
+              <th className="w-12 px-3 py-[18px]">
                 <input
                   type="checkbox"
                   aria-label={t('common.selectAll')}
@@ -56,13 +56,13 @@ export function DataTable<T extends { id: string }>({
                     if (element) element.indeterminate = selected.length > 0 && !allSelected;
                   }}
                   onChange={() => setSelection(allSelected ? [] : rows.map((row) => row.id))}
-                  className="size-[18px] accent-primary"
+                  className="design-checkbox size-[18px] shrink-0 cursor-pointer appearance-none rounded-[5px] border-2 border-tableHeading/80 bg-transparent checked:border-primary checked:bg-primary focus-visible:ring-2 focus-visible:ring-primary/20"
                 />
               </th>
               {columns.map((column) => (
                 <th
                   key={column.id}
-                  className={`px-2 py-4 text-start font-semibold ${column.id === 'actions' ? 'sticky end-0 bg-table' : ''} ${column.headerClassName ?? ''}`}
+                  className={`h-[60px] px-4 py-[18px] text-start font-semibold ${column.headerClassName ?? ''}`}
                 >
                   {column.header}
                 </th>
@@ -72,7 +72,7 @@ export function DataTable<T extends { id: string }>({
           <tbody className="divide-y divide-border">
             {rows.map((row) => (
               <tr key={row.id} className="h-[66px] transition hover:bg-primary/[0.025]">
-                <td className="px-2 py-4">
+                <td className="px-3 py-3.5">
                   <input
                     type="checkbox"
                     aria-label={t('common.selectRow', { id: row.id })}
@@ -84,15 +84,15 @@ export function DataTable<T extends { id: string }>({
                           : [...selected, row.id],
                       )
                     }
-                    className="size-[18px] accent-primary"
+                    className="design-checkbox size-[18px] shrink-0 cursor-pointer appearance-none rounded-[5px] border-2 border-tableHeading/80 bg-transparent checked:border-primary checked:bg-primary focus-visible:ring-2 focus-visible:ring-primary/20"
                   />
                 </td>
                 {columns.map((column) => (
                   <td
                     key={column.id}
-                    className={`px-2 py-4 align-middle ${column.id === 'actions' ? 'sticky end-0 bg-subtle' : ''} ${column.className ?? ''}`}
+                    className={`px-4 py-3.5 align-middle ${column.className ?? ''}`}
                   >
-                    <div className="min-w-0 truncate">{column.cell(row)}</div>
+                    {column.cell(row)}
                   </td>
                 ))}
               </tr>

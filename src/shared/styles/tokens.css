@@ -225,3 +225,59 @@
     scroll-behavior: auto !important;
   }
 }
+
+@layer components {
+  .header-control {
+    box-shadow: 0 4px 16px rgb(var(--color-overlay) / 0.08);
+  }
+  .dashboard-header::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      rgb(var(--color-iconSurface)),
+      rgb(var(--color-primary)),
+      rgb(var(--color-iconSurface))
+    );
+  }
+  .schedule-panel::before,
+  .schedule-panel::after {
+    content: '';
+    position: absolute;
+    inset-inline-end: 0;
+    width: 24px;
+    height: 24px;
+    pointer-events: none;
+  }
+  .schedule-panel::before {
+    top: -24px;
+    background: radial-gradient(circle at 0 0, transparent 24px, rgb(var(--color-subtle)) 24.5px);
+  }
+  .schedule-panel::after {
+    bottom: -24px;
+    background: radial-gradient(
+      circle at 0 100%,
+      transparent 24px,
+      rgb(var(--color-subtle)) 24.5px
+    );
+  }
+}
+
+@layer components {
+  .design-checkbox:checked {
+    appearance: auto;
+    accent-color: rgb(var(--color-primary));
+  }
+  .design-checkbox:indeterminate {
+    appearance: auto;
+    accent-color: rgb(var(--color-primary));
+  }
+}
+
+[dir='rtl'] .schedule-panel::before,
+[dir='rtl'] .schedule-panel::after {
+  transform: scaleX(-1);
+}

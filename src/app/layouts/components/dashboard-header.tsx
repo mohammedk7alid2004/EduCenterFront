@@ -19,8 +19,8 @@ export function DashboardHeader({ onMenuClick }: { onMenuClick: () => void }): J
       ? 'subjects'
       : 'dashboard';
   return (
-    <header className="flex min-h-[77px] flex-wrap items-center justify-between gap-3 border-b border-primary/30 px-4 py-4 sm:px-6">
-      <div className="flex min-w-0 items-center gap-2 text-xs sm:text-sm">
+    <header className="dashboard-header relative flex min-h-[77px] flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
+      <div className="flex min-w-0 items-center gap-2 text-sm">
         <button
           type="button"
           aria-label={t('common.toggleNavigation')}
@@ -35,28 +35,42 @@ export function DashboardHeader({ onMenuClick }: { onMenuClick: () => void }): J
         <Icon name="chevronRight" className="size-4 text-primary rtl:rotate-180" />
         <span className="font-semibold text-primary">{t(`nav.${section}`)}</span>
       </div>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 sm:gap-6">
         <button
           type="button"
           onClick={() => setLanguage(arabic ? 'en' : 'ar')}
           aria-label={t('common.changeLanguage')}
-          className="flex h-10 items-center gap-3 rounded-xl bg-card px-3.5 text-xs shadow-sm"
+          className="header-control flex h-10 w-[87px] items-center justify-center gap-3 rounded-[10px] bg-card px-3.5 text-xs"
         >
-          <Icon name="globe" className="size-5 text-primary" />
+          <img
+            src={arabic ? '/images/dashboard/language-ar.svg' : '/images/dashboard/language-en.png'}
+            alt=""
+            className="h-5 w-8 rounded-sm object-cover"
+          />
           <span>{arabic ? 'AR' : 'EN'}</span>
         </button>
+        <span
+          title={t('common.notifications')}
+          className="header-control -ms-2 flex h-[34px] w-[52px] items-center justify-center rounded-[10px] bg-card"
+        >
+          <img
+            src="/images/dashboard/notification.png"
+            alt=""
+            className="h-[30px] w-[34px] object-contain"
+          />
+        </span>
         <div className="relative">
           <button
             type="button"
             aria-expanded={profileOpen}
             onClick={() => setProfileOpen(!profileOpen)}
-            className="flex h-[45px] items-center gap-2 rounded-xl bg-card px-3 shadow-sm"
+            className="header-control flex h-[45px] items-center gap-1.5 rounded-xl bg-card px-3 sm:w-[181px]"
           >
             <span className="grid size-8 place-items-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
               {user?.name.charAt(0).toUpperCase()}
             </span>
-            <span className="hidden text-start sm:block">
-              <span className="block text-xs font-medium">{user?.name}</span>
+            <span className="hidden min-w-0 flex-1 text-start sm:block">
+              <span className="block truncate text-xs font-medium">{user?.name}</span>
               <span className="block text-[10px] text-muted">
                 {user?.roleName
                   ? t(`roles.${user.roleName.toLowerCase()}`, { defaultValue: user.roleName })

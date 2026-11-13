@@ -36,29 +36,33 @@ export function ManagementList(props: ManagementListProps): JSX.Element {
   }, [props.loading, props.fetching, props.error, controls, totalPages]);
   const pages = Array.from({ length: Math.min(5, totalPages) }, (_, index) => firstPage + index);
   return (
-    <section className="flex min-h-full flex-col gap-6">
+    <section className="flex flex-1 flex-col gap-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <button
             type="button"
             onClick={() => navigate(ROUTES.dashboard)}
             aria-label={t('common.back')}
-            className="grid size-11 shrink-0 place-items-center rounded-full bg-primary/10 text-primary transition hover:bg-primary/20"
+            className="grid size-11 shrink-0 place-items-center rounded-full bg-iconSurface text-primary transition hover:bg-primary/15"
           >
             <Icon name="arrowLeft" className="size-6 rtl:rotate-180" />
           </button>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-semibold">{props.title}</h1>
+              <h1 className="text-2xl font-semibold leading-9">{props.title}</h1>
               <span className="rounded-md bg-primary px-1.5 py-1 text-sm text-card">
                 {props.totalCount}
               </span>
             </div>
-            <p className="mt-0.5 text-xs text-muted">{props.description}</p>
+            <p className="mt-0.5 text-xs leading-[18px] text-muted">{props.description}</p>
           </div>
         </div>
-        <Button onClick={props.onCreate} disabled={!online} className="h-[43px] rounded-xl">
-          <Icon name="plus" className="size-5" />
+        <Button
+          onClick={props.onCreate}
+          disabled={!online}
+          className="h-[43px] rounded-[10px] font-normal"
+        >
+          <Icon name="addSquare" className="size-5" />
           {props.createLabel}
         </Button>
       </div>
@@ -74,14 +78,14 @@ export function ManagementList(props: ManagementListProps): JSX.Element {
             aria-label={t('common.search')}
             placeholder={t('common.searchPlaceholder')}
             onChange={(event) => controls.setSearch(event.target.value)}
-            className="h-[43px] w-full rounded-xl border border-border bg-card pe-4 ps-10 text-sm outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/10"
+            className="h-[43px] w-full rounded-[10px] border border-muted bg-card pe-4 ps-10 text-xs shadow-sm outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/10"
           />
         </div>
         <Button
           variant="ghost"
           aria-expanded={filterOpen}
           onClick={() => setFilterOpen(!filterOpen)}
-          className={`h-[43px] rounded-xl border ${controls.status ? 'border-primary text-primary' : 'border-border text-muted'}`}
+          className={`h-[43px] rounded-xl border ${controls.status ? 'border-primary text-primary' : 'border-muted text-muted'}`}
         >
           <Icon name="filter" className="size-5" />
           {t('common.filter')}
@@ -121,13 +125,13 @@ export function ManagementList(props: ManagementListProps): JSX.Element {
           props.children
         )}
       </div>
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-5 text-sm">
-        <label className="flex items-center gap-3 rounded-xl bg-subtle px-4 py-2">
+      <div className="mt-1 flex flex-wrap items-center justify-between gap-4 pb-6 text-sm">
+        <label className="header-control flex items-center gap-3 rounded-xl bg-card px-4 py-2">
           {t('common.perPage')}
           <select
             value={controls.pageSize}
             onChange={(event) => controls.setPageSize(Number(event.target.value))}
-            className="rounded-lg border border-primary/40 bg-card px-3 py-1 text-primary"
+            className="rounded-lg border border-primary/60 bg-iconSurface px-3 py-1 text-primary"
           >
             {PAGE_SIZES.map((size) => (
               <option key={size} value={size}>
@@ -142,7 +146,7 @@ export function ManagementList(props: ManagementListProps): JSX.Element {
             disabled={controls.page <= 1 || props.fetching}
             aria-label={t('common.previousPage')}
             onClick={() => controls.setPage(controls.page - 1)}
-            className="grid size-[33px] place-items-center rounded-lg bg-subtle text-primary disabled:opacity-40"
+            className="grid size-[33px] place-items-center rounded-lg bg-iconSurface text-primary disabled:opacity-40"
           >
             <Icon name="chevronLeft" className="size-4 rtl:rotate-180" />
           </button>
@@ -162,7 +166,7 @@ export function ManagementList(props: ManagementListProps): JSX.Element {
             disabled={controls.page >= totalPages || props.fetching}
             aria-label={t('common.nextPage')}
             onClick={() => controls.setPage(controls.page + 1)}
-            className="grid size-[33px] place-items-center rounded-lg bg-subtle text-primary disabled:opacity-40"
+            className="grid size-[33px] place-items-center rounded-lg bg-iconSurface text-primary disabled:opacity-40"
           >
             <Icon name="chevronRight" className="size-4 rtl:rotate-180" />
           </button>

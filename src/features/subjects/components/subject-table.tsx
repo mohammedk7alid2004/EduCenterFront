@@ -23,6 +23,7 @@ export function SubjectTable({
   const columns: Column<SubjectDto>[] = [
     {
       id: 'id',
+      headerClassName: 'w-28',
       header: t('common.id'),
       cell: (row) => (
         <span className="block max-w-24 truncate" title={row.id}>
@@ -32,6 +33,7 @@ export function SubjectTable({
     },
     {
       id: 'name',
+      headerClassName: 'w-56',
       header: t('subjects.table.name'),
       cell: (row) => (
         <button type="button" className="text-start hover:text-primary" onClick={() => onView(row)}>
@@ -41,6 +43,7 @@ export function SubjectTable({
     },
     {
       id: 'notes',
+      headerClassName: 'w-72',
       header: t('subjects.table.note'),
       cell: (row) => (
         <span className="block max-w-80 truncate">
@@ -50,6 +53,7 @@ export function SubjectTable({
     },
     {
       id: 'status',
+      headerClassName: 'w-36',
       header: t('common.status'),
       cell: (row) => (
         <StatusSwitch
@@ -65,6 +69,7 @@ export function SubjectTable({
     },
     {
       id: 'actions',
+      headerClassName: 'w-44',
       header: t('common.actions'),
       cell: (row) => (
         <SubjectRowActions
