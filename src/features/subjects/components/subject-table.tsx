@@ -53,6 +53,7 @@ export function SubjectTable({
         </span>
       ),
     },
+    ...auditColumns,
     {
       id: 'status',
       headerClassName: 'w-36',
@@ -69,7 +70,6 @@ export function SubjectTable({
         />
       ),
     },
-    ...auditColumns,
     {
       id: 'actions',
       headerClassName: 'w-44',

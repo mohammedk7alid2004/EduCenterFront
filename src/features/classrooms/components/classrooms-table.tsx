@@ -79,6 +79,7 @@ export function ClassroomsTable({
         </span>
       ),
     },
+    ...auditColumns,
     {
       id: 'status',
       header: t('common.status'),
@@ -115,7 +116,6 @@ export function ClassroomsTable({
         />
       ),
     },
-    ...auditColumns,
   ];
   return (
     <>

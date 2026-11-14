@@ -75,6 +75,7 @@ export function TeacherTable({
         </span>
       ),
     },
+    ...auditColumns,
     {
       id: 'status',
       headerClassName: 'w-40',
@@ -91,7 +92,6 @@ export function TeacherTable({
         />
       ),
     },
-    ...auditColumns,
     {
       id: 'actions',
       headerClassName: 'w-52',

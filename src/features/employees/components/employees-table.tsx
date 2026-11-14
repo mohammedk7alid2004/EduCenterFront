@@ -63,6 +63,7 @@ export function EmployeesTable({
       header: t('employees.form.role'),
       cell: (employee) => employee.role.name || t('common.noValue'),
     },
+    ...auditColumns,
     {
       id: 'status',
       header: t('common.status'),
@@ -78,7 +79,6 @@ export function EmployeesTable({
         />
       ),
     },
-    ...auditColumns,
     {
       id: 'actions',
       header: t('common.actions'),
