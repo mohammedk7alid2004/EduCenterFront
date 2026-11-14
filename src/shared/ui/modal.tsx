@@ -8,6 +8,7 @@ interface ModalProps {
   icon: IconName;
   onClose: () => void;
   pending?: boolean;
+  size?: 'default' | 'form' | 'wide';
   variant?: 'default' | 'feedback' | 'danger';
 }
 
@@ -17,6 +18,7 @@ export function Modal({
   onClose,
   pending,
   variant = 'default',
+  size = 'default',
   children,
 }: PropsWithChildren<ModalProps>): JSX.Element {
   const { t } = useTranslation();
@@ -45,7 +47,7 @@ export function Modal({
       onClick={(event) => {
         if (event.target === event.currentTarget && !pending) onClose();
       }}
-      className={`relative m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] overflow-y-auto rounded-3xl bg-card p-6 text-foreground shadow-xl backdrop:bg-overlay/50 ${variant !== 'default' ? 'max-w-[556px] py-7' : 'max-w-[635px]'}`}
+      className={`relative m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] overflow-y-auto rounded-3xl bg-card p-6 text-foreground shadow-xl backdrop:bg-overlay/50 ${variant !== 'default' ? 'max-w-[556px] py-7' : size === 'wide' ? 'max-w-[794px]' : size === 'form' ? 'max-w-[701px]' : 'max-w-[635px]'}`}
     >
       {variant !== 'default' ? (
         <div className="mb-3 flex flex-col items-center gap-5 pt-1 text-center">

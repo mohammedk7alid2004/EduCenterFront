@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ROUTES } from '@/config';
 import { useLogout } from '@/features/auth';
+import { useProfile, ProfileAvatar } from '@/features/profile';
 import { useAuthStore } from '@/core/auth';
 import { setLanguage } from '@/core/i18n';
 import { Icon } from '@/shared/ui';
@@ -10,14 +11,25 @@ export function DashboardHeader({ onMenuClick }: { onMenuClick: () => void }): J
   const { t, i18n } = useTranslation();
   const location = useLocation();
   const logout = useLogout();
+  const profile = useProfile();
   const user = useAuthStore((state) => state.user);
   const [profileOpen, setProfileOpen] = useState(false);
   const arabic = i18n.language.startsWith('ar');
-  const section = location.pathname.startsWith(ROUTES.teachers)
-    ? 'teachers'
-    : location.pathname.startsWith(ROUTES.subjects)
-      ? 'subjects'
-      : 'dashboard';
+  const isSystem =
+    location.pathname.startsWith(ROUTES.roles) || location.pathname.startsWith(ROUTES.employees);
+  const section = location.pathname.startsWith(ROUTES.classrooms)
+    ? 'classrooms'
+    : location.pathname.startsWith(ROUTES.profile)
+      ? 'profile'
+      : location.pathname.startsWith(ROUTES.roles)
+        ? 'roles'
+        : location.pathname.startsWith(ROUTES.employees)
+          ? 'employees'
+          : location.pathname.startsWith(ROUTES.teachers)
+            ? 'teachers'
+            : location.pathname.startsWith(ROUTES.subjects)
+              ? 'subjects'
+              : 'dashboard';
   return (
     <header className="dashboard-header relative flex min-h-[77px] flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
       <div className="flex min-w-0 items-center gap-2 text-sm">
@@ -30,7 +42,15 @@ export function DashboardHeader({ onMenuClick }: { onMenuClick: () => void }): J
           <Icon name="panel" className="size-6" />
         </button>
         <span className="hidden sm:inline">
-          {t(section === 'dashboard' ? 'nav.dashboard' : 'nav.schedule')}
+          {t(
+            isSystem
+              ? 'nav.system'
+              : section === 'profile'
+                ? 'nav.dashboard'
+                : section === 'dashboard'
+                  ? 'nav.dashboard'
+                  : 'nav.schedule',
+          )}
         </span>
         <Icon name="chevronRight" className="size-4 text-primary rtl:rotate-180" />
         <span className="font-semibold text-primary">{t(`nav.${section}`)}</span>
@@ -62,13 +82,15 @@ export function DashboardHeader({ onMenuClick }: { onMenuClick: () => void }): J
         <div className="relative">
           <button
             type="button"
+            aria-label={t('profile.openMenu')}
             aria-expanded={profileOpen}
             onClick={() => setProfileOpen(!profileOpen)}
             className="header-control flex h-[45px] items-center gap-1.5 rounded-xl bg-card px-3 sm:w-[181px]"
           >
-            <span className="grid size-8 place-items-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
-              {user?.name.charAt(0).toUpperCase()}
-            </span>
+            <ProfileAvatar
+              name={profile.data?.fullName || user?.name || ''}
+              imageUrl={profile.data?.imageUrl}
+            />
             <span className="hidden min-w-0 flex-1 text-start sm:block">
               <span className="block truncate text-xs font-medium">{user?.name}</span>
               <span className="block text-[10px] text-muted">
@@ -83,6 +105,14 @@ export function DashboardHeader({ onMenuClick }: { onMenuClick: () => void }): J
           </button>
           {profileOpen && (
             <div className="absolute end-0 top-full z-20 mt-2 min-w-40 rounded-xl border border-border bg-card p-2 shadow-lg">
+              <Link
+                to={ROUTES.profile}
+                onClick={() => setProfileOpen(false)}
+                className="flex w-full items-center gap-2 rounded-lg p-2 text-sm text-primary hover:bg-primary/10"
+              >
+                <Icon name="users" className="size-4" />
+                {t('nav.profile')}
+              </Link>
               <button
                 type="button"
                 onClick={() => logout.mutate()}

@@ -1,7 +1,8 @@
-import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { useEffect, useState, type ReactNode } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ROUTES, type IconName } from '@/config';
+import { PERMISSIONS, ROUTES, SIDEBAR_GROUP, type IconName } from '@/config';
+import { usePermission } from '@/core/auth';
 import { Icon } from '@/shared/ui';
 export function DashboardSidebar({
   open,
@@ -11,7 +12,16 @@ export function DashboardSidebar({
   onClose: () => void;
 }): JSX.Element {
   const { t } = useTranslation();
-  const [scheduleOpen, setScheduleOpen] = useState(true);
+  const location = useLocation();
+  const can = usePermission();
+  const isSystem =
+    location.pathname.startsWith(ROUTES.roles) || location.pathname.startsWith(ROUTES.employees);
+  const [openGroup, setOpenGroup] = useState<string | null>(
+    isSystem ? SIDEBAR_GROUP.system : SIDEBAR_GROUP.schedule,
+  );
+  useEffect(() => {
+    setOpenGroup(isSystem ? SIDEBAR_GROUP.system : SIDEBAR_GROUP.schedule);
+  }, [isSystem]);
   return (
     <>
       {open && (
@@ -49,48 +59,104 @@ export function DashboardSidebar({
           <NavLink
             to={ROUTES.dashboard}
             onClick={onClose}
-            className={({ isActive }) =>
-              `flex h-12 items-center gap-3 rounded-xl px-2 ${isActive ? 'text-card' : 'text-card hover:bg-card/5'}`
-            }
+            className="flex h-12 items-center gap-3 rounded-xl px-2 text-card hover:bg-card/5"
           >
             <Icon name="home" className="size-5" />
             {t('nav.dashboard')}
           </NavLink>
-          <div
-            className={`-me-[21px] schedule-panel relative rounded-s-[18px] transition ${scheduleOpen ? 'bg-subtle pb-4 text-primary' : 'text-card/80'}`}
+          <SidebarSection
+            title={t('nav.schedule')}
+            icon="schedule"
+            expanded={openGroup === SIDEBAR_GROUP.schedule}
+            onToggle={() =>
+              setOpenGroup(openGroup === SIDEBAR_GROUP.schedule ? null : SIDEBAR_GROUP.schedule)
+            }
           >
-            <button
-              type="button"
-              aria-expanded={scheduleOpen}
-              onClick={() => setScheduleOpen(!scheduleOpen)}
-              className="flex h-[54px] w-full items-center justify-between gap-2 pe-1 ps-2 text-[15px]"
+            <SidebarLink
+              route={ROUTES.teachers}
+              icon="teacher"
+              label={t('nav.teachers')}
+              onClick={onClose}
+            />
+            <SidebarLink
+              route={ROUTES.subjects}
+              icon="graduationCap"
+              label={t('nav.subjects')}
+              onClick={onClose}
+            />
+            <SidebarLink
+              route={ROUTES.classrooms}
+              icon="classroom"
+              label={t('nav.classrooms')}
+              onClick={onClose}
+            />
+          </SidebarSection>
+          {(can(PERMISSIONS.roles.read) || can(PERMISSIONS.employees.read)) && (
+            <SidebarSection
+              title={t('nav.system')}
+              icon="system"
+              expanded={openGroup === SIDEBAR_GROUP.system}
+              onToggle={() =>
+                setOpenGroup(openGroup === SIDEBAR_GROUP.system ? null : SIDEBAR_GROUP.system)
+              }
             >
-              <span className="flex items-center gap-2 whitespace-nowrap">
-                <Icon name="schedule" className="size-5" />
-                {t('nav.schedule')}
-              </span>
-              <Icon name={scheduleOpen ? 'chevronDown' : 'chevronUp'} className="size-4 shrink-0" />
-            </button>
-            {scheduleOpen && (
-              <div className="space-y-1 pe-1 ps-[18px]">
+              {can(PERMISSIONS.roles.read) && (
                 <SidebarLink
-                  route={ROUTES.teachers}
-                  icon="teacher"
-                  label={t('nav.teachers')}
+                  route={ROUTES.roles}
+                  icon="permission"
+                  label={t('nav.roles')}
                   onClick={onClose}
                 />
+              )}
+              {can(PERMISSIONS.employees.read) && (
                 <SidebarLink
-                  route={ROUTES.subjects}
-                  icon="graduationCap"
-                  label={t('nav.subjects')}
+                  route={ROUTES.employees}
+                  icon="users"
+                  label={t('nav.employees')}
                   onClick={onClose}
                 />
-              </div>
-            )}
-          </div>
+              )}
+            </SidebarSection>
+          )}
         </nav>
       </aside>
     </>
+  );
+}
+function SidebarSection({
+  title,
+  icon,
+  expanded,
+  onToggle,
+  children,
+}: {
+  title: string;
+  icon: IconName;
+  expanded: boolean;
+  onToggle: () => void;
+  children: ReactNode;
+}): JSX.Element {
+  return (
+    <div
+      className={`-me-[21px] relative rounded-s-[18px] transition ${expanded ? 'schedule-panel bg-subtle pb-4 text-primary' : 'text-card'}`}
+    >
+      <button
+        type="button"
+        aria-expanded={expanded}
+        onClick={onToggle}
+        className="flex h-[54px] w-full items-center justify-between gap-2 pe-1 ps-2 text-[15px]"
+      >
+        <span className="flex items-center gap-2 whitespace-nowrap">
+          <Icon name={icon} className="size-5 shrink-0" />
+          {title}
+        </span>
+        <Icon
+          name={expanded ? 'chevronDown' : 'chevronRight'}
+          className="size-4 shrink-0 rtl:rotate-180"
+        />
+      </button>
+      {expanded && <div className="space-y-1 pe-1 ps-[18px]">{children}</div>}
+    </div>
   );
 }
 function SidebarLink({
@@ -108,9 +174,7 @@ function SidebarLink({
     <NavLink
       to={route}
       onClick={onClick}
-      className={({ isActive }) =>
-        `flex h-11 items-center gap-3 rounded-xl pe-0 ${isActive ? 'text-primary' : 'text-primary'}`
-      }
+      className="flex h-11 items-center gap-3 rounded-xl pe-0 text-sm text-primary"
     >
       {({ isActive }) => (
         <>
@@ -118,10 +182,12 @@ function SidebarLink({
             className={`size-2 shrink-0 rounded-full ${isActive ? 'bg-primary' : 'bg-primary/25'}`}
           />
           <span
-            className={`-ms-1 flex h-11 flex-1 items-center gap-3 rounded-xl px-4 ${isActive ? 'bg-primary text-card' : 'hover:bg-primary/5'}`}
+            className={`-ms-1 flex h-11 min-w-0 flex-1 items-center gap-2.5 rounded-xl px-3 ${isActive ? 'bg-primary text-card' : 'hover:bg-primary/5'}`}
           >
             <Icon name={icon} className="size-5 shrink-0" />
-            {label}
+            <span className="truncate" title={label}>
+              {label}
+            </span>
           </span>
         </>
       )}

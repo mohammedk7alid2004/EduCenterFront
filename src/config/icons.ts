@@ -1,6 +1,10 @@
 import {
   AlertCircle,
+  ShieldCheck,
+  ShieldEllipsis,
   CalendarDays,
+  CircleUserRound,
+  Grid2X2,
   Home,
   PanelLeft,
   ArrowLeft,
@@ -42,7 +46,11 @@ import {
 
 export const icons = {
   alert: AlertCircle,
+  system: ShieldCheck,
+  permission: ShieldEllipsis,
   calendar: CalendarDays,
+  classroom: Grid2X2,
+  profile: CircleUserRound,
   home: Home,
   panel: PanelLeft,
   arrowLeft: ArrowLeft,

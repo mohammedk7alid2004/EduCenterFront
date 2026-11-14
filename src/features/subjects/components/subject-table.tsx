@@ -1,3 +1,4 @@
+import { useAuditColumns } from '@/shared/ui';
 import { useTranslation } from 'react-i18next';
 import { DataTable, StatusSwitch, useConfirm, type Column } from '@/shared/ui';
 import { useOnline } from '@/shared/lib';
@@ -20,6 +21,7 @@ export function SubjectTable({
   const { confirm, dialog } = useConfirm();
   const remove = useDeleteSubjects();
   const toggle = useToggleSubjectStatus();
+  const auditColumns = useAuditColumns<SubjectDto>();
   const columns: Column<SubjectDto>[] = [
     {
       id: 'id',
@@ -67,6 +69,7 @@ export function SubjectTable({
         />
       ),
     },
+    ...auditColumns,
     {
       id: 'actions',
       headerClassName: 'w-44',

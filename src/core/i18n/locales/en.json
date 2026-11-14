@@ -76,7 +76,10 @@
       "teachersDescription": "View and manage teachers and their assigned subjects.",
       "subjectsDescription": "Manage subjects, their status, and curriculum notes.",
       "open": "Open section",
-      "welcome": "Welcome, {{name}}"
+      "welcome": "Welcome, {{name}}",
+      "rolesDescription": "Manage roles and their assigned permissions",
+      "employeesDescription": "Manage administrative employees and their roles",
+      "classroomsDescription": "Manage classrooms, capacity and availability"
     },
     "login": {
       "title": "Welcome back"
@@ -95,7 +98,7 @@
     "schedule": "Schedule Management",
     "appointments": "Appointments",
     "groups": "Groups",
-    "classrooms": "Classrooms",
+    "classrooms": "Classroom",
     "expenses": "Expenses Management",
     "purchases": "Purchases Management",
     "blogs": "Blogs Management",
@@ -105,7 +108,11 @@
     "contact": "Contact Us",
     "settings": "General Setting",
     "permissions": "Permission",
-    "orders": "Orders Management"
+    "orders": "Orders Management",
+    "system": "System Management",
+    "roles": "Role & Permission",
+    "employees": "Sub Admin Employee",
+    "profile": "My Profile"
   },
   "auth": {
     "splash": {
@@ -267,5 +274,177 @@
     "phone": "Enter a valid phone number",
     "subjects": "Select at least one subject",
     "subjectName": "Enter the subject name in Arabic or English"
+  },
+  "roleManagement": {
+    "title": "Role & Permission",
+    "description": "Manage roles and their assigned permissions",
+    "create": "Add New Role",
+    "viewTitle": "View Permission",
+    "permissions": "Permissions",
+    "availablePermissions": "Available Permissions",
+    "form": {
+      "name": "Role Name",
+      "namePlaceholder": "Enter Role Name",
+      "createTitle": "Add New Role",
+      "editTitle": "Edit Permission",
+      "permissionsRequired": "Select at least one permission"
+    },
+    "delete": {
+      "title": "Delete Role"
+    },
+    "feedback": {
+      "created": "The role was successfully added.",
+      "updated": "The permissions have been saved successfully.",
+      "deleted": "The selected roles have been deleted successfully."
+    }
+  },
+  "employees": {
+    "title": "Sub Admin Employee",
+    "description": "Manage administrative employees and their roles",
+    "create": "Add New Sub Admin Employee",
+    "viewTitle": "View Sub Admin Employee",
+    "table": {
+      "name": "Employee Name"
+    },
+    "form": {
+      "fullName": "Full Name",
+      "email": "Email",
+      "password": "Password",
+      "role": "Role",
+      "gender": "Gender",
+      "selectGender": "Select gender",
+      "male": "Male",
+      "female": "Female",
+      "selectRole": "Select Role",
+      "noRoles": "No roles are available. Create a role first.",
+      "createTitle": "Add New Sub Admin Employee",
+      "editTitle": "Edit Sub Admin Employee",
+      "phone": "Phone Number"
+    },
+    "delete": {
+      "title": "Delete Sub Admin Employee"
+    },
+    "feedback": {
+      "created": "The employee was successfully added.",
+      "updated": "The changes have been saved successfully.",
+      "deleted": "The selected employees have been deleted successfully."
+    }
+  },
+  "permissionGroups": {
+    "AboutUs": "About Us",
+    "ContactUs": "Contact Us",
+    "CustomerRegistration": "Customer Registration",
+    "FAQ": "FAQ",
+    "GeneralCompanySettings": "General Company Settings",
+    "Help": "Help",
+    "PrivacyPolicy": "Privacy Policy",
+    "ReturnPolicy": "Return Policy",
+    "SalesPolicy": "Sales Policy",
+    "ShippingPolicy": "Shipping Policy",
+    "SocialMediaLinks": "Social Media Links",
+    "TermsAndConditions": "Terms And Conditions",
+    "Roles": "Roles",
+    "Permissions": "Permissions",
+    "AuditLogs": "Audit Logs",
+    "Statistics": "Statistics",
+    "SubAdminEmployee": "Sub Admin Employee",
+    "Teachers": "Teachers",
+    "CareerFields": "Career Fields",
+    "Subjects": "Subjects",
+    "Country": "Country",
+    "City": "City",
+    "Government": "Government",
+    "Village": "Village",
+    "OurTeams": "Our Teams",
+    "Classrooms": "Classrooms"
+  },
+  "permissionActions": {
+    "View": "View",
+    "ViewAll": "View All",
+    "GetAll": "Get All",
+    "ShowOne": "Show One",
+    "GetById": "Get By Id",
+    "Read": "Read",
+    "Create": "Create",
+    "Update": "Update",
+    "Delete": "Delete",
+    "ActiveStatus": "Active Status",
+    "ToggleStatus": "Toggle Status",
+    "ImportExcelFile": "Import Excel File",
+    "ExportExcelFile": "Export Excel File",
+    "GetTemplateExcelFile": "Get Template Excel File",
+    "Import": "Import",
+    "Export": "Export",
+    "ExportData": "Export Data",
+    "GetTemplate": "Get Template",
+    "GetExcelTemplate": "Get Excel Template",
+    "UploadExcel": "Upload Excel",
+    "GetDashboard": "Get Dashboard",
+    "GetCounters": "Get Counters",
+    "GetOnlineSubAdmins": "Get Online Sub Admins"
+  },
+  "audit": {
+    "createdBy": "Created By",
+    "updatedBy": "Updated By",
+    "createdAt": "Created At",
+    "updatedAt": "Updated At"
+  },
+  "profile": {
+    "title": "My Profile",
+    "description": "Manage your personal details and account password",
+    "details": "Profile Details",
+    "fullName": "Full Name",
+    "phone": "Phone Number",
+    "email": "Email",
+    "emailReadOnly": "Your email address cannot be changed here.",
+    "image": "Profile Image",
+    "imageHelp": "JPG, PNG or WebP, up to 10 MB.",
+    "saved": "Profile updated successfully.",
+    "changePassword": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm New Password",
+    "passwordHelp": "Use at least 8 characters with uppercase, lowercase, a number and a special character. You will sign in again after changing your password.",
+    "passwordChanged": "Password changed successfully. Please sign in again.",
+    "openMenu": "Open account menu",
+    "validation": {
+      "phone": "Enter 8 to 15 digits, optionally starting with +.",
+      "employeePhone": "Enter a valid phone number.",
+      "imageSize": "Choose a nonempty image up to 10 MB.",
+      "imageType": "Choose a JPG, PNG or WebP image.",
+      "passwordMatch": "The passwords do not match."
+    },
+    "chooseImage": "Choose image",
+    "noImageSelected": "No new image selected",
+    "editTitle": "Edit Profile"
+  },
+  "classrooms": {
+    "title": "Classroom",
+    "description": "Manage your classrooms and their capacity",
+    "create": "Add New Classroom",
+    "viewTitle": "View Classroom",
+    "capacityPeople": "{{count}} Person",
+    "form": {
+      "name": "Classroom Name",
+      "namePlaceholder": "Enter Classroom Name",
+      "capacity": "Capacity",
+      "notes": "Notes",
+      "notesPlaceholder": "Enter Notes...",
+      "createTitle": "Add New Classroom",
+      "editTitle": "Edit Classroom",
+      "increaseCapacity": "Increase capacity",
+      "decreaseCapacity": "Decrease capacity"
+    },
+    "validation": {
+      "capacity": "Enter a whole number from 1 to 2,147,483,647."
+    },
+    "delete": {
+      "title": "Delete Classroom"
+    },
+    "feedback": {
+      "created": "The classroom was successfully added.",
+      "updated": "The changes have been saved successfully.",
+      "deleted": "The selected classrooms have been deleted successfully."
+    }
   }
 }

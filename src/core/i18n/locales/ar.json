@@ -76,7 +76,10 @@
       "teachersDescription": "عرض وإدارة المدرسين والمواد المسندة إليهم.",
       "subjectsDescription": "إدارة المواد الدراسية وحالتها وملاحظاتها.",
       "open": "فتح القسم",
-      "welcome": "مرحبًا، {{name}}"
+      "welcome": "مرحبًا، {{name}}",
+      "rolesDescription": "إدارة الأدوار والصلاحيات الممنوحة لكل دور",
+      "employeesDescription": "إدارة الموظفين الإداريين وأدوارهم وصلاحياتهم",
+      "classroomsDescription": "إدارة القاعات الدراسية والسعة وحالتها"
     },
     "login": {
       "title": "مرحباً بعودتك"
@@ -95,7 +98,7 @@
     "schedule": "إدارة الجدول",
     "appointments": "المواعيد",
     "groups": "المجموعات",
-    "classrooms": "الفصول والقاعات",
+    "classrooms": "القاعات الدراسية",
     "expenses": "إدارة المصروفات",
     "purchases": "إدارة المشتريات",
     "blogs": "إدارة المقالات",
@@ -105,7 +108,11 @@
     "contact": "اتصل بنا",
     "settings": "الإعدادات العامة",
     "permissions": "الصلاحيات",
-    "orders": "إدارة الطلبات"
+    "orders": "إدارة الطلبات",
+    "system": "إدارة النظام",
+    "roles": "الأدوار والصلاحيات",
+    "employees": "الموظفون الإداريون",
+    "profile": "الملف الشخصي"
   },
   "auth": {
     "splash": {
@@ -267,5 +274,177 @@
     "phone": "أدخل رقم هاتف صحيحًا",
     "subjects": "اختر مادة واحدة على الأقل",
     "subjectName": "أدخل اسم المادة بالعربية أو الإنجليزية"
+  },
+  "roleManagement": {
+    "title": "الأدوار والصلاحيات",
+    "description": "إدارة الأدوار والصلاحيات الممنوحة لكل دور",
+    "create": "إضافة دور جديد",
+    "viewTitle": "عرض الصلاحيات",
+    "permissions": "الصلاحيات",
+    "availablePermissions": "الصلاحيات المتاحة",
+    "form": {
+      "name": "اسم الدور",
+      "namePlaceholder": "أدخل اسم الدور",
+      "createTitle": "إضافة دور جديد",
+      "editTitle": "تعديل الصلاحيات",
+      "permissionsRequired": "اختر صلاحية واحدة على الأقل"
+    },
+    "delete": {
+      "title": "حذف الدور"
+    },
+    "feedback": {
+      "created": "تمت إضافة الدور بنجاح.",
+      "updated": "تم حفظ الصلاحيات بنجاح.",
+      "deleted": "تم حذف الأدوار المحددة بنجاح."
+    }
+  },
+  "employees": {
+    "title": "الموظفون الإداريون",
+    "description": "إدارة الموظفين الإداريين وأدوارهم وصلاحياتهم",
+    "create": "إضافة موظف إداري",
+    "viewTitle": "عرض الموظف الإداري",
+    "table": {
+      "name": "اسم الموظف"
+    },
+    "form": {
+      "fullName": "الاسم الكامل",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "role": "الدور",
+      "gender": "النوع",
+      "selectGender": "اختر النوع",
+      "male": "ذكر",
+      "female": "أنثى",
+      "selectRole": "اختر الدور",
+      "noRoles": "لا توجد أدوار متاحة. أضف دورًا أولًا.",
+      "createTitle": "إضافة موظف إداري جديد",
+      "editTitle": "تعديل الموظف الإداري",
+      "phone": "رقم الهاتف"
+    },
+    "delete": {
+      "title": "حذف الموظف الإداري"
+    },
+    "feedback": {
+      "created": "تمت إضافة الموظف الإداري بنجاح.",
+      "updated": "تم حفظ التغييرات بنجاح.",
+      "deleted": "تم حذف الموظفين المحددين بنجاح."
+    }
+  },
+  "permissionGroups": {
+    "AboutUs": "من نحن",
+    "ContactUs": "تواصل معنا",
+    "CustomerRegistration": "تسجيل العملاء",
+    "FAQ": "الأسئلة الشائعة",
+    "GeneralCompanySettings": "إعدادات الشركة",
+    "Help": "المساعدة",
+    "PrivacyPolicy": "سياسة الخصوصية",
+    "ReturnPolicy": "سياسة الاسترجاع",
+    "SalesPolicy": "سياسة المبيعات",
+    "ShippingPolicy": "سياسة الشحن",
+    "SocialMediaLinks": "روابط التواصل الاجتماعي",
+    "TermsAndConditions": "الشروط والأحكام",
+    "Roles": "الأدوار",
+    "Permissions": "الصلاحيات",
+    "AuditLogs": "سجل العمليات",
+    "Statistics": "الإحصائيات",
+    "SubAdminEmployee": "الموظفون الإداريون",
+    "Teachers": "المدرسون",
+    "CareerFields": "المجالات المهنية",
+    "Subjects": "المواد الدراسية",
+    "Country": "الدول",
+    "City": "المدن",
+    "Government": "المحافظات",
+    "Village": "القرى",
+    "OurTeams": "فريق العمل",
+    "Classrooms": "القاعات الدراسية"
+  },
+  "permissionActions": {
+    "View": "عرض",
+    "ViewAll": "عرض الكل",
+    "GetAll": "عرض الكل",
+    "ShowOne": "عرض التفاصيل",
+    "GetById": "عرض التفاصيل",
+    "Read": "قراءة",
+    "Create": "إضافة",
+    "Update": "تعديل",
+    "Delete": "حذف",
+    "ActiveStatus": "تغيير الحالة",
+    "ToggleStatus": "تغيير الحالة",
+    "ImportExcelFile": "استيراد ملف إكسل",
+    "ExportExcelFile": "تصدير ملف إكسل",
+    "GetTemplateExcelFile": "تحميل النموذج",
+    "Import": "استيراد",
+    "Export": "تصدير",
+    "ExportData": "تصدير البيانات",
+    "GetTemplate": "تحميل النموذج",
+    "GetExcelTemplate": "تحميل نموذج إكسل",
+    "UploadExcel": "رفع ملف إكسل",
+    "GetDashboard": "عرض لوحة التحكم",
+    "GetCounters": "عرض الأعداد",
+    "GetOnlineSubAdmins": "عرض الموظفين المتصلين"
+  },
+  "audit": {
+    "createdBy": "أُنشئ بواسطة",
+    "updatedBy": "عُدّل بواسطة",
+    "createdAt": "تاريخ الإنشاء",
+    "updatedAt": "تاريخ التعديل"
+  },
+  "profile": {
+    "title": "الملف الشخصي",
+    "description": "إدارة بياناتك الشخصية وكلمة مرور الحساب",
+    "details": "تفاصيل الملف الشخصي",
+    "fullName": "الاسم بالكامل",
+    "phone": "رقم الهاتف",
+    "email": "البريد الإلكتروني",
+    "emailReadOnly": "لا يمكن تعديل البريد الإلكتروني من هنا.",
+    "image": "الصورة الشخصية",
+    "imageHelp": "صورة JPG أو PNG أو WebP بحجم أقصى 10 ميجابايت.",
+    "saved": "تم تحديث الملف الشخصي بنجاح.",
+    "changePassword": "تغيير كلمة المرور",
+    "currentPassword": "كلمة المرور الحالية",
+    "newPassword": "كلمة المرور الجديدة",
+    "confirmPassword": "تأكيد كلمة المرور الجديدة",
+    "passwordHelp": "استخدم 8 أحرف على الأقل تشمل حرفًا كبيرًا وصغيرًا ورقمًا ورمزًا خاصًا. ستحتاج لتسجيل الدخول مجددًا بعد التغيير.",
+    "passwordChanged": "تم تغيير كلمة المرور بنجاح. يرجى تسجيل الدخول مجددًا.",
+    "openMenu": "فتح قائمة الحساب",
+    "validation": {
+      "phone": "أدخل من 8 إلى 15 رقمًا، ويمكن أن يبدأ الرقم بعلامة +.",
+      "employeePhone": "أدخل رقم هاتف صحيحًا.",
+      "imageSize": "اختر صورة غير فارغة بحجم أقصى 10 ميجابايت.",
+      "imageType": "اختر صورة بصيغة JPG أو PNG أو WebP.",
+      "passwordMatch": "كلمتا المرور غير متطابقتين."
+    },
+    "chooseImage": "اختيار صورة",
+    "noImageSelected": "لم يتم اختيار صورة جديدة",
+    "editTitle": "تعديل الملف الشخصي"
+  },
+  "classrooms": {
+    "title": "القاعات الدراسية",
+    "description": "إدارة القاعات الدراسية والسعة الاستيعابية",
+    "create": "إضافة قاعة دراسية",
+    "viewTitle": "عرض القاعة الدراسية",
+    "capacityPeople": "{{count}} شخص",
+    "form": {
+      "name": "اسم القاعة",
+      "namePlaceholder": "أدخل اسم القاعة",
+      "capacity": "السعة الاستيعابية",
+      "notes": "ملاحظات",
+      "notesPlaceholder": "أدخل الملاحظات...",
+      "createTitle": "إضافة قاعة دراسية",
+      "editTitle": "تعديل القاعة الدراسية",
+      "increaseCapacity": "زيادة السعة",
+      "decreaseCapacity": "تقليل السعة"
+    },
+    "validation": {
+      "capacity": "أدخل عددًا صحيحًا من 1 إلى 2,147,483,647."
+    },
+    "delete": {
+      "title": "حذف القاعة الدراسية"
+    },
+    "feedback": {
+      "created": "تمت إضافة القاعة الدراسية بنجاح.",
+      "updated": "تم حفظ التعديلات بنجاح.",
+      "deleted": "تم حذف القاعات المحددة بنجاح."
+    }
   }
 }

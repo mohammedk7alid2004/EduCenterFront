@@ -20,6 +20,8 @@ interface ManagementListProps {
   error: ApiError | null;
   onRetry: () => void;
   onCreate: () => void;
+  canCreate?: boolean;
+  statusFilter?: boolean;
   children: ReactNode;
 }
 
@@ -57,14 +59,16 @@ export function ManagementList(props: ManagementListProps): JSX.Element {
             <p className="mt-0.5 text-xs leading-[18px] text-muted">{props.description}</p>
           </div>
         </div>
-        <Button
-          onClick={props.onCreate}
-          disabled={!online}
-          className="h-[43px] rounded-[10px] font-normal"
-        >
-          <Icon name="addSquare" className="size-5" />
-          {props.createLabel}
-        </Button>
+        {props.canCreate !== false && (
+          <Button
+            onClick={props.onCreate}
+            disabled={!online}
+            className="h-[43px] rounded-[10px] font-normal"
+          >
+            <Icon name="addSquare" className="size-5" />
+            {props.createLabel}
+          </Button>
+        )}
       </div>
       <div className="flex items-center gap-4">
         <div className="relative flex-1">
@@ -81,15 +85,17 @@ export function ManagementList(props: ManagementListProps): JSX.Element {
             className="h-[43px] w-full rounded-[10px] border border-muted bg-card pe-4 ps-10 text-xs shadow-sm outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/10"
           />
         </div>
-        <Button
-          variant="ghost"
-          aria-expanded={filterOpen}
-          onClick={() => setFilterOpen(!filterOpen)}
-          className={`h-[43px] rounded-xl border ${controls.status ? 'border-primary text-primary' : 'border-muted text-muted'}`}
-        >
-          <Icon name="filter" className="size-5" />
-          {t('common.filter')}
-        </Button>
+        {props.statusFilter !== false && (
+          <Button
+            variant="ghost"
+            aria-expanded={filterOpen}
+            onClick={() => setFilterOpen(!filterOpen)}
+            className={`h-[43px] rounded-xl border ${controls.status ? 'border-primary text-primary' : 'border-muted text-muted'}`}
+          >
+            <Icon name="filter" className="size-5" />
+            {t('common.filter')}
+          </Button>
+        )}
       </div>
       {filterOpen && (
         <div className="flex flex-wrap items-center gap-3 rounded-xl border border-border bg-subtle p-4">

@@ -1,3 +1,4 @@
+import { useAuditColumns } from '@/shared/ui';
 import { useTranslation } from 'react-i18next';
 import { DataTable, StatusSwitch, useConfirm, type Column } from '@/shared/ui';
 import { useOnline } from '@/shared/lib';
@@ -20,6 +21,7 @@ export function TeacherTable({
   const { confirm, dialog } = useConfirm();
   const remove = useDeleteTeachers();
   const toggle = useToggleTeacherStatus();
+  const auditColumns = useAuditColumns<TeacherDto>();
   const columns: Column<TeacherDto>[] = [
     {
       id: 'id',
@@ -89,6 +91,7 @@ export function TeacherTable({
         />
       ),
     },
+    ...auditColumns,
     {
       id: 'actions',
       headerClassName: 'w-52',

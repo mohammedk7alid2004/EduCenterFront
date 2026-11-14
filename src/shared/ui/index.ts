@@ -13,3 +13,5 @@ export * from './row-actions';
 export * from './status-switch';
 
 export * from './detail-field';
+
+export * from './audit-columns';

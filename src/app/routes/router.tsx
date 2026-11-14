@@ -1,5 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
-import { ROUTES } from '@/config';
+import { PERMISSIONS, ROUTES } from '@/config';
 import { LoginPage, PasswordRecoveryPage } from '@/features/auth';
 import { AppLayout } from '../layouts/app-layout';
 import { RouteErrorBoundary } from '../error-boundary';
@@ -37,6 +37,41 @@ export const router = createBrowserRouter([
     ),
     errorElement: <RouteErrorBoundary />,
     children: [
+      {
+        path: ROUTES.classrooms,
+        lazy: async () => ({ Component: (await import('@/features/classrooms')).ClassroomsPage }),
+      },
+      {
+        path: ROUTES.profile,
+        lazy: async () => ({ Component: (await import('@/features/profile')).ProfilePage }),
+      },
+      {
+        path: ROUTES.roles,
+        lazy: async () => {
+          const { RolesPage } = await import('@/features/roles');
+          return {
+            Component: () => (
+              <ProtectedRoute permission={PERMISSIONS.roles.read}>
+                <RolesPage />
+              </ProtectedRoute>
+            ),
+          };
+        },
+      },
+      {
+        path: ROUTES.employees,
+        lazy: async () => {
+          const { EmployeesPage } = await import('@/features/employees');
+          return {
+            Component: () => (
+              <ProtectedRoute permission={PERMISSIONS.employees.read}>
+                <EmployeesPage />
+              </ProtectedRoute>
+            ),
+          };
+        },
+      },
+
       {
         path: ROUTES.dashboard,
         lazy: async () => ({ Component: (await import('@/features/dashboard')).DashboardPage }),

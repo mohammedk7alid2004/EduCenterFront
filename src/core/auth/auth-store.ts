@@ -20,6 +20,7 @@ interface AuthState {
     user: AuthUser,
     rememberMe?: boolean,
   ) => void;
+  setUserName: (name: string) => void;
   setAccessToken: (accessToken: string) => void;
   setTokens: (accessToken: string, refreshToken: string) => void;
   logout: () => void;
@@ -37,6 +38,8 @@ export const useAuthStore = create<AuthState>()(
         sessionStorage.removeItem(STORAGE_KEYS.auth);
         set({ accessToken, refreshToken, user });
       },
+      setUserName: (name) =>
+        set((state) => ({ user: state.user ? { ...state.user, name } : null })),
       setAccessToken: (accessToken) => set({ accessToken }),
       setTokens: (accessToken, refreshToken) => set({ accessToken, refreshToken }),
       logout: () => set({ accessToken: null, refreshToken: null, user: null }),

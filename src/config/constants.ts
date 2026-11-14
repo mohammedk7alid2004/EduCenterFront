@@ -1,3 +1,4 @@
+export const SIDEBAR_GROUP = { schedule: 'schedule', system: 'system' } as const;
 export const APP_NAME = import.meta.env.VITE_APP_NAME ?? 'EduCenter';
 export const LIST_PARAMS = {
   search: 'q',
@@ -25,6 +26,10 @@ export const ROUTES = {
   dashboard: '/dashboard',
   subjects: '/subjects',
   teachers: '/teachers',
+  roles: '/roles',
+  employees: '/employees',
+  profile: '/profile',
+  classrooms: '/classrooms',
 } as const;
 export const API_ENDPOINTS = {
   auth: {
@@ -34,6 +39,34 @@ export const API_ENDPOINTS = {
     forgotPassword: '/Auth/forgot-password',
     verifyResetOtp: '/Auth/verify-reset-otp',
     resetPassword: '/Auth/reset-password',
+    profile: '/Auth/me',
+    updateProfile: '/Auth/profile',
+    changePassword: '/Auth/change-password',
+  },
+  roles: {
+    getAll: '/Roles',
+    permissions: '/Roles/permissions',
+    detail: (id: string) => `/Roles/permissions/${encodeURIComponent(id)}`,
+    create: '/Roles',
+    update: (id: string) => `/Roles/${encodeURIComponent(id)}`,
+    delete: '/Roles',
+    options: '/v1/select-menu/GetRoles',
+  },
+  employees: {
+    getAll: '/v1/SubAdminEmployee',
+    detail: (id: string) => `/v1/SubAdminEmployee/${encodeURIComponent(id)}`,
+    create: '/v1/SubAdminEmployee',
+    update: '/v1/SubAdminEmployee',
+    delete: '/v1/SubAdminEmployee',
+    toggleStatus: (id: string) => `/v1/SubAdminEmployee/toggle-status/${encodeURIComponent(id)}`,
+  },
+  classrooms: {
+    getAll: '/v1/Classrooms/GetAll',
+    getById: (id: string) => `/v1/Classrooms/ShowOneDetails/${encodeURIComponent(id)}`,
+    create: '/v1/Classrooms/Create',
+    update: '/v1/Classrooms/Update',
+    delete: '/v1/Classrooms/Delete',
+    toggleStatus: (id: string) => `/v1/Classrooms/ToggleStatus/${encodeURIComponent(id)}`,
   },
   template: {
     detail: (id: string) => `/template/${id}`,
@@ -57,7 +90,13 @@ export const API_ENDPOINTS = {
 } as const;
 export const QUERY_KEYS = {
   options: 'options',
+  detail: 'detail',
+  permissions: 'permissions',
+  roles: ['roles'],
+  employees: ['employees'],
   auth: ['auth'],
+  profile: ['profile'],
+  classrooms: ['classrooms'],
   subjects: ['subjects'],
   teachers: ['teachers'],
 } as const;
