@@ -79,7 +79,8 @@
       "welcome": "مرحبًا، {{name}}",
       "rolesDescription": "إدارة الأدوار والصلاحيات الممنوحة لكل دور",
       "employeesDescription": "إدارة الموظفين الإداريين وأدوارهم وصلاحياتهم",
-      "classroomsDescription": "إدارة القاعات الدراسية والسعة وحالتها"
+      "classroomsDescription": "إدارة القاعات الدراسية والسعة وحالتها",
+      "systemDescription": "إدارة إعدادات المركز والسياسات وروابط التواصل والأسئلة الشائعة."
     },
     "login": {
       "title": "مرحباً بعودتك"
@@ -112,7 +113,8 @@
     "system": "إدارة النظام",
     "roles": "الأدوار والصلاحيات",
     "employees": "الموظفون الإداريون",
-    "profile": "الملف الشخصي"
+    "profile": "الملف الشخصي",
+    "access": "إدارة المستخدمين والصلاحيات"
   },
   "auth": {
     "splash": {
@@ -445,6 +447,78 @@
       "created": "تمت إضافة القاعة الدراسية بنجاح.",
       "updated": "تم حفظ التعديلات بنجاح.",
       "deleted": "تم حذف القاعات المحددة بنجاح."
+    }
+  },
+  "systemManagement": {
+    "description": "إدارة إعدادات المركز والسياسات ومحتوى الدعم",
+    "descriptionLabel": "الوصف",
+    "update": "تحديث",
+    "editTitle": "تعديل {{section}}",
+    "message": "المحتوى",
+    "contentLanguage": "لغة المحتوى",
+    "arabic": "العربية",
+    "english": "English",
+    "saved": "تم حفظ التغييرات بنجاح.",
+    "copied": "تم النسخ",
+    "copyFailed": "تعذر النسخ. يمكنك تحديد النص ونسخه.",
+    "copy": "نسخ {{name}}",
+    "invalidUrl": "أدخل رابطًا صحيحًا يبدأ بـ http أو https",
+    "centerName": "اسم المركز",
+    "workingHours": "ساعات العمل",
+    "mainPhoneNumber": "رقم الهاتف الرئيسي",
+    "otherPhones": "أرقام الهواتف الأخرى",
+    "location": "الموقع",
+    "latitude": "خط العرض",
+    "longitude": "خط الطول",
+    "map": "خريطة موقع المركز",
+    "coordinatePair": "أدخل خط العرض وخط الطول معًا",
+    "invalidCoordinates": "أدخل إحداثيات صحيحة",
+    "addLocation": "إضافة موقع",
+    "removeLocation": "حذف الموقع",
+    "addPhone": "إضافة رقم هاتف",
+    "removePhone": "حذف {{phone}}",
+    "invoiceLogoUrl": "شعار الفاتورة",
+    "navbarLogoUrl": "شعار القائمة",
+    "footerLogoUrl": "شعار أسفل الصفحة",
+    "dropFile": "اسحب الملف هنا أو اضغط للاختيار",
+    "imageHint": "PNG أو JPG أو WebP · بحد أقصى 10 ميجابايت",
+    "tabs": {
+      "privacy": "سياسة الخصوصية",
+      "registration": "تسجيل الطلاب",
+      "terms": "الشروط والأحكام",
+      "social": "روابط التواصل الاجتماعي",
+      "faq": "الأسئلة الشائعة",
+      "payment": "سياسة الدفع",
+      "help": "المساعدة",
+      "center": "إعدادات المركز"
+    },
+    "faq": {
+      "create": "إضافة سؤال جديد",
+      "edit": "تعديل السؤال",
+      "view": "عرض السؤال",
+      "question": "السؤال",
+      "answer": "الإجابة",
+      "delete": "حذف الأسئلة",
+      "deleted": "تم حذف الأسئلة المحددة بنجاح."
+    },
+    "platforms": {
+      "WhatsApp": "واتساب",
+      "Facebook": "فيسبوك",
+      "TikTok": "تيك توك",
+      "Snapchat": "سناب شات",
+      "X": "إكس",
+      "Instagram": "إنستغرام",
+      "LinkedIn": "لينكد إن",
+      "Email": "البريد الإلكتروني",
+      "Play Store": "جوجل بلاي",
+      "App Store": "آب ستور",
+      "Twitter": "إكس",
+      "PlayStore": "جوجل بلاي",
+      "AppStore": "آب ستور",
+      "Website": "الموقع الإلكتروني",
+      "AdministrationManagementEmail": "بريد الإدارة",
+      "AdmissionsEmail": "بريد القبول والتسجيل",
+      "TechnicalSupportEmail": "بريد الدعم الفني"
     }
   }
 }

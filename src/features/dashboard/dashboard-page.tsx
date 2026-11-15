@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { PERMISSIONS, ROUTES } from '@/config';
+import { SYSTEM_TABS } from '@/features/system-management';
 import { useAuthStore, usePermission } from '@/core/auth';
 import { Icon } from '@/shared/ui';
 const sections = [
+  { key: 'system', route: ROUTES.systemManagement, icon: 'building', permission: undefined },
   { key: 'classrooms', route: ROUTES.classrooms, icon: 'classroom', permission: undefined },
   { key: 'teachers', route: ROUTES.teachers, icon: 'graduationCap', permission: undefined },
   { key: 'subjects', route: ROUTES.subjects, icon: 'bookOpen', permission: undefined },
@@ -29,7 +31,11 @@ export function DashboardPage(): JSX.Element {
       </div>
       <div className="grid gap-6 md:grid-cols-2">
         {sections
-          .filter((section) => !section.permission || can(section.permission))
+          .filter((section) =>
+            section.key === 'system'
+              ? SYSTEM_TABS.some((tab) => can(tab.read))
+              : !section.permission || can(section.permission),
+          )
           .map((section) => (
             <Link
               key={section.key}

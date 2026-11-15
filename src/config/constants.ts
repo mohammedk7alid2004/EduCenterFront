@@ -30,6 +30,7 @@ export const ROUTES = {
   employees: '/employees',
   profile: '/profile',
   classrooms: '/classrooms',
+  systemManagement: '/system-management',
 } as const;
 export const API_ENDPOINTS = {
   auth: {
@@ -89,6 +90,7 @@ export const API_ENDPOINTS = {
   },
 } as const;
 export const QUERY_KEYS = {
+  systemManagement: ['system-management'],
   options: 'options',
   detail: 'detail',
   permissions: 'permissions',

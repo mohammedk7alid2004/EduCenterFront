@@ -3,6 +3,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { PERMISSIONS, ROUTES, SIDEBAR_GROUP, type IconName } from '@/config';
 import { usePermission } from '@/core/auth';
+import { SYSTEM_TABS, useCenterBrand } from '@/features/system-management';
 import { Icon } from '@/shared/ui';
 export function DashboardSidebar({
   open,
@@ -14,6 +15,7 @@ export function DashboardSidebar({
   const { t } = useTranslation();
   const location = useLocation();
   const can = usePermission();
+  const brand = useCenterBrand();
   const isSystem =
     location.pathname.startsWith(ROUTES.roles) || location.pathname.startsWith(ROUTES.employees);
   const [openGroup, setOpenGroup] = useState<string | null>(
@@ -37,11 +39,11 @@ export function DashboardSidebar({
       >
         <div className="flex h-[125px] shrink-0 items-start justify-center pt-6">
           <img
-            src="/logo-3m2a.svg"
+            src={brand.data?.navbarLogoUrl || '/logo-3m2a.svg'}
             alt={t('app.logo')}
             width={179}
             height={85}
-            className="h-[85px] w-[179px]"
+            className="h-[85px] w-[179px] object-contain"
           />
           <button
             type="button"
@@ -93,7 +95,7 @@ export function DashboardSidebar({
           </SidebarSection>
           {(can(PERMISSIONS.roles.read) || can(PERMISSIONS.employees.read)) && (
             <SidebarSection
-              title={t('nav.system')}
+              title={t('nav.access')}
               icon="system"
               expanded={openGroup === SIDEBAR_GROUP.system}
               onToggle={() =>
@@ -117,6 +119,18 @@ export function DashboardSidebar({
                 />
               )}
             </SidebarSection>
+          )}
+          {SYSTEM_TABS.some((tab) => can(tab.read)) && (
+            <NavLink
+              to={ROUTES.systemManagement}
+              onClick={onClose}
+              className={({ isActive }) =>
+                `flex min-h-12 items-center gap-3 rounded-xl px-2 text-sm ${isActive ? 'bg-subtle text-primary' : 'text-card hover:bg-card/5'}`
+              }
+            >
+              <Icon name="building" className="size-5 shrink-0" />
+              {t('nav.system')}
+            </NavLink>
           )}
         </nav>
       </aside>

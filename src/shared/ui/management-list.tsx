@@ -23,6 +23,7 @@ interface ManagementListProps {
   canCreate?: boolean;
   statusFilter?: boolean;
   children: ReactNode;
+  beforeSearch?: ReactNode;
 }
 
 export function ManagementList(props: ManagementListProps): JSX.Element {
@@ -70,6 +71,7 @@ export function ManagementList(props: ManagementListProps): JSX.Element {
           </Button>
         )}
       </div>
+      {props.beforeSearch}
       <div className="flex items-center gap-4">
         <div className="relative flex-1">
           <Icon

@@ -79,7 +79,8 @@
       "welcome": "Welcome, {{name}}",
       "rolesDescription": "Manage roles and their assigned permissions",
       "employeesDescription": "Manage administrative employees and their roles",
-      "classroomsDescription": "Manage classrooms, capacity and availability"
+      "classroomsDescription": "Manage classrooms, capacity and availability",
+      "systemDescription": "Manage center settings, policies, social links and frequently asked questions."
     },
     "login": {
       "title": "Welcome back"
@@ -112,7 +113,8 @@
     "system": "System Management",
     "roles": "Role & Permission",
     "employees": "Sub Admin Employee",
-    "profile": "My Profile"
+    "profile": "My Profile",
+    "access": "Users & Access"
   },
   "auth": {
     "splash": {
@@ -445,6 +447,78 @@
       "created": "The classroom was successfully added.",
       "updated": "The changes have been saved successfully.",
       "deleted": "The selected classrooms have been deleted successfully."
+    }
+  },
+  "systemManagement": {
+    "description": "Manage center settings, policies and support content",
+    "descriptionLabel": "Description",
+    "update": "Update",
+    "editTitle": "Edit {{section}}",
+    "message": "Message",
+    "contentLanguage": "Content language",
+    "arabic": "العربية",
+    "english": "English",
+    "saved": "Changes have been saved successfully.",
+    "copied": "Copied to clipboard",
+    "copyFailed": "Could not copy. Please select and copy the value.",
+    "copy": "Copy {{name}}",
+    "invalidUrl": "Enter a valid http or https URL",
+    "centerName": "Center Name",
+    "workingHours": "Number of Working Hours",
+    "mainPhoneNumber": "Main Phone Number",
+    "otherPhones": "Other Phone Numbers",
+    "location": "Location",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "map": "Center location map",
+    "coordinatePair": "Enter both latitude and longitude",
+    "invalidCoordinates": "Enter valid coordinates",
+    "addLocation": "Add location",
+    "removeLocation": "Remove location",
+    "addPhone": "Add phone number",
+    "removePhone": "Remove {{phone}}",
+    "invoiceLogoUrl": "Invoice Logo",
+    "navbarLogoUrl": "Navbar Logo",
+    "footerLogoUrl": "Footer Logo",
+    "dropFile": "Drag & drop a file here, or browse",
+    "imageHint": "PNG, JPG or WebP · Maximum 10 MB",
+    "tabs": {
+      "privacy": "Privacy Policy",
+      "registration": "Student Registration",
+      "terms": "Terms & Conditions",
+      "social": "Social Media Links",
+      "faq": "FAQ",
+      "payment": "Payment Policy",
+      "help": "Help",
+      "center": "Center Settings"
+    },
+    "faq": {
+      "create": "Add New FAQ",
+      "edit": "Edit FAQ",
+      "view": "View FAQ",
+      "question": "Question",
+      "answer": "Answer",
+      "delete": "Delete FAQ",
+      "deleted": "The selected FAQs have been deleted successfully."
+    },
+    "platforms": {
+      "WhatsApp": "WhatsApp",
+      "Facebook": "Facebook",
+      "TikTok": "TikTok",
+      "Snapchat": "Snapchat",
+      "X": "X",
+      "Instagram": "Instagram",
+      "LinkedIn": "LinkedIn",
+      "Email": "Email",
+      "Play Store": "Play Store",
+      "App Store": "App Store",
+      "Twitter": "X",
+      "PlayStore": "Play Store",
+      "AppStore": "App Store",
+      "Website": "Website",
+      "AdministrationManagementEmail": "Administration Email",
+      "AdmissionsEmail": "Admissions Email",
+      "TechnicalSupportEmail": "Technical Support Email"
     }
   }
 }

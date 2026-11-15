@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ROUTES } from '@/config';
+import { SYSTEM_TABS, SYSTEM_TAB_PARAM } from '@/features/system-management';
 import { useLogout } from '@/features/auth';
 import { useProfile, ProfileAvatar } from '@/features/profile';
-import { useAuthStore } from '@/core/auth';
+import { usePermission, useAuthStore } from '@/core/auth';
 import { setLanguage } from '@/core/i18n';
 import { Icon } from '@/shared/ui';
 export function DashboardHeader({ onMenuClick }: { onMenuClick: () => void }): JSX.Element {
@@ -15,8 +16,15 @@ export function DashboardHeader({ onMenuClick }: { onMenuClick: () => void }): J
   const user = useAuthStore((state) => state.user);
   const [profileOpen, setProfileOpen] = useState(false);
   const arabic = i18n.language.startsWith('ar');
+  const can = usePermission();
+  const allowedTabs = SYSTEM_TABS.filter((tab) => can(tab.read));
   const isSystem =
     location.pathname.startsWith(ROUTES.roles) || location.pathname.startsWith(ROUTES.employees);
+  const settingsTab = location.pathname.startsWith(ROUTES.systemManagement)
+    ? (allowedTabs.find(
+        (tab) => tab.key === new URLSearchParams(location.search).get(SYSTEM_TAB_PARAM),
+      ) ?? allowedTabs[0])
+    : undefined;
   const section = location.pathname.startsWith(ROUTES.classrooms)
     ? 'classrooms'
     : location.pathname.startsWith(ROUTES.profile)
@@ -43,17 +51,21 @@ export function DashboardHeader({ onMenuClick }: { onMenuClick: () => void }): J
         </button>
         <span className="hidden sm:inline">
           {t(
-            isSystem
+            settingsTab
               ? 'nav.system'
-              : section === 'profile'
-                ? 'nav.dashboard'
-                : section === 'dashboard'
+              : isSystem
+                ? 'nav.access'
+                : section === 'profile'
                   ? 'nav.dashboard'
-                  : 'nav.schedule',
+                  : section === 'dashboard'
+                    ? 'nav.dashboard'
+                    : 'nav.schedule',
           )}
         </span>
         <Icon name="chevronRight" className="size-4 text-primary rtl:rotate-180" />
-        <span className="font-semibold text-primary">{t(`nav.${section}`)}</span>
+        <span className="font-semibold text-primary">
+          {settingsTab ? t(`systemManagement.tabs.${settingsTab.key}`) : t(`nav.${section}`)}
+        </span>
       </div>
       <div className="flex items-center gap-4 sm:gap-6">
         <button

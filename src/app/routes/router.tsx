@@ -38,6 +38,12 @@ export const router = createBrowserRouter([
     errorElement: <RouteErrorBoundary />,
     children: [
       {
+        path: ROUTES.systemManagement,
+        lazy: async () => ({
+          Component: (await import('@/features/system-management')).SystemManagementPage,
+        }),
+      },
+      {
         path: ROUTES.classrooms,
         lazy: async () => ({ Component: (await import('@/features/classrooms')).ClassroomsPage }),
       },
