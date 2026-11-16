@@ -25,21 +25,23 @@ export function DashboardHeader({ onMenuClick }: { onMenuClick: () => void }): J
         (tab) => tab.key === new URLSearchParams(location.search).get(SYSTEM_TAB_PARAM),
       ) ?? allowedTabs[0])
     : undefined;
-  const section = location.pathname.startsWith(ROUTES.appointments)
-    ? 'appointments'
-    : location.pathname.startsWith(ROUTES.classrooms)
-      ? 'classrooms'
-      : location.pathname.startsWith(ROUTES.profile)
-        ? 'profile'
-        : location.pathname.startsWith(ROUTES.roles)
-          ? 'roles'
-          : location.pathname.startsWith(ROUTES.employees)
-            ? 'employees'
-            : location.pathname.startsWith(ROUTES.teachers)
-              ? 'teachers'
-              : location.pathname.startsWith(ROUTES.subjects)
-                ? 'subjects'
-                : 'dashboard';
+  const section = location.pathname.startsWith(ROUTES.contactUs)
+    ? 'contactUs'
+    : location.pathname.startsWith(ROUTES.appointments)
+      ? 'appointments'
+      : location.pathname.startsWith(ROUTES.classrooms)
+        ? 'classrooms'
+        : location.pathname.startsWith(ROUTES.profile)
+          ? 'profile'
+          : location.pathname.startsWith(ROUTES.roles)
+            ? 'roles'
+            : location.pathname.startsWith(ROUTES.employees)
+              ? 'employees'
+              : location.pathname.startsWith(ROUTES.teachers)
+                ? 'teachers'
+                : location.pathname.startsWith(ROUTES.subjects)
+                  ? 'subjects'
+                  : 'dashboard';
   return (
     <header className="dashboard-header relative flex min-h-[77px] flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
       <div className="flex min-w-0 items-center gap-2 text-sm">
@@ -57,7 +59,7 @@ export function DashboardHeader({ onMenuClick }: { onMenuClick: () => void }): J
               ? 'nav.system'
               : isSystem
                 ? 'nav.access'
-                : section === 'profile'
+                : section === 'profile' || section === 'contactUs'
                   ? 'nav.dashboard'
                   : section === 'dashboard'
                     ? 'nav.dashboard'

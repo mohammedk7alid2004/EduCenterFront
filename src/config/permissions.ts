@@ -22,6 +22,14 @@ export function hasPermission(roles: readonly Role[], permission: string): boole
 }
 
 export const PERMISSIONS = {
+  contactUs: {
+    read: 'ContactUs.ViewAll',
+    detail: 'ContactUs.ShowOne',
+    delete: 'ContactUs.Delete',
+    export: 'ContactUs.ExportExcelFile',
+    template: 'ContactUs.GetTemplateExcelFile',
+    import: 'ContactUs.ImportExcelFile',
+  },
   appointments: {
     read: 'Appointments.GetAll',
     detail: 'Appointments.GetById',

@@ -81,7 +81,8 @@
       "employeesDescription": "Manage administrative employees and their roles",
       "classroomsDescription": "Manage classrooms, capacity and availability",
       "systemDescription": "Manage center settings, policies, social links and frequently asked questions.",
-      "appointmentsDescription": "Manage group schedules, teachers and classrooms"
+      "appointmentsDescription": "Manage group schedules, teachers and classrooms",
+      "contactUsDescription": "View and manage incoming contact messages"
     },
     "login": {
       "title": "Welcome back"
@@ -115,7 +116,8 @@
     "roles": "Role & Permission",
     "employees": "Sub Admin Employee",
     "profile": "My Profile",
-    "access": "Users & Access"
+    "access": "Users & Access",
+    "contactUs": "Contact Us"
   },
   "auth": {
     "splash": {
@@ -605,5 +607,36 @@
     },
     "classroomCapacity": "Classroom capacity: {{count}} students",
     "selectClassroomFirst": "Select a classroom first to set its capacity."
+  },
+  "contactUs": {
+    "title": "Contact Us",
+    "description": "View and manage incoming contact messages",
+    "viewTitle": "View Message",
+    "receivedAt": "Received At",
+    "deleteTitle": "Delete Messages",
+    "deleted": "The selected messages have been deleted successfully.",
+    "export": "Export Excel",
+    "template": "Download Template",
+    "import": "Import Excel",
+    "file": "Excel File",
+    "importHint": "Download the template, fill in the contact details, then upload an Excel file. Maximum file size: 10 MB.",
+    "invalidFile": "Choose a non-empty .xlsx or .xls file up to 10 MB.",
+    "imported": "Processed {{total}} rows: {{uploaded}} imported, {{skipped}} skipped.",
+    "skippedRows": "Skipped Rows",
+    "row": "Row {{count}}",
+    "separator": ", ",
+    "skipReasons": {
+      "1": "Already exists in the database",
+      "2": "Duplicate in the file",
+      "3": "Missing unique identifier",
+      "4": "Invalid row data"
+    },
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "subject": "Subject",
+      "message": "Message"
+    }
   }
 }

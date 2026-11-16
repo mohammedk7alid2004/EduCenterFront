@@ -1,0 +1,147 @@
+import { useTranslation } from 'react-i18next';
+import { PERMISSIONS } from '@/config';
+import { usePermission } from '@/core/auth';
+import { useOnline } from '@/shared/lib';
+import { DataTable, RowActions, useConfirm, type Column } from '@/shared/ui';
+import { useDeleteContacts } from '../contact-us.queries';
+import { contactDate } from '../contact-us.lib';
+import type { ContactMessage } from '../contact-us.types';
+export function ContactTable({
+  rows,
+  onView,
+}: {
+  rows: ContactMessage[];
+  onView: (id: string) => void;
+}): JSX.Element {
+  const { t, i18n } = useTranslation();
+  const can = usePermission();
+  const online = useOnline();
+  const remove = useDeleteContacts();
+  const { confirm, dialog } = useConfirm();
+  function deleteSelection(ids: string[]) {
+    confirm({
+      title: t('contactUs.deleteTitle'),
+      description: t('common.deleteSelection', { count: ids.length }),
+      onConfirm: () => remove.mutateAsync(ids),
+      successTitle: t('contactUs.deleteTitle'),
+      successDescription: t('contactUs.deleted'),
+    });
+  }
+  const columns: Column<ContactMessage>[] = [
+    {
+      id: 'id',
+      header: t('common.id'),
+      cell: (row) => (
+        <span className="block max-w-24 truncate" title={row.id}>
+          #<bdi>{row.id}</bdi>
+        </span>
+      ),
+    },
+    {
+      id: 'name',
+      header: t('contactUs.fields.name'),
+      headerClassName: 'min-w-44',
+      cell: (row) =>
+        can(PERMISSIONS.contactUs.detail) ? (
+          <button
+            className="max-w-52 truncate text-start font-medium hover:text-primary"
+            title={row.name}
+            onClick={() => onView(row.id)}
+          >
+            {row.name || t('common.noValue')}
+          </button>
+        ) : (
+          row.name
+        ),
+    },
+    {
+      id: 'email',
+      header: t('contactUs.fields.email'),
+      cell: (row) =>
+        row.email ? (
+          <a
+            href={`mailto:${row.email}`}
+            className="block max-w-56 truncate hover:text-primary"
+            title={row.email}
+          >
+            <bdi>{row.email}</bdi>
+          </a>
+        ) : (
+          t('common.noValue')
+        ),
+    },
+    {
+      id: 'phone',
+      header: t('contactUs.fields.phone'),
+      headerClassName: 'min-w-40',
+      cell: (row) =>
+        row.phone || row.phoneNumber ? (
+          <a
+            href={`tel:${(row.phone || row.phoneNumber).replace(/[^+\d]/g, '')}`}
+            className="hover:text-primary"
+          >
+            <bdi>{row.phone || `${row.phoneCountryCode} ${row.phoneNumber}`}</bdi>
+          </a>
+        ) : (
+          t('common.noValue')
+        ),
+    },
+    {
+      id: 'subject',
+      header: t('contactUs.fields.subject'),
+      headerClassName: 'min-w-48',
+      cell: (row) => (
+        <span className="block max-w-56 truncate" title={row.subject}>
+          {row.subject || t('common.noValue')}
+        </span>
+      ),
+    },
+    {
+      id: 'message',
+      header: t('contactUs.fields.message'),
+      headerClassName: 'min-w-64',
+      cell: (row) => (
+        <span className="block max-w-72 truncate" title={row.message}>
+          {row.message || t('common.noValue')}
+        </span>
+      ),
+    },
+    {
+      id: 'createdAt',
+      header: t('contactUs.receivedAt'),
+      headerClassName: 'min-w-44',
+      cell: (row) => (
+        <time dateTime={row.createdAt}>
+          {contactDate(row.createdAt, i18n.language) ?? t('common.noValue')}
+        </time>
+      ),
+    },
+    {
+      id: 'actions',
+      header: t('common.actions'),
+      headerClassName: 'min-w-28',
+      cell: (row) => (
+        <RowActions
+          onView={() => onView(row.id)}
+          onEdit={() => onView(row.id)}
+          onDelete={() => deleteSelection([row.id])}
+          disabled={!online || remove.isPending}
+          canView={can(PERMISSIONS.contactUs.detail)}
+          canEdit={false}
+          canDelete={can(PERMISSIONS.contactUs.delete)}
+        />
+      ),
+    },
+  ];
+  return (
+    <>
+      {dialog}
+      <DataTable
+        columns={columns}
+        rows={rows}
+        pending={!online || remove.isPending}
+        onDeleteSelected={can(PERMISSIONS.contactUs.delete) ? deleteSelection : undefined}
+      />
+    </>
+  );
+}

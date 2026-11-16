@@ -32,8 +32,17 @@ export const ROUTES = {
   appointments: '/appointments',
   classrooms: '/classrooms',
   systemManagement: '/system-management',
+  contactUs: '/contact-us',
 } as const;
 export const API_ENDPOINTS = {
+  contactUs: {
+    getAll: '/v1/ContactUs/GetAll',
+    detail: (id: string) => `/v1/ContactUs/GetById/${encodeURIComponent(id)}`,
+    delete: '/v1/ContactUs/Delete',
+    export: '/v1/ContactUs/Export',
+    template: '/v1/ContactUs/Template',
+    import: '/v1/ContactUs/ImportExcelFile',
+  },
   auth: {
     login: '/Auth/dashboard/login',
     refresh: '/Auth/refresh-token',
@@ -104,6 +113,7 @@ export const API_ENDPOINTS = {
   },
 } as const;
 export const QUERY_KEYS = {
+  contactUs: ['contact-us'],
   appointments: ['appointments'],
   systemManagement: ['system-management'],
   options: 'options',

@@ -6,6 +6,12 @@ import { useAuthStore, usePermission } from '@/core/auth';
 import { Icon } from '@/shared/ui';
 const sections = [
   {
+    key: 'contactUs',
+    route: ROUTES.contactUs,
+    icon: 'mail',
+    permission: PERMISSIONS.contactUs.read,
+  },
+  {
     key: 'appointments',
     route: ROUTES.appointments,
     icon: 'clock',

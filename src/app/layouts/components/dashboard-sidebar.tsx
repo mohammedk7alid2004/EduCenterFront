@@ -128,6 +128,18 @@ export function DashboardSidebar({
               )}
             </SidebarSection>
           )}
+          {can(PERMISSIONS.contactUs.read) && (
+            <NavLink
+              to={ROUTES.contactUs}
+              onClick={onClose}
+              className={({ isActive }) =>
+                `flex min-h-12 items-center gap-3 rounded-xl px-2 ${isActive ? 'bg-card text-primary' : 'text-card hover:bg-card/5'}`
+              }
+            >
+              <Icon name="mail" className="size-5" />
+              {t('nav.contactUs')}
+            </NavLink>
+          )}
           {SYSTEM_TABS.some((tab) => can(tab.read)) && (
             <NavLink
               to={ROUTES.systemManagement}
