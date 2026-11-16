@@ -1,5 +1,11 @@
 export const theme = {
   light: {
+    calendarTeal: '0 143 145',
+    calendarPurple: '108 82 226',
+    calendarMaroon: '91 23 35',
+    calendarNavy: '16 52 80',
+    calendarYellow: '251 216 74',
+    calendarInk: '8 21 33',
     primary: '15 61 58',
     secondary: '242 230 214',
     accent: '244 177 59',
@@ -22,6 +28,12 @@ export const theme = {
     warning: '244 177 59',
   },
   dark: {
+    calendarTeal: '0 106 109',
+    calendarPurple: '86 61 183',
+    calendarMaroon: '91 23 35',
+    calendarNavy: '16 52 80',
+    calendarYellow: '251 216 74',
+    calendarInk: '8 21 33',
     primary: '20 82 78',
     secondary: '30 41 59',
     accent: '244 177 59',

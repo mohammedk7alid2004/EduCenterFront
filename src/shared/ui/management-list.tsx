@@ -24,6 +24,9 @@ interface ManagementListProps {
   statusFilter?: boolean;
   children: ReactNode;
   beforeSearch?: ReactNode;
+  searchActions?: ReactNode;
+  filterContent?: ReactNode;
+  pagination?: boolean;
 }
 
 export function ManagementList(props: ManagementListProps): JSX.Element {
@@ -72,8 +75,8 @@ export function ManagementList(props: ManagementListProps): JSX.Element {
         )}
       </div>
       {props.beforeSearch}
-      <div className="flex items-center gap-4">
-        <div className="relative flex-1">
+      <div className="flex flex-wrap items-center gap-4">
+        <div className="relative min-w-40 flex-1">
           <Icon
             name="search"
             className="pointer-events-none absolute start-4 top-1/2 size-4 -translate-y-1/2 text-muted"
@@ -98,9 +101,11 @@ export function ManagementList(props: ManagementListProps): JSX.Element {
             {t('common.filter')}
           </Button>
         )}
+        {props.searchActions}
       </div>
       {filterOpen && (
         <div className="flex flex-wrap items-center gap-3 rounded-xl border border-border bg-subtle p-4">
+          {props.filterContent && <div className="w-full">{props.filterContent}</div>}
           <label htmlFor="status-filter" className="text-sm">
             {t('common.status')}
           </label>
@@ -133,53 +138,55 @@ export function ManagementList(props: ManagementListProps): JSX.Element {
           props.children
         )}
       </div>
-      <div className="mt-1 flex flex-wrap items-center justify-between gap-4 pb-6 text-sm">
-        <label className="header-control flex items-center gap-3 rounded-xl bg-card px-4 py-2">
-          {t('common.perPage')}
-          <select
-            value={controls.pageSize}
-            onChange={(event) => controls.setPageSize(Number(event.target.value))}
-            className="rounded-lg border border-primary/60 bg-iconSurface px-3 py-1 text-primary"
-          >
-            {PAGE_SIZES.map((size) => (
-              <option key={size} value={size}>
-                {size}
-              </option>
-            ))}
-          </select>
-        </label>
-        <nav aria-label={t('common.paginationLabel')} className="flex items-center gap-2">
-          <button
-            type="button"
-            disabled={controls.page <= 1 || props.fetching}
-            aria-label={t('common.previousPage')}
-            onClick={() => controls.setPage(controls.page - 1)}
-            className="grid size-[33px] place-items-center rounded-lg bg-iconSurface text-primary disabled:opacity-40"
-          >
-            <Icon name="chevronLeft" className="size-4 rtl:rotate-180" />
-          </button>
-          {pages.map((page) => (
+      {props.pagination !== false && (
+        <div className="mt-1 flex flex-wrap items-center justify-between gap-4 pb-6 text-sm">
+          <label className="header-control flex items-center gap-3 rounded-xl bg-card px-4 py-2">
+            {t('common.perPage')}
+            <select
+              value={controls.pageSize}
+              onChange={(event) => controls.setPageSize(Number(event.target.value))}
+              className="rounded-lg border border-primary/60 bg-iconSurface px-3 py-1 text-primary"
+            >
+              {PAGE_SIZES.map((size) => (
+                <option key={size} value={size}>
+                  {size}
+                </option>
+              ))}
+            </select>
+          </label>
+          <nav aria-label={t('common.paginationLabel')} className="flex items-center gap-2">
             <button
               type="button"
-              key={page}
-              aria-current={page === controls.page ? 'page' : undefined}
-              onClick={() => controls.setPage(page)}
-              className={`grid size-[33px] place-items-center rounded-lg ${page === controls.page ? 'bg-primary text-card' : 'text-muted hover:bg-subtle'}`}
+              disabled={controls.page <= 1 || props.fetching}
+              aria-label={t('common.previousPage')}
+              onClick={() => controls.setPage(controls.page - 1)}
+              className="grid size-[33px] place-items-center rounded-lg bg-iconSurface text-primary disabled:opacity-40"
             >
-              {String(page).padStart(2, '0')}
+              <Icon name="chevronLeft" className="size-4 rtl:rotate-180" />
             </button>
-          ))}
-          <button
-            type="button"
-            disabled={controls.page >= totalPages || props.fetching}
-            aria-label={t('common.nextPage')}
-            onClick={() => controls.setPage(controls.page + 1)}
-            className="grid size-[33px] place-items-center rounded-lg bg-iconSurface text-primary disabled:opacity-40"
-          >
-            <Icon name="chevronRight" className="size-4 rtl:rotate-180" />
-          </button>
-        </nav>
-      </div>
+            {pages.map((page) => (
+              <button
+                type="button"
+                key={page}
+                aria-current={page === controls.page ? 'page' : undefined}
+                onClick={() => controls.setPage(page)}
+                className={`grid size-[33px] place-items-center rounded-lg ${page === controls.page ? 'bg-primary text-card' : 'text-muted hover:bg-subtle'}`}
+              >
+                {String(page).padStart(2, '0')}
+              </button>
+            ))}
+            <button
+              type="button"
+              disabled={controls.page >= totalPages || props.fetching}
+              aria-label={t('common.nextPage')}
+              onClick={() => controls.setPage(controls.page + 1)}
+              className="grid size-[33px] place-items-center rounded-lg bg-iconSurface text-primary disabled:opacity-40"
+            >
+              <Icon name="chevronRight" className="size-4 rtl:rotate-180" />
+            </button>
+          </nav>
+        </div>
+      )}
     </section>
   );
 }

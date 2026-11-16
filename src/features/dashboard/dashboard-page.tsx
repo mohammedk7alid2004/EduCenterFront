@@ -5,6 +5,12 @@ import { SYSTEM_TABS } from '@/features/system-management';
 import { useAuthStore, usePermission } from '@/core/auth';
 import { Icon } from '@/shared/ui';
 const sections = [
+  {
+    key: 'appointments',
+    route: ROUTES.appointments,
+    icon: 'clock',
+    permission: PERMISSIONS.appointments.read,
+  },
   { key: 'system', route: ROUTES.systemManagement, icon: 'building', permission: undefined },
   { key: 'classrooms', route: ROUTES.classrooms, icon: 'classroom', permission: undefined },
   { key: 'teachers', route: ROUTES.teachers, icon: 'graduationCap', permission: undefined },

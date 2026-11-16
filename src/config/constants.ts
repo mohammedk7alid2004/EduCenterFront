@@ -29,6 +29,7 @@ export const ROUTES = {
   roles: '/roles',
   employees: '/employees',
   profile: '/profile',
+  appointments: '/appointments',
   classrooms: '/classrooms',
   systemManagement: '/system-management',
 } as const;
@@ -69,6 +70,17 @@ export const API_ENDPOINTS = {
     delete: '/v1/Classrooms/Delete',
     toggleStatus: (id: string) => `/v1/Classrooms/ToggleStatus/${encodeURIComponent(id)}`,
   },
+  appointments: {
+    getAll: '/v1/Appointments/GetAll',
+    detail: (id: string) => `/v1/Appointments/ShowOneDetails/${encodeURIComponent(id)}`,
+    create: '/v1/Appointments/Create',
+    update: '/v1/Appointments/Update',
+    delete: '/v1/Appointments/Delete',
+    setStatus: (id: string) => `/v1/Appointments/SetStatus/${encodeURIComponent(id)}`,
+    teachers: '/v1/Appointments/GetTeachers',
+    subjects: '/v1/select-menu/GetSubjects',
+    classrooms: '/v1/select-menu/GetClassrooms',
+  },
   template: {
     detail: (id: string) => `/template/${id}`,
   },
@@ -90,6 +102,7 @@ export const API_ENDPOINTS = {
   },
 } as const;
 export const QUERY_KEYS = {
+  appointments: ['appointments'],
   systemManagement: ['system-management'],
   options: 'options',
   detail: 'detail',

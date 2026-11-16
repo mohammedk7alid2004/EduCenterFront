@@ -74,6 +74,14 @@ export function DashboardSidebar({
               setOpenGroup(openGroup === SIDEBAR_GROUP.schedule ? null : SIDEBAR_GROUP.schedule)
             }
           >
+            {can(PERMISSIONS.appointments.read) && (
+              <SidebarLink
+                route={ROUTES.appointments}
+                icon="clock"
+                label={t('nav.appointments')}
+                onClick={onClose}
+              />
+            )}
             <SidebarLink
               route={ROUTES.teachers}
               icon="teacher"

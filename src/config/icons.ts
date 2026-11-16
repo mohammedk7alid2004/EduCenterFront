@@ -1,5 +1,7 @@
 import { createElement, type ComponentProps } from 'react';
 import {
+  Clock,
+  List,
   Facebook,
   Instagram,
   Linkedin,
@@ -67,6 +69,8 @@ function brandIcon(path: string) {
 }
 
 export const icons = {
+  clock: Clock,
+  list: List,
   facebook: Facebook,
   instagram: Instagram,
   linkedin: Linkedin,

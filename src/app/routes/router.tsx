@@ -38,6 +38,19 @@ export const router = createBrowserRouter([
     errorElement: <RouteErrorBoundary />,
     children: [
       {
+        path: ROUTES.appointments,
+        lazy: async () => {
+          const { AppointmentsPage } = await import('@/features/appointments');
+          return {
+            Component: () => (
+              <ProtectedRoute permission={PERMISSIONS.appointments.read}>
+                <AppointmentsPage />
+              </ProtectedRoute>
+            ),
+          };
+        },
+      },
+      {
         path: ROUTES.systemManagement,
         lazy: async () => ({
           Component: (await import('@/features/system-management')).SystemManagementPage,

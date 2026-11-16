@@ -80,7 +80,8 @@
       "rolesDescription": "Manage roles and their assigned permissions",
       "employeesDescription": "Manage administrative employees and their roles",
       "classroomsDescription": "Manage classrooms, capacity and availability",
-      "systemDescription": "Manage center settings, policies, social links and frequently asked questions."
+      "systemDescription": "Manage center settings, policies, social links and frequently asked questions.",
+      "appointmentsDescription": "Manage group schedules, teachers and classrooms"
     },
     "login": {
       "title": "Welcome back"
@@ -519,6 +520,79 @@
       "AdministrationManagementEmail": "Administration Email",
       "AdmissionsEmail": "Admissions Email",
       "TechnicalSupportEmail": "Technical Support Email"
+    }
+  },
+  "appointments": {
+    "title": "Appointments",
+    "description": "Manage group schedules, teachers and classrooms",
+    "create": "Add New Appointment",
+    "edit": "Edit Appointment",
+    "viewTitle": "View Appointment",
+    "created": "The appointment was added successfully.",
+    "updated": "Changes have been saved successfully.",
+    "deleteTitle": "Delete Appointments",
+    "deleted": "Appointments have been deleted successfully.",
+    "noOptions": "No available options.",
+    "groupPlaceholder": "Enter Group Name",
+    "selectPlaceholder": "Select an option",
+    "selectTeacher": "Select a subject, then a teacher",
+    "time": "Time",
+    "separator": ", ",
+    "changeStatus": "Change status for {{name}}",
+    "detailsFilter": "More Filters",
+    "viewMode": "Appointment view",
+    "listView": "List view",
+    "calendarView": "Calendar view",
+    "fields": {
+      "groupName": "Group Name",
+      "subject": "Subject",
+      "teacher": "Teacher",
+      "classroom": "Classroom",
+      "level": "Level",
+      "grade": "Grade",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "days": "Days",
+      "iteration": "Iterations",
+      "numberOfIterations": "Number of Iterations",
+      "maxCapacity": "Maximum Students",
+      "notes": "Notes"
+    },
+    "validation": {
+      "positive": "Enter a whole number greater than zero.",
+      "days": "Select at least one day.",
+      "time": "End time must be after start time."
+    },
+    "days": {
+      "0": "Sunday",
+      "1": "Monday",
+      "2": "Tuesday",
+      "3": "Wednesday",
+      "4": "Thursday",
+      "5": "Friday",
+      "6": "Saturday"
+    },
+    "iterations": {
+      "weekly": "Weekly",
+      "monthly": "Monthly",
+      "yearly": "Yearly"
+    },
+    "statuses": {
+      "active": "Active",
+      "completed": "Completed",
+      "paused": "Paused"
+    },
+    "calendar": {
+      "title": "Schedule Calendar",
+      "previous": "Previous period",
+      "next": "Next period",
+      "today": "Today",
+      "period": "Calendar period",
+      "daily": "Daily",
+      "weekly": "Weekly",
+      "monthly": "Monthly",
+      "more": "+{{count}} more",
+      "previewNote": "Schedule preview by weekday. Recurrence start dates are not set, so these blocks show configured schedules, not dated sessions or remaining repetitions."
     }
   }
 }
