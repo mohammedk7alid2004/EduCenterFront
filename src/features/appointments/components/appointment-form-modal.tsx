@@ -48,6 +48,7 @@ function AppointmentForm({
   const { t, i18n } = useTranslation();
   const online = useOnline();
   const [success, setSuccess] = useState(false);
+  const classrooms = useAppointmentOptions('classrooms');
   const required = z.string().trim().min(1, t('validation.required'));
   const positive = z
     .number({ invalid_type_error: t('appointments.validation.positive') })
@@ -83,6 +84,17 @@ function AppointmentForm({
     .refine((values) => timeMinutes(values.endTime) > timeMinutes(values.startTime), {
       path: ['endTime'],
       message: t('appointments.validation.time'),
+    })
+    .superRefine((values, context) => {
+      const capacity = classrooms.data?.find(
+        (option) => option.id === values.classroomId,
+      )?.capacity;
+      if (typeof capacity !== 'number' || values.maxCapacity > capacity)
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['maxCapacity'],
+          message: t('appointments.validation.capacity', { count: capacity ?? 0 }),
+        });
     });
   const {
     register,
@@ -113,10 +125,12 @@ function AppointmentForm({
   });
   const subjectId = watch('subjectId');
   const levelId = watch('levelId');
+  const classroomCapacity = classrooms.data?.find(
+    (option) => option.id === watch('classroomId'),
+  )?.capacity;
   const levels = useAppointmentOptions('levels');
   const grades = useAppointmentGrades(levelId);
   const subjects = useAppointmentOptions('subjects');
-  const classrooms = useAppointmentOptions('classrooms');
   const teachers = useAppointmentTeachers(subjectId, Boolean(subjectId));
   const mutation = useSaveAppointment(appointment?.id);
   const title = t(appointment ? 'appointments.edit' : 'appointments.create');
@@ -362,14 +376,37 @@ function AppointmentForm({
             requiredAsterisk
             error={errors.numberOfIterations?.message}
           />
-          <Input
-            {...register('maxCapacity', { valueAsNumber: true })}
-            type="number"
-            min={1}
-            step={1}
-            label={t('appointments.fields.maxCapacity')}
-            requiredAsterisk
-            error={errors.maxCapacity?.message}
+          <Controller
+            name="maxCapacity"
+            control={control}
+            render={({ field }) => (
+              <Input
+                name={field.name}
+                ref={field.ref}
+                onBlur={field.onBlur}
+                value={Number.isNaN(field.value) ? '' : field.value}
+                onChange={(event) =>
+                  field.onChange(
+                    Number.isNaN(event.target.valueAsNumber)
+                      ? Number.NaN
+                      : Math.min(event.target.valueAsNumber, classroomCapacity ?? 0),
+                  )
+                }
+                type="number"
+                min={1}
+                max={classroomCapacity ?? undefined}
+                step={1}
+                disabled={!classroomCapacity}
+                label={t('appointments.fields.maxCapacity')}
+                helperText={
+                  classroomCapacity
+                    ? t('appointments.classroomCapacity', { count: classroomCapacity })
+                    : t('appointments.selectClassroomFirst')
+                }
+                requiredAsterisk
+                error={errors.maxCapacity?.message}
+              />
+            )}
           />
           <AppointmentSelect
             {...register('status', { valueAsNumber: true })}

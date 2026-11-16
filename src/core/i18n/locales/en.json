@@ -561,7 +561,8 @@
     "validation": {
       "positive": "Enter a whole number greater than zero.",
       "days": "Select at least one day.",
-      "time": "End time must be after start time."
+      "time": "End time must be after start time.",
+      "capacity": "Students cannot exceed the classroom capacity ({{count}})."
     },
     "days": {
       "0": "Sunday",
@@ -601,6 +602,8 @@
       "period": "Period",
       "am": "AM",
       "pm": "PM"
-    }
+    },
+    "classroomCapacity": "Classroom capacity: {{count}} students",
+    "selectClassroomFirst": "Select a classroom first to set its capacity."
   }
 }
