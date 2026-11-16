@@ -593,6 +593,14 @@
       "monthly": "Monthly",
       "more": "+{{count}} more",
       "previewNote": "Schedule preview by weekday. Recurrence start dates are not set, so these blocks show configured schedules, not dated sessions or remaining repetitions."
+    },
+    "selectGrade": "Select a level, then a grade",
+    "timePicker": {
+      "hour": "Hour",
+      "minute": "Minute",
+      "period": "Period",
+      "am": "AM",
+      "pm": "PM"
     }
   }
 }

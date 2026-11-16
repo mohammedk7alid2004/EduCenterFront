@@ -41,7 +41,10 @@ export function fetchAppointments(filters: AppointmentFilters = {}, signal?: Abo
 export function fetchAppointment(id: string, signal?: AbortSignal) {
   return get<AppointmentDto>(endpoints.detail(id), signal);
 }
-export function fetchAppointmentOptions(kind: 'subjects' | 'classrooms', signal?: AbortSignal) {
+export function fetchAppointmentOptions(
+  kind: 'subjects' | 'classrooms' | 'levels',
+  signal?: AbortSignal,
+) {
   return get<AppointmentOption[]>(endpoints[kind], signal);
 }
 export function fetchAppointmentTeachers(subjectId?: string, signal?: AbortSignal) {
@@ -91,4 +94,8 @@ export async function setAppointmentStatus(
   } catch (error) {
     throw normalizeApiError(error);
   }
+}
+
+export function fetchAppointmentGrades(levelId: string, signal?: AbortSignal) {
+  return get<AppointmentOption[]>(endpoints.grades, signal, { parentId: levelId });
 }

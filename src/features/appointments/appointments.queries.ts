@@ -7,6 +7,7 @@ import {
   fetchAppointment,
   fetchAppointmentOptions,
   fetchAppointmentTeachers,
+  fetchAppointmentGrades,
   saveAppointment,
   deleteAppointments,
   setAppointmentStatus,
@@ -43,7 +44,7 @@ export function useAppointment(id?: string) {
     enabled: Boolean(id),
   });
 }
-export function useAppointmentOptions(kind: 'subjects' | 'classrooms') {
+export function useAppointmentOptions(kind: 'subjects' | 'classrooms' | 'levels') {
   const { i18n } = useTranslation();
   return useQuery({
     queryKey: [...QUERY_KEYS.appointments, QUERY_KEYS.options, kind, i18n.language],
@@ -82,5 +83,14 @@ export function useSetAppointmentStatus() {
     onSuccess: () => {
       void client.invalidateQueries({ queryKey: QUERY_KEYS.appointments });
     },
+  });
+}
+
+export function useAppointmentGrades(levelId: string) {
+  const { i18n } = useTranslation();
+  return useQuery({
+    queryKey: [...QUERY_KEYS.appointments, QUERY_KEYS.options, 'grades', i18n.language, levelId],
+    queryFn: ({ signal }) => fetchAppointmentGrades(levelId, signal),
+    enabled: Boolean(levelId),
   });
 }

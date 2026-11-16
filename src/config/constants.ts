@@ -80,6 +80,8 @@ export const API_ENDPOINTS = {
     teachers: '/v1/Appointments/GetTeachers',
     subjects: '/v1/select-menu/GetSubjects',
     classrooms: '/v1/select-menu/GetClassrooms',
+    levels: '/v1/select-menu/GetEducationLevels',
+    grades: '/v1/select-menu/GetEducationGrades',
   },
   template: {
     detail: (id: string) => `/template/${id}`,

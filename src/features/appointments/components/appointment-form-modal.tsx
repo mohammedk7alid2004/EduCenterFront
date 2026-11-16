@@ -9,12 +9,14 @@ import {
   useAppointment,
   useAppointmentOptions,
   useAppointmentTeachers,
+  useAppointmentGrades,
   useSaveAppointment,
 } from '../appointments.queries';
 import { APPOINTMENT_ITERATION, APPOINTMENT_STATUS, WEEK_DAYS } from '../appointments.constants';
 import type { AppointmentDto, AppointmentValues } from '../appointments.types';
 import { localizedName, timeMinutes } from '../appointments.lib';
 import { AppointmentSelect } from './appointment-select';
+import { AppointmentTimeField } from './appointment-time-field';
 export function AppointmentFormModal({
   appointment,
   onClose,
@@ -57,8 +59,8 @@ function AppointmentForm({
       subjectId: required,
       teacherId: required,
       classroomId: required,
-      level: required,
-      grade: required,
+      levelId: required,
+      gradeId: required,
       startTime: z.string().regex(/^\d{2}:\d{2}$/, t('validation.required')),
       endTime: z.string().regex(/^\d{2}:\d{2}$/, t('validation.required')),
       days: z.array(z.number().int().min(0).max(6)).min(1, t('appointments.validation.days')),
@@ -97,8 +99,8 @@ function AppointmentForm({
       subjectId: appointment?.subjectId ?? '',
       teacherId: appointment?.teacherId ?? '',
       classroomId: appointment?.classroomId ?? '',
-      level: appointment?.level ?? '',
-      grade: appointment?.grade ?? '',
+      levelId: appointment?.levelId ?? '',
+      gradeId: appointment?.gradeId ?? '',
       startTime: appointment?.startTime.slice(0, 5) ?? '10:00',
       endTime: appointment?.endTime.slice(0, 5) ?? '12:00',
       days: appointment?.days ?? [],
@@ -110,14 +112,22 @@ function AppointmentForm({
     },
   });
   const subjectId = watch('subjectId');
+  const levelId = watch('levelId');
+  const levels = useAppointmentOptions('levels');
+  const grades = useAppointmentGrades(levelId);
   const subjects = useAppointmentOptions('subjects');
   const classrooms = useAppointmentOptions('classrooms');
   const teachers = useAppointmentTeachers(subjectId, Boolean(subjectId));
   const mutation = useSaveAppointment(appointment?.id);
   const title = t(appointment ? 'appointments.edit' : 'appointments.create');
-  const optionError = subjects.error || classrooms.error || teachers.error;
+  const optionError =
+    subjects.error || classrooms.error || teachers.error || levels.error || grades.error;
   const optionsLoading =
-    subjects.isPending || classrooms.isPending || (Boolean(subjectId) && teachers.isPending);
+    subjects.isPending ||
+    classrooms.isPending ||
+    levels.isPending ||
+    (Boolean(levelId) && grades.isPending) ||
+    (Boolean(subjectId) && teachers.isPending);
   const currentOption = (options: { id: string; name: string }[], id?: string, name?: string) =>
     id && name && !options.some((option) => option.id === id)
       ? [{ id, name }, ...options]
@@ -147,6 +157,8 @@ function AppointmentForm({
             <ErrorState
               error={optionError}
               onRetry={() => {
+                void levels.refetch();
+                if (levelId) void grades.refetch();
                 void subjects.refetch();
                 void classrooms.refetch();
                 if (subjectId) void teachers.refetch();
@@ -209,7 +221,15 @@ function AppointmentForm({
             )}
           />
           <AppointmentSelect
-            {...register('classroomId')}
+            {...register('classroomId', {
+              onChange: (event: React.ChangeEvent<HTMLSelectElement>) => {
+                const capacity = classrooms.data?.find(
+                  (option) => option.id === event.target.value,
+                )?.capacity;
+                if (typeof capacity === 'number' && capacity > 0)
+                  setValue('maxCapacity', capacity, { shouldDirty: true, shouldValidate: true });
+              },
+            })}
             label={t('appointments.fields.classroom')}
             requiredAsterisk
             error={errors.classroomId?.message}
@@ -224,33 +244,61 @@ function AppointmentForm({
               appointment && localizedName(appointment.classroom, i18n.language),
             )}
           />
-          <Input
-            {...register('level')}
+          <AppointmentSelect
+            {...register('levelId', {
+              onChange: () => setValue('gradeId', '', { shouldDirty: true }),
+            })}
             label={t('appointments.fields.level')}
             requiredAsterisk
-            error={errors.level?.message}
+            error={errors.levelId?.message}
+            disabled={levels.isPending}
+            placeholder={t('appointments.selectPlaceholder')}
+            options={(levels.data ?? []).map((option) => ({
+              id: option.id,
+              name: localizedName(option.name, i18n.language),
+            }))}
           />
-          <Input
-            {...register('grade')}
+          <AppointmentSelect
+            {...register('gradeId')}
             label={t('appointments.fields.grade')}
             requiredAsterisk
-            error={errors.grade?.message}
+            error={errors.gradeId?.message}
+            disabled={!levelId || grades.isPending}
+            placeholder={t('appointments.selectGrade')}
+            options={(grades.data ?? []).map((option) => ({
+              id: option.id,
+              name: localizedName(option.name, i18n.language),
+            }))}
           />
-          <Input
-            {...register('startTime')}
-            type="time"
-            step={60}
-            label={t('appointments.fields.startTime')}
-            requiredAsterisk
-            error={errors.startTime?.message}
+          <Controller
+            name="startTime"
+            control={control}
+            render={({ field }) => (
+              <AppointmentTimeField
+                name={field.name}
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                inputRef={field.ref}
+                label={t('appointments.fields.startTime')}
+                error={errors.startTime?.message}
+              />
+            )}
           />
-          <Input
-            {...register('endTime')}
-            type="time"
-            step={60}
-            label={t('appointments.fields.endTime')}
-            requiredAsterisk
-            error={errors.endTime?.message}
+          <Controller
+            name="endTime"
+            control={control}
+            render={({ field }) => (
+              <AppointmentTimeField
+                name={field.name}
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                inputRef={field.ref}
+                label={t('appointments.fields.endTime')}
+                error={errors.endTime?.message}
+              />
+            )}
           />
           <div>
             <span id="appointment-days-label" className="mb-2 block text-sm font-medium">

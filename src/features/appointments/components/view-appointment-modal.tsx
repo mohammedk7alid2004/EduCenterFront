@@ -35,8 +35,12 @@ export function ViewAppointmentModal({
           <DetailField label={t('appointments.fields.classroom')}>
             {localizedName(row.classroom, i18n.language)}
           </DetailField>
-          <DetailField label={t('appointments.fields.level')}>{row.level}</DetailField>
-          <DetailField label={t('appointments.fields.grade')}>{row.grade}</DetailField>
+          <DetailField label={t('appointments.fields.level')}>
+            {row.levelName ? localizedName(row.levelName, i18n.language) : row.level}
+          </DetailField>
+          <DetailField label={t('appointments.fields.grade')}>
+            {row.gradeName ? localizedName(row.gradeName, i18n.language) : row.grade}
+          </DetailField>
           <DetailField label={t('appointments.fields.startTime')}>
             {formatAppointmentTime(row.startTime, i18n.language)}
           </DetailField>

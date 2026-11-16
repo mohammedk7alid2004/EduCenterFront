@@ -8,8 +8,8 @@ export interface AppointmentValues {
   subjectId: string;
   teacherId: string;
   classroomId: string;
-  level: string;
-  grade: string;
+  levelId: string;
+  gradeId: string;
   startTime: string;
   endTime: string;
   days: number[];
@@ -19,7 +19,14 @@ export interface AppointmentValues {
   notes: string;
   status: number;
 }
-export interface AppointmentDto extends AppointmentValues, AuditFields {
+export interface AppointmentDto
+  extends Omit<AppointmentValues, 'levelId' | 'gradeId'>, AuditFields {
+  levelId: string | null;
+  gradeId: string | null;
+  level: string;
+  grade: string;
+  levelName: LocalizedName | null;
+  gradeName: LocalizedName | null;
   id: string;
   subject: LocalizedName;
   classroom: LocalizedName;
@@ -32,6 +39,7 @@ export interface AppointmentFilters extends ListFilters {
   classroomId?: string;
 }
 export interface AppointmentOption {
+  capacity?: number | null;
   id: string;
   name: LocalizedName;
 }
