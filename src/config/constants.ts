@@ -1,3 +1,4 @@
+export const FEEDBACK_DISMISS_DELAY_MS = 2500;
 export const SIDEBAR_GROUP = { schedule: 'schedule', system: 'system' } as const;
 export const APP_NAME = import.meta.env.VITE_APP_NAME ?? 'EduCenter';
 export const LIST_PARAMS = {

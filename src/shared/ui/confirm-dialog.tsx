@@ -52,7 +52,6 @@ export function useConfirm(): {
         <FeedbackDialog
           title={options.successTitle ?? options.title}
           description={options.successDescription ?? ''}
-          destructive
           onClose={close}
         />
       ) : (

@@ -1,29 +1,29 @@
-import { useTranslation } from 'react-i18next';
-import { Button } from './button';
+import { useEffect, useRef } from 'react';
+import { FEEDBACK_DISMISS_DELAY_MS } from '@/config';
 import { Modal } from './modal';
+
 export function FeedbackDialog({
   title,
   description,
   onClose,
-  destructive = false,
 }: {
   title: string;
   description: string;
   onClose: () => void;
-  destructive?: boolean;
 }): JSX.Element {
-  const { t } = useTranslation();
+  const close = useRef(onClose);
+  useEffect(() => {
+    close.current = onClose;
+  }, [onClose]);
+  useEffect(() => {
+    const timer = window.setTimeout(() => close.current(), FEEDBACK_DISMISS_DELAY_MS);
+    return () => window.clearTimeout(timer);
+  }, []);
   return (
-    <Modal
-      title={title}
-      icon={destructive ? 'trash' : 'check'}
-      onClose={onClose}
-      variant={destructive ? 'danger' : 'feedback'}
-    >
-      <p className="mb-6 text-center text-muted">{description}</p>
-      <Button onClick={onClose} className="w-full">
-        {t('common.close')}
-      </Button>
+    <Modal title={title} icon="check" onClose={onClose} variant="feedback" showCloseButton={false}>
+      <p role="status" className="text-center text-xs leading-5 text-tableHeading">
+        {description}
+      </p>
     </Modal>
   );
 }
