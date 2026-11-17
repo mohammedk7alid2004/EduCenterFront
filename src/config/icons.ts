@@ -1,5 +1,8 @@
 import { createElement, type ComponentProps } from 'react';
 import {
+  QrCode,
+  Image,
+  FileText,
   Download,
   Clock,
   List,
@@ -87,7 +90,45 @@ function ContactUsIcon(props: ComponentProps<'svg'>) {
   );
 }
 
+function ScheduleGridIcon(props: ComponentProps<'svg'>) {
+  return createElement(
+    'svg',
+    {
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      strokeWidth: 1.7,
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round',
+      ...props,
+    },
+    createElement('rect', { x: 3, y: 3, width: 18, height: 18, rx: 5 }),
+    createElement('path', { d: 'M12 3v18M3 12h18' }),
+  );
+}
+function ScheduleListIcon(props: ComponentProps<'svg'>) {
+  return createElement(
+    'svg',
+    {
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      strokeWidth: 1.7,
+      strokeLinejoin: 'round',
+      ...props,
+    },
+    ...[3, 10, 17].map((y) =>
+      createElement('rect', { key: y, x: 4, y, width: 16, height: 4, rx: 0.7 }),
+    ),
+  );
+}
+
 export const icons = {
+  qrCode: QrCode,
+  imageFile: Image,
+  pdfFile: FileText,
+  scheduleGrid: ScheduleGridIcon,
+  scheduleList: ScheduleListIcon,
   contactUs: ContactUsIcon,
   download: Download,
   clock: Clock,

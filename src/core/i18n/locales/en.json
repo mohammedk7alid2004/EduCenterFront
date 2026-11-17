@@ -614,7 +614,16 @@
       "minuteValue": "Minute {{count}}"
     },
     "classroomCapacity": "Classroom capacity: {{count}} students",
-    "selectClassroomFirst": "Select a classroom first to set its capacity."
+    "selectClassroomFirst": "Select a classroom first to set its capacity.",
+    "qr": {
+      "title": "Export QR Code",
+      "open": "Export QR for {{name}}",
+      "alt": "Appointment details QR for {{name}}",
+      "png": "Export As PNG",
+      "pdf": "Export As PDF",
+      "generationFailed": "Could not generate the QR code. Try again.",
+      "exportFailed": "Could not export the file. Try again."
+    }
   },
   "contactUs": {
     "title": "Contact Us",

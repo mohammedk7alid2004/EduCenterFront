@@ -6,9 +6,12 @@ export function timeMinutes(value: string): number {
   const [hours, minutes] = value.split(':').map(Number);
   return hours * 60 + minutes;
 }
-export function formatAppointmentTime(value: string, language: string): string {
+export function formatAppointmentTime(value: string, language: string, compact = false): string {
   const date = new Date(2000, 0, 1, Math.floor(timeMinutes(value) / 60), timeMinutes(value) % 60);
-  return new Intl.DateTimeFormat(language, { hour: 'numeric', minute: '2-digit' }).format(date);
+  return new Intl.DateTimeFormat(language, {
+    hour: 'numeric',
+    ...(compact && timeMinutes(value) % 60 === 0 ? {} : { minute: '2-digit' as const }),
+  }).format(date);
 }
 
 export function calendarDates(date: Date, period: 'daily' | 'weekly' | 'monthly'): Date[] {

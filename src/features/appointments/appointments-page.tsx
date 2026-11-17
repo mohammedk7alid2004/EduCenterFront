@@ -12,6 +12,7 @@ import { AppointmentsTable } from './components/appointments-table';
 import { AppointmentsCalendar } from './components/appointments-calendar';
 import { AppointmentFormModal } from './components/appointment-form-modal';
 import { ViewAppointmentModal } from './components/view-appointment-modal';
+import { AppointmentQrModal } from './components/appointment-qr-modal';
 import { AppointmentFilters } from './components/appointment-filters';
 export function AppointmentsPage(): JSX.Element {
   const { t } = useTranslation();
@@ -21,6 +22,7 @@ export function AppointmentsPage(): JSX.Element {
   const calendar = params.get(APPOINTMENT_PARAMS.view) === APPOINTMENT_VIEW.calendar;
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<AppointmentDto | null>(null);
+  const [qrId, setQrId] = useState<string | null>(null);
   const [viewing, setViewing] = useState<AppointmentDto | null>(null);
   const subject = params.get(APPOINTMENT_PARAMS.subject) ?? '';
   const teacher = params.get(APPOINTMENT_PARAMS.teacher) ?? '';
@@ -91,7 +93,7 @@ export function AppointmentsPage(): JSX.Element {
               aria-label={t('appointments.viewMode')}
               className="flex gap-1 rounded-xl border border-border p-1"
             >
-              {Object.values(APPOINTMENT_VIEW).map((value) => (
+              {[APPOINTMENT_VIEW.calendar, APPOINTMENT_VIEW.list].map((value) => (
                 <button
                   type="button"
                   key={value}
@@ -107,7 +109,7 @@ export function AppointmentsPage(): JSX.Element {
                   className={`grid size-9 place-items-center rounded-lg ${calendar === (value === APPOINTMENT_VIEW.calendar) ? 'bg-primary text-card' : 'bg-subtle text-primary'}`}
                 >
                   <Icon
-                    name={value === APPOINTMENT_VIEW.calendar ? 'classroom' : 'list'}
+                    name={value === APPOINTMENT_VIEW.calendar ? 'scheduleGrid' : 'scheduleList'}
                     className="size-5"
                   />
                 </button>
@@ -117,11 +119,12 @@ export function AppointmentsPage(): JSX.Element {
         }
       >
         {calendar ? (
-          <AppointmentsCalendar rows={query.data?.items ?? []} onView={setViewing} />
+          <AppointmentsCalendar rows={query.data?.items ?? []} onView={setViewing} onQr={setQrId} />
         ) : (
           <AppointmentsTable
             rows={query.data?.items ?? []}
             onView={setViewing}
+            onQr={setQrId}
             onEdit={(row) => {
               setEditing(row);
               setFormOpen(true);
@@ -132,6 +135,7 @@ export function AppointmentsPage(): JSX.Element {
       {formOpen && (
         <AppointmentFormModal appointment={editing} onClose={() => setFormOpen(false)} />
       )}
+      {qrId && <AppointmentQrModal id={qrId} onClose={() => setQrId(null)} />}
       {viewing && <ViewAppointmentModal id={viewing.id} onClose={() => setViewing(null)} />}
     </>
   );

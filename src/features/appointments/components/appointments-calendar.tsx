@@ -10,20 +10,15 @@ import {
   localizedName,
   timeMinutes,
 } from '../appointments.lib';
-import {
-  APPOINTMENT_ITERATION,
-  APPOINTMENT_STATUS,
-  CALENDAR_HOUR_HEIGHT,
-  CALENDAR_PERIOD,
-  WEEK_DAYS,
-} from '../appointments.constants';
+import { CALENDAR_HOUR_HEIGHT, CALENDAR_PERIOD, WEEK_DAYS } from '../appointments.constants';
 import type { AppointmentDto } from '../appointments.types';
+import { AppointmentCalendarEvent } from './appointment-calendar-event';
 const eventColors = [
-  'bg-calendarTeal text-card',
-  'bg-calendarPurple text-card',
-  'bg-calendarMaroon text-card',
-  'bg-calendarNavy text-card',
-  'bg-calendarInk text-card',
+  'bg-calendarTeal text-qrPaper',
+  'bg-calendarPurple text-qrPaper',
+  'bg-calendarMaroon text-qrPaper',
+  'bg-calendarNavy text-qrPaper',
+  'bg-calendarInk text-qrPaper',
   'bg-calendarYellow text-calendarInk',
 ];
 function color(id: string) {
@@ -34,9 +29,11 @@ function color(id: string) {
 export function AppointmentsCalendar({
   rows,
   onView,
+  onQr,
 }: {
   rows: AppointmentDto[];
   onView: (row: AppointmentDto) => void;
+  onQr: (id: string) => void;
 }): JSX.Element {
   const { t, i18n } = useTranslation();
   const can = usePermission();
@@ -66,7 +63,6 @@ export function AppointmentsCalendar({
   );
   const dayLabel = new Intl.DateTimeFormat(i18n.language, { weekday: 'short' });
   const number = new Intl.NumberFormat(i18n.language, { minimumIntegerDigits: 2 });
-  const today = new Date().toDateString();
   const matching = (day: Date) => rows.filter((row) => row.days.includes(day.getDay()));
   const eventTitle = (row: AppointmentDto) =>
     `${row.groupName} · ${localizedName(row.subject, i18n.language)} · ${formatAppointmentTime(row.startTime, i18n.language)} – ${formatAppointmentTime(row.endTime, i18n.language)} · ${row.teacher}`;
@@ -102,7 +98,7 @@ export function AppointmentsCalendar({
           <div
             role="group"
             aria-label={t('appointments.calendar.period')}
-            className="flex rounded-full bg-permissionSurface p-1"
+            className="flex rounded-full bg-permissionSurface p-1.5 shadow-sm"
           >
             {Object.values(CALENDAR_PERIOD).map((value) => (
               <button
@@ -110,7 +106,7 @@ export function AppointmentsCalendar({
                 key={value}
                 aria-pressed={period === value}
                 onClick={() => setPeriod(value)}
-                className={`rounded-full px-4 py-2 text-sm transition ${period === value ? 'bg-primary text-card shadow-sm' : 'text-primary hover:bg-primary/10'}`}
+                className={`rounded-full px-5 py-2.5 text-sm font-medium transition ${period === value ? 'bg-primary text-card shadow-sm ring-2 ring-card' : 'text-primary hover:bg-primary/10'}`}
               >
                 {t(`appointments.calendar.${value}`)}
               </button>
@@ -153,7 +149,7 @@ export function AppointmentsCalendar({
                         setDate(day);
                         setPeriod(CALENDAR_PERIOD.daily);
                       }}
-                      className={`mb-2 grid size-8 place-items-center rounded-full text-sm ${day.toDateString() === today ? 'bg-primary text-card' : 'hover:bg-primary/10'}`}
+                      className={`mb-2 grid size-8 place-items-center rounded-full text-sm ${day.toDateString() === date.toDateString() ? 'bg-primary text-card' : 'hover:bg-primary/10'}`}
                     >
                       {number.format(day.getDate())}
                     </button>
@@ -161,16 +157,31 @@ export function AppointmentsCalendar({
                       {matching(day)
                         .slice(0, 3)
                         .map((row) => (
-                          <button
-                            type="button"
+                          <div
                             key={row.id}
-                            title={eventTitle(row)}
-                            disabled={!can(PERMISSIONS.appointments.detail)}
-                            onClick={() => onView(row)}
-                            className={`block w-full truncate rounded-lg px-2 py-1.5 text-start text-[10px] ${color(row.id)}`}
+                            className={`flex items-center gap-1 rounded-lg px-1 py-1 ${color(row.id)}`}
                           >
-                            {formatAppointmentTime(row.startTime, i18n.language)} · {row.groupName}
-                          </button>
+                            <button
+                              type="button"
+                              title={eventTitle(row)}
+                              disabled={!can(PERMISSIONS.appointments.detail)}
+                              onClick={() => onView(row)}
+                              className="min-w-0 flex-1 truncate px-1 py-1 text-start text-[10px]"
+                            >
+                              {formatAppointmentTime(row.startTime, i18n.language)} ·{' '}
+                              {row.groupName}
+                            </button>
+                            {can(PERMISSIONS.appointments.detail) && (
+                              <button
+                                type="button"
+                                aria-label={t('appointments.qr.open', { name: row.groupName })}
+                                onClick={() => onQr(row.id)}
+                                className="grid size-6 shrink-0 place-items-center rounded-md bg-permissionSurface text-primary"
+                              >
+                                <Icon name="qrCode" className="size-3.5" />
+                              </button>
+                            )}
+                          </div>
                         ))}
                       {matching(day).length > 3 && (
                         <button
@@ -196,7 +207,11 @@ export function AppointmentsCalendar({
                 style={{ gridTemplateColumns: `76px repeat(${dates.length}, minmax(0, 1fr))` }}
               >
                 <span className="self-end pb-2 text-xs text-tableHeading">
-                  {t('appointments.time')}
+                  {
+                    new Intl.DateTimeFormat(i18n.language, { timeZoneName: 'shortOffset' })
+                      .formatToParts(new Date())
+                      .find((part) => part.type === 'timeZoneName')?.value
+                  }
                 </span>
                 {dates.map((day) => (
                   <button
@@ -206,7 +221,7 @@ export function AppointmentsCalendar({
                       setDate(day);
                       setPeriod(CALENDAR_PERIOD.daily);
                     }}
-                    className={`rounded-3xl py-5 text-center ${day.toDateString() === today ? 'bg-primary text-card' : 'bg-table text-foreground'}`}
+                    className={`rounded-[28px] py-6 text-center ${day.toDateString() === date.toDateString() ? 'bg-primary text-card' : 'bg-table text-foreground'}`}
                   >
                     <span className="block text-2xl font-semibold">
                       {number.format(day.getDate())}
@@ -250,21 +265,20 @@ export function AppointmentsCalendar({
                       />
                     ))}
                     {layoutAppointments(matching(day)).map(({ row, lane, lanes }) => (
-                      <button
-                        type="button"
+                      <AppointmentCalendarEvent
                         key={row.id}
+                        row={row}
                         title={eventTitle(row)}
-                        aria-label={eventTitle(row)}
-                        disabled={!can(PERMISSIONS.appointments.detail)}
-                        onClick={() => onView(row)}
-                        className={`absolute flex min-h-6 flex-col overflow-hidden rounded-2xl p-2 text-start text-xs shadow-sm transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary ${color(row.id)} ${row.status !== APPOINTMENT_STATUS.active ? 'opacity-60' : ''}`}
+                        color={color(row.id)}
+                        onView={onView}
+                        onQr={onQr}
                         style={{
                           top:
                             ((timeMinutes(row.startTime) - firstHour * 60) / 60) *
                               CALENDAR_HOUR_HEIGHT +
                             2,
                           height: Math.max(
-                            24,
+                            28,
                             ((timeMinutes(row.endTime) - timeMinutes(row.startTime)) / 60) *
                               CALENDAR_HOUR_HEIGHT -
                               4,
@@ -272,25 +286,7 @@ export function AppointmentsCalendar({
                           insetInlineStart: `calc(${(lane / lanes) * 100}% + 2px)`,
                           width: `calc(${100 / lanes}% - 4px)`,
                         }}
-                      >
-                        <span className="flex items-center gap-1 truncate font-semibold">
-                          <Icon name="bookOpen" className="size-4 shrink-0" />
-                          <span className="truncate">
-                            {localizedName(row.subject, i18n.language)}
-                          </span>
-                        </span>
-                        <span className="mt-1 truncate text-[10px]">
-                          {formatAppointmentTime(row.startTime, i18n.language)} –{' '}
-                          {formatAppointmentTime(row.endTime, i18n.language)}
-                        </span>
-                        <span className="mt-1 truncate text-[10px]">
-                          {row.groupName} ·{' '}
-                          {t(
-                            `appointments.iterations.${Object.entries(APPOINTMENT_ITERATION).find(([, value]) => value === row.iteration)?.[0]}`,
-                          )}
-                        </span>
-                        <span className="mt-auto truncate pt-1 text-[10px]">{row.teacher}</span>
-                      </button>
+                      />
                     ))}
                   </div>
                 ))}

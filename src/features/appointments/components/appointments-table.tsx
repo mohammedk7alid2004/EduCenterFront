@@ -3,7 +3,7 @@ import { toast } from 'sonner';
 import { PERMISSIONS } from '@/config';
 import { usePermission } from '@/core/auth';
 import { useOnline } from '@/shared/lib';
-import { DataTable, RowActions, useAuditColumns, useConfirm, type Column } from '@/shared/ui';
+import { DataTable, Icon, RowActions, useAuditColumns, useConfirm, type Column } from '@/shared/ui';
 import { useDeleteAppointments, useSetAppointmentStatus } from '../appointments.queries';
 import { APPOINTMENT_STATUS, APPOINTMENT_ITERATION } from '../appointments.constants';
 import { localizedName, formatAppointmentTime } from '../appointments.lib';
@@ -12,10 +12,12 @@ export function AppointmentsTable({
   rows,
   onView,
   onEdit,
+  onQr,
 }: {
   rows: AppointmentDto[];
   onView: (row: AppointmentDto) => void;
   onEdit: (row: AppointmentDto) => void;
+  onQr: (id: string) => void;
 }): JSX.Element {
   const { t, i18n } = useTranslation();
   const can = usePermission();
@@ -138,15 +140,27 @@ export function AppointmentsTable({
       header: t('common.actions'),
       headerClassName: 'min-w-40',
       cell: (row) => (
-        <RowActions
-          onView={() => onView(row)}
-          onEdit={() => onEdit(row)}
-          onDelete={() => deleteSelection([row.id])}
-          disabled={pending}
-          canView={can(PERMISSIONS.appointments.detail)}
-          canEdit={can(PERMISSIONS.appointments.update) && can(PERMISSIONS.appointments.detail)}
-          canDelete={can(PERMISSIONS.appointments.delete)}
-        />
+        <div className="flex items-center gap-2">
+          {can(PERMISSIONS.appointments.detail) && (
+            <button
+              type="button"
+              aria-label={t('appointments.qr.open', { name: row.groupName })}
+              onClick={() => onQr(row.id)}
+              className="grid size-[38px] place-items-center rounded-lg bg-permissionSurface text-primary hover:bg-primary/15"
+            >
+              <Icon name="qrCode" className="size-5" />
+            </button>
+          )}
+          <RowActions
+            onView={() => onView(row)}
+            onEdit={() => onEdit(row)}
+            onDelete={() => deleteSelection([row.id])}
+            disabled={pending}
+            canView={can(PERMISSIONS.appointments.detail)}
+            canEdit={can(PERMISSIONS.appointments.update) && can(PERMISSIONS.appointments.detail)}
+            canDelete={can(PERMISSIONS.appointments.delete)}
+          />
+        </div>
       ),
     },
   ];

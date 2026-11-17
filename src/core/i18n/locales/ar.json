@@ -614,7 +614,16 @@
       "minuteValue": "الدقيقة {{count}}"
     },
     "classroomCapacity": "سعة القاعة: {{count}} طالب",
-    "selectClassroomFirst": "اختر القاعة أولًا لتحديد السعة."
+    "selectClassroomFirst": "اختر القاعة أولًا لتحديد السعة.",
+    "qr": {
+      "title": "تصدير QR Code",
+      "open": "تصدير QR للموعد {{name}}",
+      "alt": "QR بيانات الموعد {{name}}",
+      "png": "تصدير بصيغة PNG",
+      "pdf": "تصدير بصيغة PDF",
+      "generationFailed": "تعذر إنشاء QR. حاول مرة أخرى.",
+      "exportFailed": "تعذر تصدير الملف. حاول مرة أخرى."
+    }
   },
   "contactUs": {
     "title": "تواصل معنا",

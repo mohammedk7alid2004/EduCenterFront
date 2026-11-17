@@ -1,5 +1,7 @@
 export const theme = {
   light: {
+    qrInk: '0 0 0',
+    qrPaper: '255 255 255',
     calendarTeal: '0 143 145',
     calendarPurple: '108 82 226',
     calendarMaroon: '91 23 35',
@@ -28,6 +30,8 @@ export const theme = {
     warning: '244 177 59',
   },
   dark: {
+    qrInk: '0 0 0',
+    qrPaper: '255 255 255',
     calendarTeal: '0 106 109',
     calendarPurple: '86 61 183',
     calendarMaroon: '91 23 35',
