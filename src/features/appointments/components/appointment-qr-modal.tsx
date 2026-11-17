@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ApiError } from '@/core/api';
+import { useCenterBrand } from '@/features/system-management';
 import { useOnline } from '@/shared/lib';
 import { Button, ErrorState, Icon, LoadingState, Modal } from '@/shared/ui';
 import { useAppointment } from '../appointments.queries';
@@ -34,6 +35,8 @@ export function AppointmentQrModal({
 }
 function QrContent({ row, onClose }: { row: AppointmentDto; onClose: () => void }): JSX.Element {
   const { t, i18n } = useTranslation();
+  const brand = useCenterBrand();
+  const logoSource = brand.data?.navbarLogoUrl || undefined;
   const [image, setImage] = useState('');
   const [error, setError] = useState<Error | null>(null);
   const [retry, setRetry] = useState(0);
@@ -82,7 +85,7 @@ function QrContent({ row, onClose }: { row: AppointmentDto; onClose: () => void 
     let cancelled = false;
     setImage('');
     setError(null);
-    void generateAppointmentQr(data.payload)
+    void generateAppointmentQr(data.payload, undefined, logoSource)
       .then((result) => {
         if (!cancelled) setImage(result);
       })
@@ -92,13 +95,19 @@ function QrContent({ row, onClose }: { row: AppointmentDto; onClose: () => void 
     return () => {
       cancelled = true;
     };
-  }, [data.payload, retry]);
+  }, [data.payload, retry, logoSource]);
   async function exportFile(format: 'png' | 'pdf') {
     if (busy) return;
     setBusy(format);
     setExportError(null);
     try {
-      await exportAppointmentQr({ ...data, id: row.id, language: i18n.language, format });
+      await exportAppointmentQr({
+        ...data,
+        id: row.id,
+        language: i18n.language,
+        format,
+        logoSource,
+      });
     } catch {
       setExportError(new Error('appointments.qr.exportFailed'));
     } finally {

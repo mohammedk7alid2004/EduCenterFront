@@ -24,6 +24,9 @@ export const TIME_PICKER = {
 } as const;
 
 export const APPOINTMENT_QR = {
+  defaultLogo: '/logo-3m2a.svg',
+  logoRatio: 0.2,
+  logoPaddingRatio: 0.02,
   previewSize: 320,
   exportSize: 1000,
   margin: 4,

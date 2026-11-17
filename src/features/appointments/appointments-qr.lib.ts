@@ -8,17 +8,55 @@ function hexColor(value: string): string {
     .map((channel) => Number(channel).toString(16).padStart(2, '0'))
     .join('')}`;
 }
+async function loadQrLogo(source: string): Promise<HTMLImageElement> {
+  const image = new window.Image();
+  image.crossOrigin = 'anonymous';
+  image.src = source;
+  try {
+    await image.decode();
+    return image;
+  } catch (error) {
+    if (source !== APPOINTMENT_QR.defaultLogo) return loadQrLogo(APPOINTMENT_QR.defaultLogo);
+    throw error;
+  }
+}
 export async function generateAppointmentQr(
   payload: string,
   size: number = APPOINTMENT_QR.previewSize,
+  logoSource: string = APPOINTMENT_QR.defaultLogo,
 ): Promise<string> {
-  const { default: QRCode } = await import('qrcode');
-  return QRCode.toDataURL(payload, {
+  const [{ default: QRCode }, logo] = await Promise.all([import('qrcode'), loadQrLogo(logoSource)]);
+  const canvas = document.createElement('canvas');
+  await QRCode.toCanvas(canvas, payload, {
     width: size,
     margin: APPOINTMENT_QR.margin,
-    errorCorrectionLevel: 'M',
+    errorCorrectionLevel: 'H',
     color: { dark: hexColor(theme.light.qrInk), light: hexColor(theme.light.qrPaper) },
   });
+  const context = canvas.getContext('2d');
+  if (!context) throw new Error('appointments.qr.generationFailed');
+  const logoSize = size * APPOINTMENT_QR.logoRatio;
+  const padding = size * APPOINTMENT_QR.logoPaddingRatio;
+  const start = (size - logoSize) / 2;
+  context.fillStyle = hexColor(theme.light.qrPaper);
+  context.fillRect(
+    start - padding,
+    start - padding,
+    logoSize + padding * 2,
+    logoSize + padding * 2,
+  );
+  context.fillStyle = hexColor(theme.light.primary);
+  context.beginPath();
+  context.roundRect(start, start, logoSize, logoSize, padding);
+  context.fill();
+  const ratio = Math.min(
+    (logoSize - padding * 2) / logo.naturalWidth,
+    (logoSize - padding * 2) / logo.naturalHeight,
+  );
+  const width = logo.naturalWidth * ratio;
+  const height = logo.naturalHeight * ratio;
+  context.drawImage(logo, (size - width) / 2, (size - height) / 2, width, height);
+  return canvas.toDataURL('image/png');
 }
 export async function exportAppointmentQr({
   payload,
@@ -26,16 +64,18 @@ export async function exportAppointmentQr({
   id,
   language,
   format,
+  logoSource,
 }: {
   payload: string;
   labels: string[];
   id: string;
   language: string;
   format: 'png' | 'pdf';
+  logoSource?: string;
 }): Promise<void> {
   await document.fonts.ready;
   const qr = new window.Image();
-  qr.src = await generateAppointmentQr(payload, APPOINTMENT_QR.exportSize);
+  qr.src = await generateAppointmentQr(payload, APPOINTMENT_QR.exportSize, logoSource);
   await qr.decode();
   const canvas = document.createElement('canvas');
   canvas.width = APPOINTMENT_QR.cardWidth;
