@@ -8,7 +8,7 @@ const sections = [
   {
     key: 'contactUs',
     route: ROUTES.contactUs,
-    icon: 'mail',
+    icon: 'contactUs',
     permission: PERMISSIONS.contactUs.read,
   },
   {

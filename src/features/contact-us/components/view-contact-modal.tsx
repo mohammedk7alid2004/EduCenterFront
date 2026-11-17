@@ -13,7 +13,7 @@ export function ViewContactModal({
   const query = useContact(id);
   const row = query.data;
   return (
-    <Modal title={t('contactUs.viewTitle')} icon="mail" onClose={onClose}>
+    <Modal title={t('contactUs.viewTitle')} icon="contactUs" onClose={onClose}>
       {query.isPending ? (
         <LoadingState />
       ) : query.error ? (

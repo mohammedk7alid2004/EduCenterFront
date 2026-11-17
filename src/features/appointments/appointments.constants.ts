@@ -12,3 +12,13 @@ export const APPOINTMENT_PARAMS = {
 export const OPTIONS_PAGE_SIZE = 100;
 export const MINUTES_PER_DAY = 1440;
 export const CALENDAR_HOUR_HEIGHT = 88;
+
+export const TIME_PICKER = {
+  hours: 12,
+  minutes: 60,
+  minuteStep: 5,
+  dialSize: 224,
+  dialRadius: 88,
+  modes: { hour: 'hour', minute: 'minute' },
+  periods: { am: 'am', pm: 'pm' },
+} as const;

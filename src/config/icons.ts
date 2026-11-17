@@ -69,7 +69,26 @@ function brandIcon(path: string) {
   };
 }
 
+function ContactUsIcon(props: ComponentProps<'svg'>) {
+  return createElement(
+    'svg',
+    {
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      strokeWidth: 1.7,
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round',
+      ...props,
+    },
+    createElement('path', {
+      d: 'M4 7V6a4 4 0 0 1 4-4h11a4 4 0 0 1 4 4v11a4 4 0 0 1-4 4H8M8 8l4.1 3a2 2 0 0 0 2.4 0L19 8M2 11h4M1 15h6M3 19h3',
+    }),
+  );
+}
+
 export const icons = {
+  contactUs: ContactUsIcon,
   download: Download,
   clock: Clock,
   list: List,

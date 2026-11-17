@@ -603,7 +603,15 @@
       "minute": "الدقيقة",
       "period": "الفترة",
       "am": "ص",
-      "pm": "م"
+      "pm": "م",
+      "select": "اختيار {{label}}",
+      "apply": "تطبيق",
+      "chooseHour": "اختر الساعة",
+      "chooseMinute": "اختر الدقائق",
+      "hourDial": "قرص اختيار الساعة",
+      "minuteDial": "قرص اختيار الدقائق",
+      "hourValue": "الساعة {{count}}",
+      "minuteValue": "الدقيقة {{count}}"
     },
     "classroomCapacity": "سعة القاعة: {{count}} طالب",
     "selectClassroomFirst": "اختر القاعة أولًا لتحديد السعة."

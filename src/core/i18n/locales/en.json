@@ -603,7 +603,15 @@
       "minute": "Minute",
       "period": "Period",
       "am": "AM",
-      "pm": "PM"
+      "pm": "PM",
+      "select": "Select {{label}}",
+      "apply": "Apply",
+      "chooseHour": "Choose the hour",
+      "chooseMinute": "Choose the minutes",
+      "hourDial": "Hour dial",
+      "minuteDial": "Minute dial",
+      "hourValue": "Hour {{count}}",
+      "minuteValue": "Minute {{count}}"
     },
     "classroomCapacity": "Classroom capacity: {{count}} students",
     "selectClassroomFirst": "Select a classroom first to set its capacity."
