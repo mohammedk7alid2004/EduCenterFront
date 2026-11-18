@@ -22,6 +22,14 @@ export function hasPermission(roles: readonly Role[], permission: string): boole
 }
 
 export const PERMISSIONS = {
+  students: {
+    read: 'Students.GetAll',
+    detail: 'Students.GetById',
+    create: 'Students.Create',
+    update: 'Students.Update',
+    delete: 'Students.Delete',
+    toggleStatus: 'Students.ToggleStatus',
+  },
   contactUs: {
     read: 'ContactUs.ViewAll',
     detail: 'ContactUs.ShowOne',

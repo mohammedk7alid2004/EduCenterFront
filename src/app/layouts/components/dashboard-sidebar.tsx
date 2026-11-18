@@ -83,9 +83,9 @@ export function DashboardSidebar({
               />
             )}
             <SidebarLink
-              route={ROUTES.teachers}
-              icon="teacher"
-              label={t('nav.teachers')}
+              route={ROUTES.classrooms}
+              icon="classroom"
+              label={t('nav.classrooms')}
               onClick={onClose}
             />
             <SidebarLink
@@ -95,12 +95,25 @@ export function DashboardSidebar({
               onClick={onClose}
             />
             <SidebarLink
-              route={ROUTES.classrooms}
-              icon="classroom"
-              label={t('nav.classrooms')}
+              route={ROUTES.teachers}
+              icon="teacher"
+              label={t('nav.teachers')}
               onClick={onClose}
             />
           </SidebarSection>
+          {can(PERMISSIONS.students.read) && (
+            <NavLink
+              to={ROUTES.students}
+              onClick={onClose}
+              className={({ isActive }) =>
+                `flex min-h-12 items-center gap-3 rounded-xl px-2 ${isActive ? 'bg-card text-primary' : 'text-card hover:bg-card/5'}`
+              }
+            >
+              <Icon name="students" className="size-5 shrink-0" />
+              {t('nav.students')}
+            </NavLink>
+          )}
+
           {(can(PERMISSIONS.roles.read) || can(PERMISSIONS.employees.read)) && (
             <SidebarSection
               title={t('nav.access')}

@@ -123,7 +123,31 @@ function ScheduleListIcon(props: ComponentProps<'svg'>) {
   );
 }
 
+function StudentsIcon(props: ComponentProps<'svg'>) {
+  return createElement(
+    'svg',
+    {
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      strokeWidth: 1.5,
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round',
+      ...props,
+    },
+    createElement('path', {
+      d: 'M2 5l5-2 5 2-5 2-5-2zm2 1v3c2 2 4 2 6 0V6M2 5v5m12-3 4-1.5L22 7l-4 1.5L14 7zm1.5 1v2c1.5 1.5 3.5 1.5 5 0V8',
+    }),
+    createElement('circle', { cx: 7, cy: 14, r: 2.5 }),
+    createElement('circle', { cx: 18, cy: 14.5, r: 2 }),
+    createElement('path', {
+      d: 'M1.5 21c0-4 11-4 11 0-2.5 1.5-8.5 1.5-11 0zm13-1.5c2-1.5 7-1 8 1-1 1-3.5 1.5-6 .8',
+    }),
+  );
+}
+
 export const icons = {
+  students: StudentsIcon,
   qrCode: QrCode,
   imageFile: Image,
   pdfFile: FileText,

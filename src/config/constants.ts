@@ -34,8 +34,19 @@ export const ROUTES = {
   classrooms: '/classrooms',
   systemManagement: '/system-management',
   contactUs: '/contact-us',
+  students: '/students',
 } as const;
 export const API_ENDPOINTS = {
+  students: {
+    getAll: '/v1/Students',
+    detail: (id: string) => `/v1/Students/${encodeURIComponent(id)}`,
+    create: '/v1/Students',
+    update: '/v1/Students',
+    delete: '/v1/Students',
+    toggleStatus: (id: string) => `/v1/Students/toggle-status/${encodeURIComponent(id)}`,
+    levels: '/v1/select-menu/GetEducationLevels',
+    grades: '/v1/select-menu/GetEducationGrades',
+  },
   contactUs: {
     getAll: '/v1/ContactUs/GetAll',
     detail: (id: string) => `/v1/ContactUs/GetById/${encodeURIComponent(id)}`,
@@ -114,6 +125,7 @@ export const API_ENDPOINTS = {
   },
 } as const;
 export const QUERY_KEYS = {
+  students: ['students'],
   contactUs: ['contact-us'],
   appointments: ['appointments'],
   systemManagement: ['system-management'],

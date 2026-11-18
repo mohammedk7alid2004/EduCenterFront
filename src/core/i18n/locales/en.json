@@ -55,7 +55,9 @@
     "showPassword": "Show password",
     "hidePassword": "Hide password",
     "toggle": "Toggle",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "details": "Details",
+    "noOptions": "No available options."
   },
   "errors": {
     "network": "You appear to be offline. Please try again.",
@@ -82,7 +84,8 @@
       "classroomsDescription": "Manage classrooms, capacity and availability",
       "systemDescription": "Manage center settings, policies, social links and frequently asked questions.",
       "appointmentsDescription": "Manage group schedules, teachers and classrooms",
-      "contactUsDescription": "View and manage incoming contact messages"
+      "contactUsDescription": "View and manage incoming contact messages",
+      "studentsDescription": "Manage student profiles, education levels and grades."
     },
     "login": {
       "title": "Welcome back"
@@ -117,7 +120,8 @@
     "employees": "Sub Admin Employee",
     "profile": "My Profile",
     "access": "Users & Access",
-    "contactUs": "Contact Us"
+    "contactUs": "Contact Us",
+    "students": "Students"
   },
   "auth": {
     "splash": {
@@ -654,6 +658,64 @@
       "phone": "Phone",
       "subject": "Subject",
       "message": "Message"
+    }
+  },
+  "students": {
+    "title": "Students",
+    "description": "Manage student profiles, education levels and grades.",
+    "create": "Add New Student",
+    "studentName": "Student Name",
+    "viewTitle": "View Student",
+    "expand": "Show details for {{name}}",
+    "subjects": "Subjects",
+    "groups": "Groups",
+    "fees": "Fees",
+    "gender": {
+      "male": "Male",
+      "female": "Female"
+    },
+    "empty": {
+      "subjects": "No registered subjects.",
+      "groups": "No registered groups.",
+      "fees": "No fee information available."
+    },
+    "form": {
+      "createTitle": "Add New Student",
+      "editTitle": "Edit Student",
+      "fullName": "Full Name",
+      "namePlaceholder": "Enter Full Name",
+      "email": "Email",
+      "emailPlaceholder": "Enter Email",
+      "phoneNumber": "Phone Number",
+      "phonePlaceholder": "Enter Phone Number",
+      "parentPhoneNumber": "Parent Phone Number",
+      "parentPhonePlaceholder": "Enter Parent Phone Number",
+      "level": "Level",
+      "levelPlaceholder": "Select Level",
+      "grade": "Grade",
+      "gradePlaceholder": "Select Grade",
+      "selectLevelFirst": "Select a level, then a grade",
+      "gender": "Gender",
+      "genderPlaceholder": "Select Gender",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "passwordOptional": "Leave blank to keep the current password."
+    },
+    "validation": {
+      "name": "Name must be 50 characters or fewer.",
+      "email": "Enter a valid email address (up to 150 characters).",
+      "phone": "Enter a valid Egyptian phone number or Gulf number with country code.",
+      "password": "Use at least 8 characters with uppercase, lowercase, a number and a symbol.",
+      "confirmPassword": "Passwords do not match."
+    },
+    "delete": {
+      "title": "Delete Students"
+    },
+    "feedback": {
+      "created": "Student created successfully.",
+      "updated": "Student updated successfully.",
+      "deleted": "Students deleted successfully.",
+      "status": "Student status updated successfully."
     }
   }
 }
