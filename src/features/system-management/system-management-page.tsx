@@ -5,18 +5,6 @@ import { ROUTES } from '@/config';
 import { usePermission } from '@/infrastructure/auth';
 import { useOnline } from '@/shared/hooks';
 import { Icon } from '@/shared/components';
-import { SYSTEM_TAB_PARAM, SYSTEM_TABS, type SystemTab } from './system-management.constants';
-import { CenterPanel } from './components/center-panel';
-import { ContentPanel } from './components/content-panel';
-import { SocialPanel } from './components/social-panel';
-import { FaqPanel } from './components/faq-panel';
-import { useEffect, useRef } from 'react';
-import { Link, Navigate, useSearchParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { ROUTES } from '@/config';
-import { usePermission } from '@/infrastructure/auth';
-import { useOnline } from '@/shared/hooks';
-import { Icon } from '@/shared/components';
 import {
   SYSTEM_TAB_GROUPS,
   SYSTEM_TAB_PARAM,
