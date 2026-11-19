@@ -1,8 +1,8 @@
 import { forwardRef, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { ApiError } from '@/core/api';
-import { useOnline } from '@/shared/lib';
-import { Button, Icon } from '@/shared/ui';
+import type { ApiError } from '@/infrastructure/api';
+import { useOnline } from '@/shared/hooks';
+import { Button, Icon } from '@/shared/components';
 export function SettingsForm({
   children,
   pending,

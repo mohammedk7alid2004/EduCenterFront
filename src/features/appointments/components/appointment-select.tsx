@@ -1,1 +1,1 @@
-export { Select as AppointmentSelect } from '@/shared/ui';
+export { Select as AppointmentSelect } from '@/shared/components';

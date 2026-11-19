@@ -1,6 +1,6 @@
 import { useSearchParams } from 'react-router-dom';
 import { LIST_PARAMS } from '@/config';
-import { useDebouncedValue, useListControls } from '@/shared/lib';
+import { useDebouncedValue, useListControls } from '@/shared/hooks';
 import { CONTACT_FILTER_PARAMS } from './contact-us.constants';
 export function useContactControls() {
   const controls = useListControls();

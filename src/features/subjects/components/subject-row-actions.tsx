@@ -1,5 +1,5 @@
-import { RowActions } from '@/shared/ui';
-import { useOnline } from '@/shared/lib';
+import { RowActions } from '@/shared/components';
+import { useOnline } from '@/shared/hooks';
 import type { SubjectDto } from '../subjects.types';
 export function SubjectRowActions({
   subject,

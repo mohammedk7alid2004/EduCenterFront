@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useRef } from 'react';
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/config';
-import type { ApiError } from '@/core/api';
+import type { ApiError } from '@/infrastructure/api';
 import {
   createSubject,
   deleteSubjects,

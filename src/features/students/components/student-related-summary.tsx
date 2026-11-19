@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Icon } from '@/shared/ui';
+import { Icon } from '@/shared/components';
 import { studentLocalizedName } from '../students.lib';
 import type { StudentDto } from '../students.types';
 export function StudentRelatedSummary({ student }: { student: StudentDto }): JSX.Element {

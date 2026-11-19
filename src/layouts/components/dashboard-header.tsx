@@ -5,9 +5,9 @@ import { ROUTES } from '@/config';
 import { SYSTEM_TABS, SYSTEM_TAB_PARAM } from '@/features/system-management';
 import { useLogout } from '@/features/auth';
 import { useProfile, ProfileAvatar } from '@/features/profile';
-import { usePermission, useAuthStore } from '@/core/auth';
-import { setLanguage } from '@/core/i18n';
-import { Icon } from '@/shared/ui';
+import { usePermission, useAuthStore } from '@/infrastructure/auth';
+import { setLanguage } from '@/infrastructure/i18n';
+import { Icon } from '@/shared/components';
 export function DashboardHeader({ onMenuClick }: { onMenuClick: () => void }): JSX.Element {
   const { t, i18n } = useTranslation();
   const location = useLocation();

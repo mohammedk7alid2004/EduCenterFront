@@ -1,5 +1,5 @@
 import { API_ENDPOINTS } from '@/config';
-import { apiClient, ApiError, normalizeApiError } from '@/core/api';
+import { apiClient, ApiError, normalizeApiError } from '@/infrastructure/api';
 import type { BackendResponse } from './types';
 import type {
   PasswordResetRequest,

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { usePermission } from '@/core/auth';
-import { useOnline } from '@/shared/lib';
+import { usePermission } from '@/infrastructure/auth';
+import { useOnline } from '@/shared/hooks';
 import {
   DataTable,
   RowActions,
@@ -9,7 +9,7 @@ import {
   useAuditColumns,
   useConfirm,
   type Column,
-} from '@/shared/ui';
+} from '@/shared/components';
 import { FAQ_PERMISSIONS } from '../system-management.constants';
 import { useDeleteFaqs, useToggleFaq } from '../system-management.queries';
 import type { FaqDto } from '../system-management.types';

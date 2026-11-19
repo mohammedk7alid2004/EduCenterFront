@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { PropsWithChildren } from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { ApiError } from '@/core/api';
+import { ApiError } from '@/infrastructure/api';
 import { saveFaq, toggleFaq } from './system-management.api';
 import { useSaveFaq } from './system-management.queries';
 vi.mock('./system-management.api', () => ({ saveFaq: vi.fn(), toggleFaq: vi.fn() }));

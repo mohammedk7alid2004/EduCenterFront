@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { apiClient } from '@/core/api';
+import { apiClient } from '@/infrastructure/api';
 import { createEmployee, updateEmployee } from './employees.api';
 import type { EmployeePayload } from './employees.types';
 
-vi.mock('@/core/api', async () => ({
-  ...(await vi.importActual<typeof import('@/core/api')>('@/core/api')),
+vi.mock('@/infrastructure/api', async () => ({
+  ...(await vi.importActual<typeof import('@/infrastructure/api')>('@/infrastructure/api')),
   apiClient: { post: vi.fn(), put: vi.fn() },
 }));
 const values: EmployeePayload = {

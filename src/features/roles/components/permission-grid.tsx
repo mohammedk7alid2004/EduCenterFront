@@ -1,6 +1,6 @@
 import { useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Icon, StatusSwitch, EmptyState } from '@/shared/ui';
+import { Icon, StatusSwitch, EmptyState } from '@/shared/components';
 import { groupPermissions, humanizePermission } from '../roles.lib';
 import type { PermissionDto } from '../roles.types';
 export function PermissionGrid({

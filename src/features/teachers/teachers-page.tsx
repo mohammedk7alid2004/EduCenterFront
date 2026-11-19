@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ManagementList } from '@/shared/ui';
-import { useListControls } from '@/shared/lib';
+import { ManagementList } from '@/shared/components';
+import { useListControls } from '@/shared/hooks';
 import type { TeacherDto } from './teachers.types';
 import { useTeachers } from './teachers.queries';
 import { TeacherTable } from './components/teacher-table';

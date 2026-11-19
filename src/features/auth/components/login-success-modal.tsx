@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Icon } from '@/shared/ui';
+import { Icon } from '@/shared/components';
 
 interface LoginSuccessModalProps {
   open: boolean;

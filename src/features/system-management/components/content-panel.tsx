@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { usePermission } from '@/core/auth';
-import { useOnline, setServerErrors } from '@/shared/lib';
+import { usePermission } from '@/infrastructure/auth';
+import { useOnline } from '@/shared/hooks';
+import { setServerErrors } from '@/shared/utils';
 import {
   Button,
   EmptyState,
@@ -11,7 +12,7 @@ import {
   Icon,
   LoadingState,
   Modal,
-} from '@/shared/ui';
+} from '@/shared/components';
 import type { SystemTab } from '../system-management.constants';
 import type { ContentDto, ContentValues } from '../system-management.types';
 import { useSaveSettings, useSettings } from '../system-management.queries';

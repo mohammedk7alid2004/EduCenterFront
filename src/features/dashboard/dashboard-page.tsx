@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { PERMISSIONS, ROUTES } from '@/config';
 import { SYSTEM_TABS } from '@/features/system-management';
-import { useAuthStore, usePermission } from '@/core/auth';
-import { Icon } from '@/shared/ui';
+import { useAuthStore, usePermission } from '@/infrastructure/auth';
+import { Icon } from '@/shared/components';
 const sections = [
   {
     key: 'students',

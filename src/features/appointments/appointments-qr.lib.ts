@@ -1,5 +1,5 @@
 import { theme } from '@/config';
-import { downloadBlob } from '@/shared/lib';
+import { downloadBlob } from '@/shared/utils';
 import { APPOINTMENT_QR, QR_EXPORT_FORMAT } from './appointments.constants';
 
 function hexColor(value: string): string {

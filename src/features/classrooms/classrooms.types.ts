@@ -1,4 +1,4 @@
-import type { AuditFields } from '@/core/api';
+import type { AuditFields } from '@/infrastructure/api';
 export interface ClassroomDto extends AuditFields {
   id: string;
   name: { ar: string | null; en: string | null };

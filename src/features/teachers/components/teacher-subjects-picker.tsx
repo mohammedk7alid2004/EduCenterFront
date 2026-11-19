@@ -1,8 +1,8 @@
 import { useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSubjectOptions } from '@/features/subjects';
-import { useDebouncedValue } from '@/shared/lib';
-import { Button, ErrorState, Icon } from '@/shared/ui';
+import { useDebouncedValue } from '@/shared/hooks';
+import { Button, ErrorState, Icon } from '@/shared/components';
 import type { TeacherSubjectRef } from '../teachers.types';
 export function TeacherSubjectsPicker({
   selected,

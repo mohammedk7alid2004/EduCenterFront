@@ -1,4 +1,4 @@
-import type { AuditFields, ListFilters } from '@/core/api';
+import type { AuditFields, ListFilters } from '@/infrastructure/api';
 export interface LocalizedName {
   ar: string | null;
   en: string | null;

@@ -1,7 +1,7 @@
-import { useAuditColumns } from '@/shared/ui';
+import { useAuditColumns } from '@/shared/components';
 import { useTranslation } from 'react-i18next';
-import { DataTable, StatusSwitch, useConfirm, type Column } from '@/shared/ui';
-import { useOnline } from '@/shared/lib';
+import { DataTable, StatusSwitch, useConfirm, type Column } from '@/shared/components';
+import { useOnline } from '@/shared/hooks';
 import { toast } from 'sonner';
 import type { SubjectDto } from '../subjects.types';
 import { useDeleteSubjects, useToggleSubjectStatus } from '../subjects.queries';

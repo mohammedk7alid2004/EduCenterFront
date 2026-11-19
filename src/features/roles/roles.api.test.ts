@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { API_ENDPOINTS } from '@/config';
-import { apiClient } from '@/core/api';
+import { apiClient } from '@/infrastructure/api';
 import { updateRole } from './roles.api';
 
-vi.mock('@/core/api', async () => ({
-  ...(await vi.importActual<typeof import('@/core/api')>('@/core/api')),
+vi.mock('@/infrastructure/api', async () => ({
+  ...(await vi.importActual<typeof import('@/infrastructure/api')>('@/infrastructure/api')),
   apiClient: { put: vi.fn() },
 }));
 describe('role permission save contract', () => {

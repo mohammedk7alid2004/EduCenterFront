@@ -5,7 +5,7 @@ import {
   type ApiResult,
   type ListFilters,
   type PaginatedResult,
-} from '@/core/api';
+} from '@/infrastructure/api';
 import { FAQ_ENDPOINTS, LOGO_FIELDS, SYSTEM_TABS } from './system-management.constants';
 import type {
   CenterSettings,

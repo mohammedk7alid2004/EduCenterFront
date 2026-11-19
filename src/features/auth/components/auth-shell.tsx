@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
-import { setLanguage } from '@/core/i18n';
-import { Icon } from '@/shared/ui';
+import { setLanguage } from '@/infrastructure/i18n';
+import { Icon } from '@/shared/components';
 import { AuthLogo } from './auth-logo';
 import { LoginHero } from './login-hero';
 export function AuthShell({ children }: PropsWithChildren): JSX.Element {

@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { API_ENDPOINTS } from '@/config';
-import { apiClient } from '@/core/api';
+import { apiClient } from '@/infrastructure/api';
 import { changePassword, fetchProfile, updateProfile } from './profile.api';
-vi.mock('@/core/api', async () => ({
-  ...(await vi.importActual<typeof import('@/core/api')>('@/core/api')),
+vi.mock('@/infrastructure/api', async () => ({
+  ...(await vi.importActual<typeof import('@/infrastructure/api')>('@/infrastructure/api')),
   apiClient: { get: vi.fn(), put: vi.fn(), post: vi.fn() },
 }));
 describe('profile API contracts', () => {

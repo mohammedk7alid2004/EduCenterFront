@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { API_ENDPOINTS } from '@/config';
-import { apiClient } from '@/core/api';
+import { apiClient } from '@/infrastructure/api';
 import {
   createClassroom,
   updateClassroom,
@@ -9,8 +9,8 @@ import {
   toggleClassroomStatus,
 } from './classrooms.api';
 import type { ClassroomValues } from './classrooms.types';
-vi.mock('@/core/api', async () => ({
-  ...(await vi.importActual<typeof import('@/core/api')>('@/core/api')),
+vi.mock('@/infrastructure/api', async () => ({
+  ...(await vi.importActual<typeof import('@/infrastructure/api')>('@/infrastructure/api')),
   apiClient: { get: vi.fn(), post: vi.fn(), put: vi.fn(), delete: vi.fn(), patch: vi.fn() },
 }));
 const values: ClassroomValues = {

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ROUTES } from '@/config';
-import { Button, DetailField, ErrorState, LoadingState, Icon } from '@/shared/ui';
+import { Button, DetailField, ErrorState, LoadingState, Icon } from '@/shared/components';
 import { useProfile } from './profile.queries';
 import { PROFILE_DIALOG } from './profile.constants';
 import { ProfileAvatar } from './components/profile-avatar';

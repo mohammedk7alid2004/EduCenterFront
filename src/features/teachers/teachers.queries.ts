@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/config';
-import type { ApiError } from '@/core/api';
+import type { ApiError } from '@/infrastructure/api';
 import {
   createTeacher,
   deleteTeachers,

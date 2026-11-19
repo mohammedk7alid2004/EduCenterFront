@@ -1,7 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { PERMISSIONS, ROUTES } from '@/config';
 import { LoginPage, PasswordRecoveryPage } from '@/features/auth';
-import { AppLayout } from '../layouts/app-layout';
+import { AppLayout } from '@/layouts/app-layout';
 import { RouteErrorBoundary } from '../error-boundary';
 import { GuestRoute, ProtectedRoute } from './guards';
 import { SimplePage } from './simple-page';

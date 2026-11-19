@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import type { AuditFields } from '@/core/api';
+import type { AuditFields } from '@/infrastructure/api';
 import type { Column } from './data-table';
 
 export function useAuditColumns<T extends AuditFields>(): Column<T>[] {

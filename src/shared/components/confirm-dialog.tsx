@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ApiError } from '@/core/api';
-import { useOnline } from '@/shared/lib';
+import { ApiError } from '@/infrastructure/api';
+import { useOnline } from '@/shared/hooks';
 import { Button } from './button';
 import { Modal } from './modal';
 import { FeedbackDialog } from './feedback-dialog';

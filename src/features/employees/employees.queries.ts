@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/config';
-import type { ApiError, ListFilters, PaginatedResult } from '@/core/api';
+import type { ApiError, ListFilters, PaginatedResult } from '@/infrastructure/api';
 import {
   fetchEmployees,
   fetchEmployee,

@@ -3,10 +3,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
-import { Button, Icon } from '@/shared/ui';
+import { Button, Icon } from '@/shared/components';
 import { AuthLogo } from './auth-logo';
-import { ApiError } from '@/core/api';
-import { setServerErrors, useOnline } from '@/shared/lib';
+import { ApiError } from '@/infrastructure/api';
+import { useOnline } from '@/shared/hooks';
+import { setServerErrors } from '@/shared/utils';
 import type { LoginCredentials } from '../types';
 
 interface LoginFormProps {

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { DetailField, ErrorState, LoadingState, Modal, StatusBadge } from '@/shared/ui';
+import { DetailField, ErrorState, LoadingState, Modal, StatusBadge } from '@/shared/components';
 import { useStudent } from '../students.queries';
 import { studentLocalizedName } from '../students.lib';
 import { STUDENT_GENDER_NAMES } from '../students.constants';

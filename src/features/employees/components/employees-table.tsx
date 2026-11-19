@@ -1,10 +1,10 @@
-import { useAuditColumns } from '@/shared/ui';
+import { useAuditColumns } from '@/shared/components';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { PERMISSIONS } from '@/config';
-import { usePermission } from '@/core/auth';
-import { useOnline } from '@/shared/lib';
-import { DataTable, RowActions, StatusSwitch, useConfirm, type Column } from '@/shared/ui';
+import { usePermission } from '@/infrastructure/auth';
+import { useOnline } from '@/shared/hooks';
+import { DataTable, RowActions, StatusSwitch, useConfirm, type Column } from '@/shared/components';
 import type { EmployeeDto } from '../employees.types';
 import { useDeleteEmployees, useToggleEmployeeStatus } from '../employees.queries';
 export function EmployeesTable({

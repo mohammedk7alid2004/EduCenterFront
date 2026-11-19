@@ -1,9 +1,10 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { loginUser } from './api';
-import { apiClient } from '@/core/api';
+import { apiClient } from '@/infrastructure/api';
 
-vi.mock('@/core/api', async () => {
-  const actual = await vi.importActual<typeof import('@/core/api')>('@/core/api');
+vi.mock('@/infrastructure/api', async () => {
+  const actual =
+    await vi.importActual<typeof import('@/infrastructure/api')>('@/infrastructure/api');
   return {
     ...actual,
     apiClient: {

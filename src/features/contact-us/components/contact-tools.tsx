@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { PERMISSIONS } from '@/config';
-import { usePermission } from '@/core/auth';
-import { useOnline } from '@/shared/lib';
-import { Button, Icon } from '@/shared/ui';
+import { usePermission } from '@/infrastructure/auth';
+import { useOnline } from '@/shared/hooks';
+import { Button, Icon } from '@/shared/components';
 import { useContactFile } from '../contact-us.queries';
 import { CONTACT_FILE_ACTION, CONTACT_FILE_NAMES } from '../contact-us.constants';
 import { downloadContactFile } from '../contact-us.lib';

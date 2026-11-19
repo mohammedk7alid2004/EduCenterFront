@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { API_ENDPOINTS } from '@/config';
-import { apiClient } from '@/core/api';
+import { apiClient } from '@/infrastructure/api';
 import {
   fetchAppointments,
   saveAppointment,
@@ -9,8 +9,8 @@ import {
   fetchAppointmentTeachers,
 } from './appointments.api';
 import type { AppointmentValues } from './appointments.types';
-vi.mock('@/core/api', async () => ({
-  ...(await vi.importActual<typeof import('@/core/api')>('@/core/api')),
+vi.mock('@/infrastructure/api', async () => ({
+  ...(await vi.importActual<typeof import('@/infrastructure/api')>('@/infrastructure/api')),
   apiClient: { get: vi.fn(), post: vi.fn(), put: vi.fn(), delete: vi.fn(), patch: vi.fn() },
 }));
 const values: AppointmentValues = {

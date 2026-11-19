@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ROUTES, STORAGE_KEYS } from '@/config';
 import { useQueryClient } from '@tanstack/react-query';
-import { useAuthStore } from '@/core/auth';
+import { useAuthStore } from '@/infrastructure/auth';
 import { useLogin } from './hooks';
 import { AuthShell } from './components/auth-shell';
 import { LoginForm } from './components/login-form';

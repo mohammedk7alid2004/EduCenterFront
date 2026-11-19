@@ -4,4 +4,4 @@ export function contactDate(value: string, language: string): string | null {
     ? null
     : new Intl.DateTimeFormat(language, { dateStyle: 'medium', timeStyle: 'short' }).format(date);
 }
-export { downloadBlob as downloadContactFile } from '@/shared/lib';
+export { downloadBlob as downloadContactFile } from '@/shared/utils';

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Button, ErrorState } from '@/shared/ui';
+import { Button, ErrorState } from '@/shared/components';
 import { useAppointmentOptions, useAppointmentTeachers } from '../appointments.queries';
 import { localizedName } from '../appointments.lib';
 import { AppointmentSelect } from './appointment-select';

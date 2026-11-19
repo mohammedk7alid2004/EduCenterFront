@@ -6,7 +6,7 @@ import {
   type ApiResult,
   type ListFilters,
   type PaginatedResult,
-} from '@/core/api';
+} from '@/infrastructure/api';
 import type { ClassroomDto, ClassroomValues } from './classrooms.types';
 export async function fetchClassrooms(
   filters: ListFilters = {},

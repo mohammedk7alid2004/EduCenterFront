@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { usePermission } from '@/core/auth';
-import { setServerErrors, useOnline } from '@/shared/lib';
+import { usePermission } from '@/infrastructure/auth';
+import { useOnline } from '@/shared/hooks';
+import { setServerErrors } from '@/shared/utils';
 import {
   DetailField,
   ErrorState,
@@ -11,7 +12,7 @@ import {
   LoadingState,
   Modal,
   StatusSwitch,
-} from '@/shared/ui';
+} from '@/shared/components';
 import { FAQ_ENDPOINTS, FAQ_PERMISSIONS, SETTINGS_DIALOG } from '../system-management.constants';
 import { useSaveFaq, useSettings } from '../system-management.queries';
 import type { FaqDto, FaqValues } from '../system-management.types';

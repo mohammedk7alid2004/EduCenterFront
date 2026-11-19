@@ -2,9 +2,9 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { PERMISSIONS, ROUTES, SIDEBAR_GROUP, type IconName } from '@/config';
-import { usePermission } from '@/core/auth';
+import { usePermission } from '@/infrastructure/auth';
 import { SYSTEM_TABS, useCenterBrand } from '@/features/system-management';
-import { Icon } from '@/shared/ui';
+import { Icon } from '@/shared/components';
 export function DashboardSidebar({
   open,
   onClose,

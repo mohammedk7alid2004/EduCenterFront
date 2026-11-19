@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import { PERMISSIONS } from '@/config';
-import { usePermission } from '@/core/auth';
+import { usePermission } from '@/infrastructure/auth';
 import { useRoleOptions, type RoleDto } from '@/features/roles';
 import {
   Button,
@@ -15,8 +15,9 @@ import {
   LoadingState,
   Modal,
   StatusSwitch,
-} from '@/shared/ui';
-import { useOnline, setServerErrors } from '@/shared/lib';
+} from '@/shared/components';
+import { useOnline } from '@/shared/hooks';
+import { setServerErrors } from '@/shared/utils';
 import type { EmployeeDto, EmployeeValues } from '../employees.types';
 import { EMPLOYEE_GENDER, EMPLOYEE_GENDER_NAMES } from '../employees.constants';
 import { useEmployee, useSaveEmployee } from '../employees.queries';

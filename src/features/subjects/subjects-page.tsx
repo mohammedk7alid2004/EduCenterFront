@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ManagementList } from '@/shared/ui';
-import { useListControls } from '@/shared/lib';
+import { ManagementList } from '@/shared/components';
+import { useListControls } from '@/shared/hooks';
 import type { SubjectDto } from './subjects.types';
 import { useSubjects } from './subjects.queries';
 import { SubjectTable } from './components/subject-table';

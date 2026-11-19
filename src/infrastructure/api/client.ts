@@ -1,7 +1,7 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { API_BASE_URL, API_ENDPOINTS } from '@/config';
-import i18n from '@/core/i18n';
-import { useAuthStore } from '@/core/auth/auth-store';
+import i18n from '@/infrastructure/i18n';
+import { useAuthStore } from '@/infrastructure/auth/auth-store';
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,

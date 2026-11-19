@@ -1,9 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { apiClient } from '@/core/api';
+import { apiClient } from '@/infrastructure/api';
 import { requestPasswordReset, resetPassword, verifyResetOtp } from './password-recovery.api';
 
-vi.mock('@/core/api', async () => {
-  const actual = await vi.importActual<typeof import('@/core/api')>('@/core/api');
+vi.mock('@/infrastructure/api', async () => {
+  const actual =
+    await vi.importActual<typeof import('@/infrastructure/api')>('@/infrastructure/api');
   return { ...actual, apiClient: { post: vi.fn() } };
 });
 

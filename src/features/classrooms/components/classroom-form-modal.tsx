@@ -12,8 +12,9 @@ import {
   LoadingState,
   Modal,
   StatusSwitch,
-} from '@/shared/ui';
-import { setServerErrors, useOnline } from '@/shared/lib';
+} from '@/shared/components';
+import { useOnline } from '@/shared/hooks';
+import { setServerErrors } from '@/shared/utils';
 import type { ClassroomDto, ClassroomValues } from '../classrooms.types';
 import { useClassroom, useSaveClassroom } from '../classrooms.queries';
 import { CLASSROOM_CAPACITY } from '../classrooms.constants';

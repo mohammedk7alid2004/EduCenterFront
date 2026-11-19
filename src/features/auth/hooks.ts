@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useAuthStore } from '@/core/auth';
+import { useAuthStore } from '@/infrastructure/auth';
 import { loginUser, logoutUser } from './api';
 import { requestPasswordReset, resetPassword, verifyResetOtp } from './password-recovery.api';
 import type { LoginCredentials, LoginResult } from './types';
@@ -8,7 +8,7 @@ import type {
   ResetPasswordRequest,
   VerifyResetOtpRequest,
 } from './password-recovery.types';
-import type { ApiError } from '@/core/api';
+import type { ApiError } from '@/infrastructure/api';
 
 export function useLogin() {
   return useMutation<LoginResult, ApiError, LoginCredentials>({

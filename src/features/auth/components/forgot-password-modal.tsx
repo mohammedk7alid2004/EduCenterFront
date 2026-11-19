@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Button, Icon } from '@/shared/ui';
+import { Button, Icon } from '@/shared/components';
 
 interface ForgotPasswordModalProps {
   open: boolean;

@@ -5,7 +5,7 @@ import {
   normalizeApiError,
   type ApiResult,
   type PaginatedResult,
-} from '@/core/api';
+} from '@/infrastructure/api';
 import type { ContactFilters, ContactMessage, ContactImportResult } from './contact-us.types';
 const endpoints = API_ENDPOINTS.contactUs;
 function params(filters: ContactFilters) {

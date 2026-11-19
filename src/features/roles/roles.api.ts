@@ -6,7 +6,7 @@ import {
   type ApiResult,
   type PaginatedResult,
   type ListFilters,
-} from '@/core/api';
+} from '@/infrastructure/api';
 import type {
   RoleDto,
   RoleDetail,

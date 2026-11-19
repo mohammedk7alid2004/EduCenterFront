@@ -1,8 +1,8 @@
 import { useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { usePermission } from '@/core/auth';
-import { useListControls } from '@/shared/lib';
-import { ManagementList } from '@/shared/ui';
+import { usePermission } from '@/infrastructure/auth';
+import { useListControls } from '@/shared/hooks';
+import { ManagementList } from '@/shared/components';
 import { FAQ_PERMISSIONS, SETTINGS_DIALOG } from '../system-management.constants';
 import { useFaqs } from '../system-management.queries';
 import { FaqTable } from './faq-table';

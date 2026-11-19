@@ -1,9 +1,16 @@
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { PERMISSIONS } from '@/config';
-import { usePermission } from '@/core/auth';
-import { useOnline } from '@/shared/lib';
-import { DataTable, Icon, RowActions, useAuditColumns, useConfirm, type Column } from '@/shared/ui';
+import { usePermission } from '@/infrastructure/auth';
+import { useOnline } from '@/shared/hooks';
+import {
+  DataTable,
+  Icon,
+  RowActions,
+  useAuditColumns,
+  useConfirm,
+  type Column,
+} from '@/shared/components';
 import { useDeleteAppointments, useSetAppointmentStatus } from '../appointments.queries';
 import { APPOINTMENT_STATUS, APPOINTMENT_ITERATION } from '../appointments.constants';
 import { localizedName, formatAppointmentTime } from '../appointments.lib';

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Icon, Input } from '@/shared/ui';
+import { Icon, Input } from '@/shared/components';
 import { CLASSROOM_CAPACITY } from '../classrooms.constants';
 export function CapacityField({
   value,

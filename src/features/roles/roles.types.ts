@@ -1,4 +1,4 @@
-import type { AuditFields } from '@/core/api';
+import type { AuditFields } from '@/infrastructure/api';
 export interface RoleDto extends AuditFields {
   id: string;
   name: string;

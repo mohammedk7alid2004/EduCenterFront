@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { UseFormRegisterReturn } from 'react-hook-form';
-import { Input } from '@/shared/ui';
+import { Input } from '@/shared/components';
 export function PasswordField({
   field,
   label,

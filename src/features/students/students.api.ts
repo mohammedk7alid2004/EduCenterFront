@@ -5,7 +5,7 @@ import {
   normalizeApiError,
   type ApiResult,
   type PaginatedResult,
-} from '@/core/api';
+} from '@/infrastructure/api';
 import type { StudentDto, StudentValues, StudentFilters, StudentOption } from './students.types';
 const endpoints = API_ENDPOINTS.students;
 export async function fetchStudents(

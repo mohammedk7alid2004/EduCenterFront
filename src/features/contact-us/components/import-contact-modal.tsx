@@ -1,7 +1,8 @@
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { setServerErrors, useOnline } from '@/shared/lib';
-import { Button, Icon, Modal } from '@/shared/ui';
+import { useOnline } from '@/shared/hooks';
+import { setServerErrors } from '@/shared/utils';
+import { Button, Icon, Modal } from '@/shared/components';
 import { CONTACT_IMPORT } from '../contact-us.constants';
 import { useImportContacts } from '../contact-us.queries';
 export function ImportContactModal({ onClose }: { onClose: () => void }): JSX.Element {

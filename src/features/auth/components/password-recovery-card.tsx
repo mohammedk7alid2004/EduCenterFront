@@ -3,9 +3,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
-import { Button, Icon, Input } from '@/shared/ui';
-import { ApiError } from '@/core/api';
-import { setServerErrors } from '@/shared/lib';
+import { Button, Icon, Input } from '@/shared/components';
+import { ApiError } from '@/infrastructure/api';
+import { setServerErrors } from '@/shared/utils';
 import type {
   CodeFormValues,
   EmailFormValues,

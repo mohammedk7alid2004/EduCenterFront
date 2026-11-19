@@ -1,6 +1,6 @@
 import { useId, useState, type Ref } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Icon } from '@/shared/ui';
+import { Icon } from '@/shared/components';
 import { formatAppointmentTime } from '../appointments.lib';
 import { AppointmentTimePicker } from './appointment-time-picker';
 interface Props {

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/config';
-import type { ApiError, PaginatedResult } from '@/core/api';
+import type { ApiError, PaginatedResult } from '@/infrastructure/api';
 import {
   fetchContacts,
   fetchContact,

@@ -1,4 +1,4 @@
-import type { ListFilters } from '@/core/api';
+import type { ListFilters } from '@/infrastructure/api';
 export interface ContactMessage {
   id: string;
   name: string;

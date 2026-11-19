@@ -1,5 +1,5 @@
 import { API_ENDPOINTS, ROLES, type Role } from '@/config';
-import { apiClient, ApiError, assertApiSuccess, normalizeApiError } from '@/core/api';
+import { apiClient, ApiError, assertApiSuccess, normalizeApiError } from '@/infrastructure/api';
 import type { BackendLoginData, BackendResponse, LoginCredentials, LoginResult } from './types';
 
 export async function loginUser(

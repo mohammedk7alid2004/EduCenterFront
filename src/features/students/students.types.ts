@@ -1,4 +1,4 @@
-import type { AuditFields, ListFilters } from '@/core/api';
+import type { AuditFields, ListFilters } from '@/infrastructure/api';
 export interface StudentLocalizedName {
   ar: string | null;
   en: string | null;

@@ -11,8 +11,8 @@
 ```
 src/
 ├── app/                  # 1. طبقة التطبيق والتوجيه
-│   ├── layouts/          # التخطيطات العامة (Sidebar, Header, Layout)
-│   ├── routes/           # إعدادات React Router والـ Route Guards
+│   ├── providers/        # مزودات React Query والـ Toasts
+│   ├── router/           # إعدادات React Router والـ Route Guards
 │   ├── app.tsx           # المكون الرئيسي للـ Shell
 │   └── error-boundary.tsx# معالج الأخطاء العام
 │
@@ -22,11 +22,10 @@ src/
 │   ├── icons.ts          # سجل الأيقونات المركزي (Lucide Registry)
 │   └── permissions.ts    # الصلاحيات والأدوار (RBAC)
 │
-├── core/                 # 3. البنية التحتية والخدمات الأساسية
+├── infrastructure/       # 3. البنية التحتية والخدمات الأساسية
 │   ├── api/              # عميل Axios مع الـ Interceptors وتجديد الـ Token
 │   ├── auth/             # مخزن الـ Auth بالـ Zustand والـ Persistence
-│   ├── i18n/             # إعدادات اللغات (عربي / إنجليزي) ودعم RTL
-│   └── providers/        # مزودات React Query والـ Toasts
+│   └── i18n/             # إعدادات اللغات (عربي / إنجليزي) ودعم RTL
 │
 ├── features/             # 4. الميزات المستقلة (Features / Vertical Slices)
 │   ├── auth/             # ميزة تسجيل الدخول
@@ -40,10 +39,15 @@ src/
 │   ├── dashboard/        # ميزة لوحة التحكم
 │   └── [feature_name]/   # أي ميزة جديدة (الطلاب، المجموعات، الحصص، الحسابات...)
 │
-└── shared/               # 5. العناصر والمكونات المشتركة
-    ├── ui/               # مكونات UI قابلة للاستخدام في أي مكان (Button, Input, Modal, DataTable, Icon)
-    ├── lib/              # دوال و Hooks مساعدة عامة (useDebounce, useUrlState)
-    └── styles/           # ملفات Tailwind CSS وأنماط التصميم
+├── layouts/              # 5. التخطيطات العامة (Sidebar, Header, Layout)
+│
+├── shared/               # 6. العناصر والمكونات المشتركة
+│   ├── components/       # مكونات UI قابلة للاستخدام في أي مكان (Button, Input, Modal, DataTable, Icon)
+│   ├── hooks/            # Hooks مساعدة عامة (useDebounce, useUrlState, useOnline)
+│   ├── utils/            # دوال مساعدة عامة (forms, download)
+│   └── styles/           # ملفات Tailwind CSS وأنماط التصميم
+│
+└── assets/               # 7. الملفات الثابتة (صور، خطوط، SVGs)
 ```
 
 ---
@@ -64,7 +68,7 @@ src/
   ```
 - **`api.ts`**: دوال الاتصال بالباك إند:
   ```ts
-  import { apiClient } from '@/core/api';
+  import { apiClient } from '@/infrastructure/api';
   import type { Student } from './types';
 
   export async function getStudents(signal?: AbortSignal): Promise<Student[]> {
@@ -99,7 +103,7 @@ export { StudentsPage } from './students-page';
 
 ### 4. سجّل المسار في الراوتر
 
-في `src/app/routes/router.tsx`:
+في `src/app/router/router.tsx`:
 
 ```tsx
 { path: '/students', element: <StudentsPage /> }

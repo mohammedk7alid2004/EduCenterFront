@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { DetailField, Modal, StatusBadge } from '@/shared/ui';
+import { DetailField, Modal, StatusBadge } from '@/shared/components';
 import type { SubjectDto } from '../subjects.types';
 export function ViewSubjectModal({
   subject,

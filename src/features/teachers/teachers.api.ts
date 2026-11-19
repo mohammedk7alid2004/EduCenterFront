@@ -1,5 +1,5 @@
 import { API_ENDPOINTS } from '@/config';
-import { apiClient, assertApiSuccess, normalizeApiError } from '@/core/api';
+import { apiClient, assertApiSuccess, normalizeApiError } from '@/infrastructure/api';
 import type {
   ApiResult,
   CreateTeacherPayload,

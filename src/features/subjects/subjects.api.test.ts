@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { apiClient, ApiError } from '@/core/api';
+import { apiClient, ApiError } from '@/infrastructure/api';
 import { createSubject, fetchSubjects } from './subjects.api';
-vi.mock('@/core/api', async () => ({
-  ...(await vi.importActual<typeof import('@/core/api')>('@/core/api')),
+vi.mock('@/infrastructure/api', async () => ({
+  ...(await vi.importActual<typeof import('@/infrastructure/api')>('@/infrastructure/api')),
   apiClient: { get: vi.fn(), post: vi.fn() },
 }));
 describe('subjects API contract', () => {

@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { describe, expect, it, beforeEach } from 'vitest';
 import { ProtectedRoute } from './guards';
-import { useAuthStore } from '@/core/auth';
+import { useAuthStore } from '@/infrastructure/auth';
 import { ROUTES } from '@/config';
 describe('ProtectedRoute', () => {
   beforeEach(() => useAuthStore.setState({ user: null, accessToken: null }));

@@ -4,8 +4,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import { PERMISSIONS } from '@/config';
-import { usePermission } from '@/core/auth';
-import { setServerErrors, useOnline } from '@/shared/lib';
+import { usePermission } from '@/infrastructure/auth';
+import { useOnline } from '@/shared/hooks';
+import { setServerErrors } from '@/shared/utils';
 import {
   Button,
   ErrorState,
@@ -16,7 +17,7 @@ import {
   Modal,
   Select,
   StatusSwitch,
-} from '@/shared/ui';
+} from '@/shared/components';
 import { STUDENT_GENDER, STUDENT_GENDER_NAMES, STUDENT_VALIDATION } from '../students.constants';
 import { studentLocalizedName } from '../students.lib';
 import { useStudent, useStudentEducation, useSaveStudent } from '../students.queries';

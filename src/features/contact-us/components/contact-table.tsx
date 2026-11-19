@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { PERMISSIONS } from '@/config';
-import { usePermission } from '@/core/auth';
-import { useOnline } from '@/shared/lib';
-import { DataTable, RowActions, useConfirm, type Column } from '@/shared/ui';
+import { usePermission } from '@/infrastructure/auth';
+import { useOnline } from '@/shared/hooks';
+import { DataTable, RowActions, useConfirm, type Column } from '@/shared/components';
 import { useDeleteContacts } from '../contact-us.queries';
 import { contactDate } from '../contact-us.lib';
 import type { ContactMessage } from '../contact-us.types';

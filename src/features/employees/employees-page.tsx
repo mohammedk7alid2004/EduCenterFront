@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PERMISSIONS } from '@/config';
-import { usePermission } from '@/core/auth';
-import { useListControls } from '@/shared/lib';
-import { ManagementList } from '@/shared/ui';
+import { usePermission } from '@/infrastructure/auth';
+import { useListControls } from '@/shared/hooks';
+import { ManagementList } from '@/shared/components';
 import { useEmployees } from './employees.queries';
 import type { EmployeeDto } from './employees.types';
 import { EmployeesTable } from './components/employees-table';

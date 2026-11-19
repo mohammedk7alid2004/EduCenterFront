@@ -3,8 +3,17 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
-import { Button, ErrorState, FeedbackDialog, Icon, Input, LoadingState, Modal } from '@/shared/ui';
-import { setServerErrors, useOnline } from '@/shared/lib';
+import {
+  Button,
+  ErrorState,
+  FeedbackDialog,
+  Icon,
+  Input,
+  LoadingState,
+  Modal,
+} from '@/shared/components';
+import { useOnline } from '@/shared/hooks';
+import { setServerErrors } from '@/shared/utils';
 import type { RoleDto, RoleValues, PermissionDto } from '../roles.types';
 import { usePermissionCatalog, useRole, useSaveRole } from '../roles.queries';
 import { PermissionGrid } from './permission-grid';

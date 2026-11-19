@@ -1,5 +1,10 @@
 import { API_ENDPOINTS } from '@/config';
-import { apiClient, assertApiSuccess, normalizeApiError, type ApiResult } from '@/core/api';
+import {
+  apiClient,
+  assertApiSuccess,
+  normalizeApiError,
+  type ApiResult,
+} from '@/infrastructure/api';
 import type { ProfileDto, ProfileValues, ChangePasswordValues } from './profile.types';
 
 export async function fetchProfile(signal?: AbortSignal): Promise<ProfileDto> {

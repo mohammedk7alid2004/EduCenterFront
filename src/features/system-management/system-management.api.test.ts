@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { apiClient } from '@/core/api';
+import { apiClient } from '@/infrastructure/api';
 import {
   centerFormData,
   deleteFaqs,
@@ -11,8 +11,8 @@ import {
 } from './system-management.api';
 import { FAQ_ENDPOINTS, SYSTEM_TABS } from './system-management.constants';
 import type { CenterValues } from './system-management.types';
-vi.mock('@/core/api', async () => ({
-  ...(await vi.importActual<typeof import('@/core/api')>('@/core/api')),
+vi.mock('@/infrastructure/api', async () => ({
+  ...(await vi.importActual<typeof import('@/infrastructure/api')>('@/infrastructure/api')),
   apiClient: { get: vi.fn(), post: vi.fn(), put: vi.fn(), patch: vi.fn(), delete: vi.fn() },
 }));
 describe('system management backend contracts', () => {

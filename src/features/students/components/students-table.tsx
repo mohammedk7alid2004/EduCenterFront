@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { PERMISSIONS } from '@/config';
-import { usePermission } from '@/core/auth';
-import { useOnline } from '@/shared/lib';
+import { usePermission } from '@/infrastructure/auth';
+import { useOnline } from '@/shared/hooks';
 import {
   DataTable,
   FeedbackDialog,
@@ -12,7 +12,7 @@ import {
   useConfirm,
   useAuditColumns,
   type Column,
-} from '@/shared/ui';
+} from '@/shared/components';
 import { studentLocalizedName } from '../students.lib';
 import { useDeleteStudents, useToggleStudentStatus } from '../students.queries';
 import type { StudentDto } from '../students.types';

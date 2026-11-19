@@ -1,8 +1,8 @@
 import type { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PERMISSIONS } from '@/config';
-import { usePermission } from '@/core/auth';
-import { Icon } from '@/shared/ui';
+import { usePermission } from '@/infrastructure/auth';
+import { Icon } from '@/shared/components';
 import { localizedName, formatAppointmentTime } from '../appointments.lib';
 import { APPOINTMENT_STATUS } from '../appointments.constants';
 import type { AppointmentDto } from '../appointments.types';

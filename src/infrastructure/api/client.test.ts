@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { apiClient } from './client';
-import { setLanguage } from '@/core/i18n';
+import { setLanguage } from '@/infrastructure/i18n';
 const originalAdapter = apiClient.defaults.adapter;
 afterEach(() => {
   apiClient.defaults.adapter = originalAdapter;

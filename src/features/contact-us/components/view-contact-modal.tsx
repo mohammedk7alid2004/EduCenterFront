@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { DetailField, ErrorState, LoadingState, Modal } from '@/shared/ui';
+import { DetailField, ErrorState, LoadingState, Modal } from '@/shared/components';
 import { useContact } from '../contact-us.queries';
 import { contactDate } from '../contact-us.lib';
 export function ViewContactModal({

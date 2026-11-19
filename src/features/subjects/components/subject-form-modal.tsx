@@ -3,9 +3,10 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
-import { Button, FeedbackDialog, Icon, Input, Modal, StatusSwitch } from '@/shared/ui';
-import { setServerErrors, useOnline } from '@/shared/lib';
-import type { ApiError } from '@/core/api';
+import { Button, FeedbackDialog, Icon, Input, Modal, StatusSwitch } from '@/shared/components';
+import { useOnline } from '@/shared/hooks';
+import { setServerErrors } from '@/shared/utils';
+import type { ApiError } from '@/infrastructure/api';
 import type { SubjectDto } from '../subjects.types';
 import { useSaveSubject } from '../subjects.queries';
 export function SubjectFormModal({

@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { ROUTES, canUsePermission, type Role } from '@/config';
-import { useAuthStore } from '@/core/auth';
+import { useAuthStore } from '@/infrastructure/auth';
 export function ProtectedRoute({
   children,
   roles,

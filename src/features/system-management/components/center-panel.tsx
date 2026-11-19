@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { usePermission } from '@/core/auth';
-import { useOnline } from '@/shared/lib';
-import { Button, DetailField, ErrorState, Icon, LoadingState } from '@/shared/ui';
+import { usePermission } from '@/infrastructure/auth';
+import { useOnline } from '@/shared/hooks';
+import { Button, DetailField, ErrorState, Icon, LoadingState } from '@/shared/components';
 import type { SystemTab } from '../system-management.constants';
 import type { CenterSettings } from '../system-management.types';
 import { useSettings } from '../system-management.queries';

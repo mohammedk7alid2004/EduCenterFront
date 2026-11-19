@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ApiError } from '@/core/api';
+import { ApiError } from '@/infrastructure/api';
 import { useCenterBrand } from '@/features/system-management';
-import { useOnline } from '@/shared/lib';
-import { Button, ErrorState, Icon, LoadingState, Modal } from '@/shared/ui';
+import { useOnline } from '@/shared/hooks';
+import { Button, ErrorState, Icon, LoadingState, Modal } from '@/shared/components';
 import { useAppointment } from '../appointments.queries';
 import { exportAppointmentQr, generateAppointmentQr } from '../appointments-qr.lib';
 import { localizedName, formatAppointmentTime } from '../appointments.lib';

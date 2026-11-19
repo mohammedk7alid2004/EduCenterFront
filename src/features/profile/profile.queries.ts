@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/config';
-import { useAuthStore } from '@/core/auth';
-import type { ApiError } from '@/core/api';
+import { useAuthStore } from '@/infrastructure/auth';
+import type { ApiError } from '@/infrastructure/api';
 import { fetchProfile, updateProfile, changePassword } from './profile.api';
 import type { ProfileDto, ProfileValues, ChangePasswordValues } from './profile.types';
 

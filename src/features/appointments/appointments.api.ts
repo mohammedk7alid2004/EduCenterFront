@@ -5,7 +5,7 @@ import {
   normalizeApiError,
   type ApiResult,
   type PaginatedResult,
-} from '@/core/api';
+} from '@/infrastructure/api';
 import type {
   AppointmentDto,
   AppointmentFilters,

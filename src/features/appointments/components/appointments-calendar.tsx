@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PERMISSIONS } from '@/config';
-import { usePermission } from '@/core/auth';
-import { Button, EmptyState, Icon } from '@/shared/ui';
+import { usePermission } from '@/infrastructure/auth';
+import { Button, EmptyState, Icon } from '@/shared/components';
 import {
   calendarDates,
   formatAppointmentTime,

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Icon, ManagementList } from '@/shared/ui';
+import { Button, Icon, ManagementList } from '@/shared/components';
 import { useContacts } from './contact-us.queries';
 import { useContactControls } from './contact-us.controls';
 import { ContactTable } from './components/contact-table';

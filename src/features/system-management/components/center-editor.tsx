@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { setServerErrors, useOnline } from '@/shared/lib';
-import { Button, FeedbackDialog, Icon, Input, Modal } from '@/shared/ui';
+import { useOnline } from '@/shared/hooks';
+import { setServerErrors } from '@/shared/utils';
+import { Button, FeedbackDialog, Icon, Input, Modal } from '@/shared/components';
 import { LOGO_FIELDS, SETTINGS_IMAGE } from '../system-management.constants';
 import type { CenterSettings, CenterValues } from '../system-management.types';
 import { useSaveCenter } from '../system-management.queries';
