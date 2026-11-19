@@ -7,7 +7,6 @@ import { useOnline } from '@/shared/hooks';
 import { setServerErrors } from '@/shared/utils';
 import {
   Button,
-  DetailField,
   ErrorState,
   FeedbackDialog,
   Icon,
@@ -25,9 +24,12 @@ export function SocialPanel({ tab }: { tab: SystemTab }): JSX.Element {
   const online = useOnline();
   const query = useSettings<SocialSettings>(tab.endpoint);
   const [editing, setEditing] = useState(false);
+
   if (query.isPending) return <LoadingState />;
   if (query.error) return <ErrorState error={query.error} onRetry={() => void query.refetch()} />;
+
   const links = socialLinks(query.data?.links ?? []);
+
   async function copy(value: string) {
     try {
       await navigator.clipboard.writeText(value);
@@ -36,46 +38,102 @@ export function SocialPanel({ tab }: { tab: SystemTab }): JSX.Element {
       toast.error(t('systemManagement.copyFailed'));
     }
   }
+
   return (
     <>
-      <div className="rounded-3xl bg-card p-6 shadow-sm">
-        <dl className="grid gap-x-10 gap-y-7 sm:grid-cols-2">
-          {links.map((link) => (
-            <div key={link.platformName} className="flex min-w-0 items-start gap-4">
-              <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-permissionSurface text-primary">
-                <Icon name={SOCIAL_ICONS[link.platformName] ?? 'link'} className="size-6" />
-              </span>
-              <DetailField
-                label={t(`systemManagement.platforms.${link.platformName}`, {
-                  defaultValue: link.platformName,
+      <div className="overflow-hidden rounded-2xl border border-border/80 bg-card shadow-xs">
+        {/* Header */}
+        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border/60 bg-subtle/50 p-5 sm:p-6">
+          <div className="flex items-center gap-3.5">
+            <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
+              <Icon name={tab.icon} className="size-6" />
+            </span>
+            <div>
+              <h2 className="text-lg font-semibold text-foreground">
+                {t(`systemManagement.tabs.${tab.key}`)}
+              </h2>
+              <p className="mt-0.5 text-xs text-muted">
+                {t(`systemManagement.subtitles.${tab.key}`, {
+                  defaultValue: t('systemManagement.description'),
                 })}
-              >
-                <span className="flex min-w-0 items-center gap-3">
-                  <bdi className="break-all">{link.url || t('common.noValue')}</bdi>
-                  {link.url && (
-                    <button
-                      type="button"
-                      onClick={() => void copy(link.url)}
-                      aria-label={t('systemManagement.copy', { name: link.platformName })}
-                      className="grid size-8 shrink-0 place-items-center rounded-lg bg-permissionSurface text-primary"
-                    >
-                      <Icon name="copy" className="size-4" />
-                    </button>
-                  )}
-                </span>
-              </DetailField>
+              </p>
             </div>
-          ))}
-        </dl>
-        {can(tab.update) && (
-          <div className="mt-8 flex justify-end">
-            <Button disabled={!online} onClick={() => setEditing(true)} className="rounded-xl">
-              <Icon name="pencil" className="size-5" />
+          </div>
+
+          {can(tab.update) && (
+            <Button
+              disabled={!online}
+              onClick={() => setEditing(true)}
+              className="h-9 rounded-xl px-4 text-xs font-medium"
+            >
+              <Icon name="pencil" className="size-4" />
               {t('systemManagement.update')}
             </Button>
-          </div>
-        )}
+          )}
+        </div>
+
+        {/* Links Grid */}
+        <div className="grid gap-4 p-6 sm:grid-cols-2">
+          {links.map((link) => {
+            const hasUrl = Boolean(link.url?.trim());
+            const isEmail = link.platformName.toLowerCase().endsWith('email');
+            const href = hasUrl ? (isEmail ? `mailto:${link.url}` : link.url) : undefined;
+
+            return (
+              <div
+                key={link.platformName}
+                className="flex items-start justify-between gap-3 rounded-xl border border-border/70 bg-subtle/30 p-4 transition hover:border-primary/40 hover:bg-subtle/50"
+              >
+                <div className="flex min-w-0 items-start gap-3.5">
+                  <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
+                    <Icon name={SOCIAL_ICONS[link.platformName] ?? 'link'} className="size-5" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-semibold text-foreground">
+                        {t(`systemManagement.platforms.${link.platformName}`, {
+                          defaultValue: link.platformName,
+                        })}
+                      </p>
+                      <span
+                        className={`size-1.5 rounded-full ${hasUrl ? 'bg-success' : 'bg-muted'}`}
+                      />
+                    </div>
+                    {hasUrl ? (
+                      <a
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-1 block truncate text-xs text-primary hover:underline"
+                        dir="ltr"
+                      >
+                        {link.url}
+                      </a>
+                    ) : (
+                      <p className="mt-1 text-xs text-muted">
+                        {t('systemManagement.notAvailable')}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {hasUrl && (
+                  <button
+                    type="button"
+                    onClick={() => void copy(link.url)}
+                    aria-label={t('systemManagement.copy', { name: link.platformName })}
+                    title={t('systemManagement.copy', { name: link.platformName })}
+                    className="grid size-8 shrink-0 place-items-center rounded-lg border border-border/80 bg-card text-muted transition hover:border-primary/50 hover:text-primary"
+                  >
+                    <Icon name="copy" className="size-4" />
+                  </button>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
+
       {editing && <SocialEditor links={links} tab={tab} onClose={() => setEditing(false)} />}
     </>
   );

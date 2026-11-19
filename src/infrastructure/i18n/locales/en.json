@@ -489,6 +489,32 @@
     "footerLogoUrl": "Footer Logo",
     "dropFile": "Drag & drop a file here, or browse",
     "imageHint": "PNG, JPG or WebP · Maximum 10 MB",
+    "groups": {
+      "center": "Center Profile",
+      "policies": "Policies & Terms",
+      "channels": "Support & Communication"
+    },
+    "subtitles": {
+      "privacy": "Student and guardian privacy terms, disclosures, and data protection policies.",
+      "registration": "Guidelines and registration workflow terms for new and returning students.",
+      "terms": "General system usage, service terms, and educational center rules.",
+      "payment": "Tuition payment schedules, refund rules, and settlement procedures.",
+      "help": "Help center content, instructions, and assistance guidelines.",
+      "center": "Official institution name, working hours, branches, and brand logos.",
+      "social": "Official communication channels, social networks, and support emails.",
+      "faq": "Frequently asked questions and direct answers for students and parents."
+    },
+    "available": "Available",
+    "notAvailable": "Not set",
+    "characters": "{{count}} characters",
+    "openLink": "Open link",
+    "visit": "Visit",
+    "emptyPolicy": "No content has been added for this policy in {{lang}} yet.",
+    "emptyPolicyAction": "Click Update to write the policy content.",
+    "identitySection": "Basic Center Information",
+    "phonesSection": "Phone Numbers & Contact",
+    "locationsSection": "Center Branches & Locations",
+    "logosSection": "Official Brand Logos",
     "tabs": {
       "privacy": "Privacy Policy",
       "registration": "Student Registration",

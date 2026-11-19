@@ -4,15 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { usePermission } from '@/infrastructure/auth';
 import { useOnline } from '@/shared/hooks';
 import { setServerErrors } from '@/shared/utils';
-import {
-  Button,
-  EmptyState,
-  ErrorState,
-  FeedbackDialog,
-  Icon,
-  LoadingState,
-  Modal,
-} from '@/shared/components';
+import { Button, ErrorState, FeedbackDialog, Icon, LoadingState, Modal } from '@/shared/components';
 import type { SystemTab } from '../system-management.constants';
 import type { ContentDto, ContentValues } from '../system-management.types';
 import { useSaveSettings, useSettings } from '../system-management.queries';
@@ -23,27 +15,152 @@ export function ContentPanel({ tab }: { tab: SystemTab }): JSX.Element {
   const online = useOnline();
   const query = useSettings<ContentDto>(tab.endpoint);
   const [editing, setEditing] = useState(false);
+  const [previewLang, setPreviewLang] = useState<'ar' | 'en'>(
+    i18n.language.startsWith('ar') ? 'ar' : 'en',
+  );
+
   if (query.isPending) return <LoadingState />;
   if (query.error) return <ErrorState error={query.error} onRetry={() => void query.refetch()} />;
-  const description = query.data?.description?.[i18n.language.startsWith('ar') ? 'ar' : 'en'];
+
+  const arText = query.data?.description?.ar?.trim() ?? '';
+  const enText = query.data?.description?.en?.trim() ?? '';
+  const activeText = previewLang === 'ar' ? arText : enText;
+  const hasAr = arText.length > 0;
+  const hasEn = enText.length > 0;
+
   return (
     <>
-      <div className="rounded-3xl bg-card p-6 shadow-sm">
-        <p className="mb-2 text-xs text-muted">{t('systemManagement.descriptionLabel')}</p>
-        {description ? (
-          <p className="whitespace-pre-wrap break-words text-base leading-7">{description}</p>
-        ) : (
-          <EmptyState />
-        )}
-        {can(tab.update) && (
-          <div className="mt-8 flex justify-end">
-            <Button disabled={!online} onClick={() => setEditing(true)} className="rounded-xl px-5">
-              <Icon name="pencil" className="size-5" />
-              {t('systemManagement.update')}
-            </Button>
+      <div className="overflow-hidden rounded-2xl border border-border/80 bg-card shadow-xs">
+        {/* Header */}
+        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border/60 bg-subtle/50 p-5 sm:p-6">
+          <div className="flex items-center gap-3.5">
+            <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
+              <Icon name={tab.icon} className="size-6" />
+            </span>
+            <div>
+              <h2 className="text-lg font-semibold text-foreground">
+                {t(`systemManagement.tabs.${tab.key}`)}
+              </h2>
+              <p className="mt-0.5 text-xs text-muted">
+                {t(`systemManagement.subtitles.${tab.key}`, {
+                  defaultValue: t('systemManagement.description'),
+                })}
+              </p>
+            </div>
           </div>
-        )}
+
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Language Switcher */}
+            <div
+              role="group"
+              aria-label={t('systemManagement.contentLanguage')}
+              className="inline-flex rounded-xl bg-permissionSurface p-1 text-xs"
+            >
+              <button
+                type="button"
+                onClick={() => setPreviewLang('ar')}
+                className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-medium transition ${
+                  previewLang === 'ar'
+                    ? 'bg-card text-primary shadow-xs'
+                    : 'text-muted hover:text-foreground'
+                }`}
+              >
+                <span className={`size-1.5 rounded-full ${hasAr ? 'bg-success' : 'bg-muted'}`} />
+                {t('systemManagement.arabic')}
+              </button>
+              <button
+                type="button"
+                onClick={() => setPreviewLang('en')}
+                className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-medium transition ${
+                  previewLang === 'en'
+                    ? 'bg-card text-primary shadow-xs'
+                    : 'text-muted hover:text-foreground'
+                }`}
+              >
+                <span className={`size-1.5 rounded-full ${hasEn ? 'bg-success' : 'bg-muted'}`} />
+                {t('systemManagement.english')}
+              </button>
+            </div>
+
+            {can(tab.update) && (
+              <Button
+                disabled={!online}
+                onClick={() => setEditing(true)}
+                className="h-9 rounded-xl px-4 text-xs font-medium"
+              >
+                <Icon name="pencil" className="size-4" />
+                {t('systemManagement.update')}
+              </Button>
+            )}
+          </div>
+        </div>
+
+        {/* Body Content */}
+        <div className="p-6">
+          {activeText ? (
+            <div
+              dir={previewLang === 'ar' ? 'rtl' : 'ltr'}
+              className="rounded-xl border border-border/60 bg-subtle/30 p-6"
+            >
+              <p className="whitespace-pre-wrap break-words text-sm leading-relaxed text-foreground sm:text-base sm:leading-8">
+                {activeText}
+              </p>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-12 text-center">
+              <span className="grid size-12 place-items-center rounded-full bg-permissionSurface text-muted">
+                <Icon name="bookOpen" className="size-6" />
+              </span>
+              <p className="mt-3 text-sm font-medium text-foreground">
+                {t('systemManagement.emptyPolicy', {
+                  lang:
+                    previewLang === 'ar'
+                      ? t('systemManagement.arabic')
+                      : t('systemManagement.english'),
+                })}
+              </p>
+              <p className="mt-1 text-xs text-muted">{t('systemManagement.emptyPolicyAction')}</p>
+              {can(tab.update) && (
+                <Button
+                  variant="ghost"
+                  disabled={!online}
+                  onClick={() => setEditing(true)}
+                  className="mt-4 h-8 rounded-lg border border-border text-xs"
+                >
+                  <Icon name="pencil" className="size-3.5" />
+                  {t('systemManagement.update')}
+                </Button>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Footer Metadata */}
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border/60 bg-subtle/20 px-6 py-3.5 text-xs text-muted">
+          <div className="flex items-center gap-4">
+            <span className="flex items-center gap-1.5">
+              <span className={`size-2 rounded-full ${hasAr ? 'bg-success' : 'bg-warning'}`} />
+              {t('systemManagement.arabic')}:{' '}
+              <strong className={hasAr ? 'text-foreground' : 'text-muted'}>
+                {hasAr ? t('systemManagement.available') : t('systemManagement.notAvailable')}
+              </strong>
+            </span>
+            <span className="text-border">|</span>
+            <span className="flex items-center gap-1.5">
+              <span className={`size-2 rounded-full ${hasEn ? 'bg-success' : 'bg-warning'}`} />
+              {t('systemManagement.english')}:{' '}
+              <strong className={hasEn ? 'text-foreground' : 'text-muted'}>
+                {hasEn ? t('systemManagement.available') : t('systemManagement.notAvailable')}
+              </strong>
+            </span>
+          </div>
+
+          {activeText && (
+            <span>{t('systemManagement.characters', { count: activeText.length })}</span>
+          )}
+        </div>
       </div>
+
       {editing && (
         <ContentEditor tab={tab} content={query.data} onClose={() => setEditing(false)} />
       )}

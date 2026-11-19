@@ -54,6 +54,26 @@ export const SYSTEM_TABS = [
   icon: IconName;
 }[];
 export type SystemTab = (typeof SYSTEM_TABS)[number];
+
+export interface SystemTabGroup {
+  readonly key: 'center' | 'policies' | 'channels';
+  readonly tabKeys: readonly SystemTab['key'][];
+}
+
+export const SYSTEM_TAB_GROUPS: readonly SystemTabGroup[] = [
+  {
+    key: 'center',
+    tabKeys: ['center'],
+  },
+  {
+    key: 'policies',
+    tabKeys: ['privacy', 'registration', 'terms', 'payment', 'help'],
+  },
+  {
+    key: 'channels',
+    tabKeys: ['social', 'faq'],
+  },
+] as const;
 export const FAQ_PERMISSIONS = {
   read: 'FAQ.ViewAll',
   detail: 'FAQ.ShowOne',
