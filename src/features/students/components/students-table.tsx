@@ -19,10 +19,12 @@ import type { StudentDto } from '../students.types';
 import { StudentRelatedSummary } from './student-related-summary';
 export function StudentsTable({
   rows,
+  startIndex,
   onView,
   onEdit,
 }: {
   rows: StudentDto[];
+  startIndex?: number;
   onView: (row: StudentDto) => void;
   onEdit: (row: StudentDto) => void;
 }): JSX.Element {
@@ -47,13 +49,10 @@ export function StudentsTable({
   }
   const columns: Column<StudentDto>[] = [
     {
-      id: 'id',
-      header: t('common.id'),
-      cell: (row) => (
-        <span className="block max-w-24 truncate" title={row.id}>
-          #<bdi>{row.id}</bdi>
-        </span>
-      ),
+      id: 'index',
+      header: t('common.index'),
+      headerClassName: 'w-16',
+      cell: (_row, index) => <span className="font-medium text-muted">{index + 1}</span>,
     },
     {
       id: 'name',
@@ -140,6 +139,7 @@ export function StudentsTable({
       <DataTable
         columns={columns}
         rows={rows}
+        startIndex={startIndex}
         pending={pending}
         onDeleteSelected={can(PERMISSIONS.students.delete) ? deleteSelection : undefined}
         expandedRowId={expandedId}

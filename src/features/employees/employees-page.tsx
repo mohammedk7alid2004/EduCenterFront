@@ -38,6 +38,7 @@ export function EmployeesPage(): JSX.Element {
       >
         <EmployeesTable
           rows={query.data?.items ?? []}
+          startIndex={(controls.page - 1) * controls.pageSize}
           onView={setViewing}
           onEdit={(employee) => {
             setEditing(employee);

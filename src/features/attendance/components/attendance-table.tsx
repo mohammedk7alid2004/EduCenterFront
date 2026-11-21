@@ -6,22 +6,21 @@ import type { AttendanceDto } from '../attendance.types';
 import { AttendanceStatusBadge } from './attendance-status-badge';
 export function AttendanceTable({
   rows,
+  startIndex,
   onView,
 }: {
   rows: AttendanceDto[];
+  startIndex?: number;
   onView: (row: AttendanceDto) => void;
 }): JSX.Element {
   const { t } = useTranslation();
   const can = usePermission();
   const columns: Column<AttendanceDto>[] = [
     {
-      id: 'id',
-      header: t('common.id'),
-      cell: (row) => (
-        <span>
-          #<bdi>{row.id.slice(0, 6)}</bdi>
-        </span>
-      ),
+      id: 'index',
+      header: t('common.index'),
+      headerClassName: 'w-16',
+      cell: (_row, index) => <span className="font-medium text-muted">{index + 1}</span>,
     },
     {
       id: 'fullName',
@@ -75,5 +74,5 @@ export function AttendanceTable({
         ) : null,
     },
   ];
-  return <DataTable columns={columns} rows={rows} pending={false} />;
+  return <DataTable columns={columns} rows={rows} startIndex={startIndex} pending={false} />;
 }

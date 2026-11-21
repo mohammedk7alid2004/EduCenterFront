@@ -8,10 +8,12 @@ import { useDeleteRoles } from '../roles.queries';
 import type { RoleDto } from '../roles.types';
 export function RolesTable({
   rows,
+  startIndex,
   onView,
   onEdit,
 }: {
   rows: RoleDto[];
+  startIndex?: number;
   onView: (role: RoleDto) => void;
   onEdit: (role: RoleDto) => void;
 }): JSX.Element {
@@ -32,14 +34,10 @@ export function RolesTable({
   const auditColumns = useAuditColumns<RoleDto>();
   const columns: Column<RoleDto>[] = [
     {
-      id: 'id',
-      header: t('common.id'),
-      headerClassName: 'w-28',
-      cell: (role) => (
-        <span className="block max-w-24 truncate" title={role.id}>
-          #<bdi>{role.id}</bdi>
-        </span>
-      ),
+      id: 'index',
+      header: t('common.index'),
+      headerClassName: 'w-16',
+      cell: (_role, index) => <span className="font-medium text-muted">{index + 1}</span>,
     },
     {
       id: 'name',
@@ -87,6 +85,7 @@ export function RolesTable({
       <DataTable
         columns={columns}
         rows={rows}
+        startIndex={startIndex}
         pending={!online || mutation.isPending}
         onDeleteSelected={can(PERMISSIONS.roles.delete) ? (ids) => remove(ids) : undefined}
       />

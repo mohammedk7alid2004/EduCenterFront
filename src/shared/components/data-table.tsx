@@ -7,13 +7,14 @@ import { Icon } from './icon';
 export interface Column<T> {
   id: string;
   header: ReactNode;
-  cell: (row: T) => ReactNode;
+  cell: (row: T, index: number) => ReactNode;
   className?: string;
   headerClassName?: string;
 }
 interface DataTableProps<T extends { id: string }> {
   columns: readonly Column<T>[];
   rows: readonly T[];
+  startIndex?: number;
   className?: string;
   onDeleteSelected?: (ids: string[]) => void;
   pending?: boolean;
@@ -25,6 +26,7 @@ interface DataTableProps<T extends { id: string }> {
 export function DataTable<T extends { id: string }>({
   columns,
   rows,
+  startIndex = 0,
   className = '',
   onDeleteSelected,
   pending,
@@ -83,7 +85,7 @@ export function DataTable<T extends { id: string }>({
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {rows.map((row) => (
+            {rows.map((row, index) => (
               <Fragment key={row.id}>
                 <tr className="h-[66px] transition hover:bg-primary/[0.025]">
                   {renderExpanded && (
@@ -123,7 +125,7 @@ export function DataTable<T extends { id: string }>({
                       key={column.id}
                       className={`px-4 py-3.5 align-middle ${column.className ?? ''}`}
                     >
-                      {column.cell(row)}
+                      {column.cell(row, startIndex + index)}
                     </td>
                   ))}
                 </tr>

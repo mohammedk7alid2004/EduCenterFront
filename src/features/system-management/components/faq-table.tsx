@@ -15,10 +15,12 @@ import { useDeleteFaqs, useToggleFaq } from '../system-management.queries';
 import type { FaqDto } from '../system-management.types';
 export function FaqTable({
   rows,
+  startIndex,
   onView,
   onEdit,
 }: {
   rows: FaqDto[];
+  startIndex?: number;
   onView: (id: string) => void;
   onEdit: (id: string) => void;
 }): JSX.Element {
@@ -42,13 +44,10 @@ export function FaqTable({
   }
   const columns: Column<FaqDto>[] = [
     {
-      id: 'id',
-      header: t('common.id'),
-      cell: (row) => (
-        <span className="block max-w-24 truncate" title={row.id}>
-          #<bdi>{row.id}</bdi>
-        </span>
-      ),
+      id: 'index',
+      header: t('common.index'),
+      headerClassName: 'w-16',
+      cell: (_row, index) => <span className="font-medium text-muted">{index + 1}</span>,
     },
     ...(['question', 'answer'] as const).map((key) => ({
       id: key,
@@ -98,6 +97,7 @@ export function FaqTable({
       <DataTable
         columns={columns}
         rows={rows}
+        startIndex={startIndex}
         pending={pending}
         onDeleteSelected={can(FAQ_PERMISSIONS.delete) ? deleteSelection : undefined}
       />

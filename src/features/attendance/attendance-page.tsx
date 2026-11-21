@@ -33,7 +33,11 @@ export function AttendancePage(): JSX.Element {
         onCreate={() => setFormOpen(true)}
         statusFilter={false}
       >
-        <AttendanceTable rows={query.data?.items ?? []} onView={setViewing} />
+        <AttendanceTable
+          rows={query.data?.items ?? []}
+          startIndex={(controls.page - 1) * controls.pageSize}
+          onView={setViewing}
+        />
       </ManagementList>
       {formOpen && <AttendanceFormModal onClose={() => setFormOpen(false)} />}
       {viewing && <ViewAttendanceModal id={viewing.id} onClose={() => setViewing(null)} />}

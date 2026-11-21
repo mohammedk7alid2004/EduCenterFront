@@ -49,7 +49,11 @@ export function ContactUsPage(): JSX.Element {
             <ContactFilters state={state} />
           </div>
         )}
-        <ContactTable rows={query.data?.items ?? []} onView={setViewing} />
+        <ContactTable
+          rows={query.data?.items ?? []}
+          startIndex={(state.controls.page - 1) * state.controls.pageSize}
+          onView={setViewing}
+        />
       </ManagementList>
       {viewing && <ViewContactModal id={viewing} onClose={() => setViewing(null)} />}
       {importOpen && <ImportContactModal onClose={() => setImportOpen(false)} />}

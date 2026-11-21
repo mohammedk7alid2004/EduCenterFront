@@ -37,6 +37,7 @@
     "deleteSelected": "Delete selected",
     "deleteSelection": "Do you want to delete the {{count}} selected records?",
     "id": "ID",
+    "index": "#",
     "actions": "Actions",
     "view": "View",
     "noValue": "—",

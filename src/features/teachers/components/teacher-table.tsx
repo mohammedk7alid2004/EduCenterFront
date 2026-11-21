@@ -8,10 +8,12 @@ import { useDeleteTeachers, useToggleTeacherStatus } from '../teachers.queries';
 import { TeacherRowActions } from './teacher-row-actions';
 export function TeacherTable({
   rows,
+  startIndex,
   onEdit,
   onView,
 }: {
   rows: TeacherDto[];
+  startIndex?: number;
   onEdit: (row: TeacherDto) => void;
   onView: (row: TeacherDto) => void;
 }): JSX.Element {
@@ -24,14 +26,10 @@ export function TeacherTable({
   const auditColumns = useAuditColumns<TeacherDto>();
   const columns: Column<TeacherDto>[] = [
     {
-      id: 'id',
-      headerClassName: 'w-28',
-      header: t('common.id'),
-      cell: (row) => (
-        <span className="block max-w-24 truncate" title={row.id}>
-          #{row.id}
-        </span>
-      ),
+      id: 'index',
+      headerClassName: 'w-16',
+      header: t('common.index'),
+      cell: (_row, index) => <span className="font-medium text-muted">{index + 1}</span>,
     },
     {
       id: 'name',
@@ -122,6 +120,7 @@ export function TeacherTable({
         className="[&_table]:min-w-[1792px]"
         columns={columns}
         rows={rows}
+        startIndex={startIndex}
         pending={!online || remove.isPending}
         onDeleteSelected={(ids) =>
           confirm({

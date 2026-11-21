@@ -8,9 +8,11 @@ import { contactDate } from '../contact-us.lib';
 import type { ContactMessage } from '../contact-us.types';
 export function ContactTable({
   rows,
+  startIndex,
   onView,
 }: {
   rows: ContactMessage[];
+  startIndex?: number;
   onView: (id: string) => void;
 }): JSX.Element {
   const { t, i18n } = useTranslation();
@@ -29,13 +31,10 @@ export function ContactTable({
   }
   const columns: Column<ContactMessage>[] = [
     {
-      id: 'id',
-      header: t('common.id'),
-      cell: (row) => (
-        <span className="block max-w-24 truncate" title={row.id}>
-          #<bdi>{row.id}</bdi>
-        </span>
-      ),
+      id: 'index',
+      header: t('common.index'),
+      headerClassName: 'w-16',
+      cell: (_row, index) => <span className="font-medium text-muted">{index + 1}</span>,
     },
     {
       id: 'name',
@@ -139,6 +138,7 @@ export function ContactTable({
       <DataTable
         columns={columns}
         rows={rows}
+        startIndex={startIndex}
         pending={!online || remove.isPending}
         onDeleteSelected={can(PERMISSIONS.contactUs.delete) ? deleteSelection : undefined}
       />

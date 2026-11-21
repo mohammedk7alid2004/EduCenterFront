@@ -123,6 +123,7 @@ export function AppointmentsPage(): JSX.Element {
         ) : (
           <AppointmentsTable
             rows={query.data?.items ?? []}
+            startIndex={(controls.page - 1) * controls.pageSize}
             onView={setViewing}
             onQr={setQrId}
             onEdit={(row) => {

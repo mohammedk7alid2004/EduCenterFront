@@ -37,6 +37,7 @@
     "deleteSelected": "حذف المحدد",
     "deleteSelection": "هل تريد حذف العناصر المحددة وعددها {{count}}؟",
     "id": "المعرف",
+    "index": "#",
     "actions": "الإجراءات",
     "view": "عرض",
     "noValue": "—",

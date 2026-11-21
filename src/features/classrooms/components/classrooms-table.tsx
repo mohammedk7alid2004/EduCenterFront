@@ -15,10 +15,12 @@ import type { ClassroomDto } from '../classrooms.types';
 import { useDeleteClassrooms, useToggleClassroomStatus } from '../classrooms.queries';
 export function ClassroomsTable({
   rows,
+  startIndex,
   onView,
   onEdit,
 }: {
   rows: ClassroomDto[];
+  startIndex?: number;
   onView: (row: ClassroomDto) => void;
   onEdit: (row: ClassroomDto) => void;
 }): JSX.Element {
@@ -41,14 +43,10 @@ export function ClassroomsTable({
   }
   const columns: Column<ClassroomDto>[] = [
     {
-      id: 'id',
-      header: t('common.id'),
-      headerClassName: 'w-28',
-      cell: (row) => (
-        <span className="block max-w-24 truncate" title={row.id}>
-          #<bdi>{row.id}</bdi>
-        </span>
-      ),
+      id: 'index',
+      header: t('common.index'),
+      headerClassName: 'w-16',
+      cell: (_row, index) => <span className="font-medium text-muted">{index + 1}</span>,
     },
     {
       id: 'name',
@@ -123,6 +121,7 @@ export function ClassroomsTable({
       <DataTable
         columns={columns}
         rows={rows}
+        startIndex={startIndex}
         pending={!online || remove.isPending || toggle.isPending}
         onDeleteSelected={can(PERMISSIONS.classrooms.delete) ? deleteSelection : undefined}
       />

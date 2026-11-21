@@ -8,6 +8,7 @@ import { GroupStatusBadge } from './group-status-badge';
 
 export function GroupsTable({
   rows,
+  startIndex,
   pending,
   onView,
   onConnect,
@@ -15,6 +16,7 @@ export function GroupsTable({
   onDeleteSelected,
 }: {
   rows: GroupDto[];
+  startIndex?: number;
   pending: boolean;
   onView: (row: GroupDto) => void;
   onConnect: (row: GroupDto) => void;
@@ -26,13 +28,10 @@ export function GroupsTable({
 
   const columns: Column<GroupDto>[] = [
     {
-      id: 'id',
-      header: t('common.id'),
-      cell: (row) => (
-        <span className="block max-w-24 truncate" title={row.id}>
-          #<bdi>{row.id.slice(0, 6)}</bdi>
-        </span>
-      ),
+      id: 'index',
+      header: t('common.index'),
+      headerClassName: 'w-16',
+      cell: (_row, index) => <span className="font-medium text-muted">{index + 1}</span>,
     },
     {
       id: 'groupName',
@@ -131,6 +130,7 @@ export function GroupsTable({
     <DataTable
       columns={columns}
       rows={rows}
+      startIndex={startIndex}
       pending={pending}
       onDeleteSelected={can(PERMISSIONS.groups.delete) ? onDeleteSelected : undefined}
     />

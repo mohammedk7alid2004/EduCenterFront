@@ -35,6 +35,7 @@ export function TeachersPage(): JSX.Element {
       >
         <TeacherTable
           rows={query.data?.items ?? []}
+          startIndex={(controls.page - 1) * controls.pageSize}
           onView={setViewing}
           onEdit={(row) => {
             setEditing(row);

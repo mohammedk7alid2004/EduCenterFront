@@ -9,10 +9,12 @@ import type { EmployeeDto } from '../employees.types';
 import { useDeleteEmployees, useToggleEmployeeStatus } from '../employees.queries';
 export function EmployeesTable({
   rows,
+  startIndex,
   onView,
   onEdit,
 }: {
   rows: EmployeeDto[];
+  startIndex?: number;
   onView: (employee: EmployeeDto) => void;
   onEdit: (employee: EmployeeDto) => void;
 }): JSX.Element {
@@ -34,14 +36,10 @@ export function EmployeesTable({
   const auditColumns = useAuditColumns<EmployeeDto>();
   const columns: Column<EmployeeDto>[] = [
     {
-      id: 'id',
-      header: t('common.id'),
-      headerClassName: 'w-28',
-      cell: (employee) => (
-        <span className="block max-w-24 truncate" title={employee.id}>
-          #<bdi>{employee.id}</bdi>
-        </span>
-      ),
+      id: 'index',
+      header: t('common.index'),
+      headerClassName: 'w-16',
+      cell: (_employee, index) => <span className="font-medium text-muted">{index + 1}</span>,
     },
     {
       id: 'name',
@@ -102,6 +100,7 @@ export function EmployeesTable({
       <DataTable
         columns={columns}
         rows={rows}
+        startIndex={startIndex}
         pending={!online || remove.isPending}
         onDeleteSelected={can(PERMISSIONS.employees.delete) ? deleteSelection : undefined}
       />

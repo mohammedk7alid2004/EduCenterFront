@@ -8,10 +8,12 @@ import { useDeleteSubjects, useToggleSubjectStatus } from '../subjects.queries';
 import { SubjectRowActions } from './subject-row-actions';
 export function SubjectTable({
   rows,
+  startIndex,
   onEdit,
   onView,
 }: {
   rows: SubjectDto[];
+  startIndex?: number;
   onEdit: (row: SubjectDto) => void;
   onView: (row: SubjectDto) => void;
 }): JSX.Element {
@@ -24,14 +26,10 @@ export function SubjectTable({
   const auditColumns = useAuditColumns<SubjectDto>();
   const columns: Column<SubjectDto>[] = [
     {
-      id: 'id',
-      headerClassName: 'w-28',
-      header: t('common.id'),
-      cell: (row) => (
-        <span className="block max-w-24 truncate" title={row.id}>
-          #{row.id}
-        </span>
-      ),
+      id: 'index',
+      headerClassName: 'w-16',
+      header: t('common.index'),
+      cell: (_row, index) => <span className="font-medium text-muted">{index + 1}</span>,
     },
     {
       id: 'name',
@@ -99,6 +97,7 @@ export function SubjectTable({
       <DataTable
         columns={columns}
         rows={rows}
+        startIndex={startIndex}
         pending={!online || remove.isPending}
         onDeleteSelected={(ids) =>
           confirm({

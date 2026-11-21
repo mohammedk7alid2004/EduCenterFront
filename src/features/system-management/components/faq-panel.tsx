@@ -126,6 +126,7 @@ export function FaqPanel(): JSX.Element {
           ) : (
             <FaqTable
               rows={query.data?.items ?? []}
+              startIndex={(controls.page - 1) * controls.pageSize}
               onView={(id) => setDialog({ id, mode: SETTINGS_DIALOG.view })}
               onEdit={(id) => setDialog({ id, mode: SETTINGS_DIALOG.edit })}
             />

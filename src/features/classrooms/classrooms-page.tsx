@@ -38,6 +38,7 @@ export function ClassroomsPage(): JSX.Element {
       >
         <ClassroomsTable
           rows={query.data?.items ?? []}
+          startIndex={(controls.page - 1) * controls.pageSize}
           onView={setViewing}
           onEdit={(classroom) => {
             setEditing(classroom);

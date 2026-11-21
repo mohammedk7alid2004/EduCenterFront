@@ -39,6 +39,7 @@ export function RolesPage(): JSX.Element {
       >
         <RolesTable
           rows={query.data?.items ?? []}
+          startIndex={(controls.page - 1) * controls.pageSize}
           onView={setViewing}
           onEdit={(role) => {
             setEditing(role);

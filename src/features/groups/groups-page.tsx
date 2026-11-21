@@ -114,6 +114,7 @@ export function GroupsPage(): JSX.Element {
       >
         <GroupsTable
           rows={query.data?.items ?? []}
+          startIndex={(controls.page - 1) * controls.pageSize}
           pending={pending}
           onView={(group) => setViewingId(group.id)}
           onConnect={(group) => setConnectingId(group.id)}

@@ -80,6 +80,7 @@ export function StudentsPage(): JSX.Element {
       >
         <StudentsTable
           rows={query.data?.items ?? []}
+          startIndex={(controls.page - 1) * controls.pageSize}
           onView={setViewing}
           onEdit={(student) => {
             setEditing(student);

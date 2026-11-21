@@ -17,11 +17,13 @@ import { localizedName, formatAppointmentTime } from '../appointments.lib';
 import type { AppointmentDto } from '../appointments.types';
 export function AppointmentsTable({
   rows,
+  startIndex,
   onView,
   onEdit,
   onQr,
 }: {
   rows: AppointmentDto[];
+  startIndex?: number;
   onView: (row: AppointmentDto) => void;
   onEdit: (row: AppointmentDto) => void;
   onQr: (id: string) => void;
@@ -44,13 +46,10 @@ export function AppointmentsTable({
     });
   const columns: Column<AppointmentDto>[] = [
     {
-      id: 'id',
-      header: t('common.id'),
-      cell: (row) => (
-        <span className="block max-w-24 truncate" title={row.id}>
-          #<bdi>{row.id}</bdi>
-        </span>
-      ),
+      id: 'index',
+      header: t('common.index'),
+      headerClassName: 'w-16',
+      cell: (_row, index) => <span className="font-medium text-muted">{index + 1}</span>,
     },
     {
       id: 'groupName',
@@ -176,6 +175,7 @@ export function AppointmentsTable({
       {dialog}
       <DataTable
         rows={rows}
+        startIndex={startIndex}
         columns={columns}
         pending={pending}
         onDeleteSelected={can(PERMISSIONS.appointments.delete) ? deleteSelection : undefined}
