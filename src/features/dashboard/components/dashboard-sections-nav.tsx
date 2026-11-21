@@ -10,7 +10,6 @@ interface SectionItem {
   route: string;
   icon: IconName;
   permission?: string;
-  tone: 'primary' | 'purple' | 'amber' | 'blue' | 'emerald' | 'rose';
 }
 
 const sections: SectionItem[] = [
@@ -19,73 +18,62 @@ const sections: SectionItem[] = [
     route: ROUTES.students,
     icon: 'students',
     permission: PERMISSIONS.students.read,
-    tone: 'primary',
   },
   {
     key: 'groups',
     route: ROUTES.groups,
     icon: 'users',
     permission: PERMISSIONS.groups.read,
-    tone: 'amber',
   },
   {
     key: 'appointments',
     route: ROUTES.appointments,
     icon: 'clock',
     permission: PERMISSIONS.appointments.read,
-    tone: 'blue',
   },
   {
     key: 'attendance',
     route: ROUTES.attendance,
     icon: 'listChecks',
     permission: PERMISSIONS.attendance.read,
-    tone: 'emerald',
   },
   {
     key: 'teachers',
     route: ROUTES.teachers,
     icon: 'graduationCap',
-    tone: 'purple',
   },
   {
     key: 'subjects',
     route: ROUTES.subjects,
     icon: 'bookOpen',
-    tone: 'primary',
   },
   {
     key: 'classrooms',
     route: ROUTES.classrooms,
     icon: 'classroom',
-    tone: 'rose',
   },
   {
     key: 'employees',
     route: ROUTES.employees,
     icon: 'users',
     permission: PERMISSIONS.employees.read,
-    tone: 'blue',
   },
   {
     key: 'roles',
     route: ROUTES.roles,
     icon: 'permission',
     permission: PERMISSIONS.roles.read,
-    tone: 'purple',
   },
   {
     key: 'contactUs',
     route: ROUTES.contactUs,
     icon: 'contactUs',
     permission: PERMISSIONS.contactUs.read,
-    tone: 'amber',
   },
   {
     key: 'system',
     route: ROUTES.systemManagement,
     icon: 'building',
-    tone: 'primary',
   },
 ];
 
@@ -100,35 +88,37 @@ export function DashboardSectionsNav(): JSX.Element {
   );
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
+    <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
+      <div className="mb-5 flex items-center justify-between border-b border-border pb-4">
         <div>
-          <h2 className="text-lg font-bold tracking-tight">{t('pages.dashboard.quickSections')}</h2>
+          <h2 className="text-base font-bold tracking-tight text-foreground">
+            {t('pages.dashboard.quickSections')}
+          </h2>
           <p className="text-xs text-muted">{t('pages.dashboard.sectionsSubtitle')}</p>
         </div>
       </div>
 
-      <div className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {accessibleSections.map((section) => (
           <Link
             key={section.key}
             to={section.route}
-            className="group flex items-start gap-3.5 rounded-2xl border border-border bg-card p-4 transition duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-sm"
+            className="group flex items-center gap-3 rounded-2xl border border-border/80 bg-subtle/40 p-3.5 transition duration-150 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-card hover:shadow-xs"
           >
-            <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary transition group-hover:scale-105 group-hover:bg-primary group-hover:text-card">
+            <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary transition group-hover:scale-105 group-hover:bg-primary group-hover:text-card">
               <Icon name={section.icon} className="size-5" />
             </span>
             <div className="min-w-0 flex-1">
               <div className="flex items-center justify-between gap-1">
-                <h3 className="font-semibold text-sm text-foreground group-hover:text-primary transition truncate">
+                <h3 className="font-semibold text-xs text-foreground group-hover:text-primary transition truncate">
                   {t(`nav.${section.key}`)}
                 </h3>
                 <Icon
                   name="arrowRight"
-                  className="size-3.5 text-muted transition group-hover:translate-x-1 group-hover:text-primary rtl:rotate-180 rtl:group-hover:-translate-x-1 shrink-0"
+                  className="size-3 text-muted transition group-hover:translate-x-0.5 group-hover:text-primary rtl:rotate-180 rtl:group-hover:-translate-x-0.5 shrink-0"
                 />
               </div>
-              <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted">
+              <p className="mt-0.5 line-clamp-1 text-[11px] text-muted">
                 {t(`pages.dashboard.${section.key}Description`)}
               </p>
             </div>

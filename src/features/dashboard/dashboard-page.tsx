@@ -7,29 +7,24 @@ import { DashboardSectionsNav } from './components/dashboard-sections-nav';
 
 export function DashboardPage(): JSX.Element {
   return (
-    <section className="space-y-7 pb-10">
+    <div className="flex flex-col gap-6 pb-10">
       {/* 1. Header Banner & Welcome */}
       <DashboardBanner />
 
       {/* 2. Key Metrics & KPI Summary Cards */}
       <DashboardStatsGrid />
 
-      {/* 3. Deep Analytics & Operational Insights */}
-      <div className="grid gap-6 lg:grid-cols-12">
-        {/* Left Side: Upcoming Sessions & Group Occupancy */}
-        <div className="space-y-6 lg:col-span-7">
-          <DashboardUpcomingAppointments />
-          <DashboardGroupsCapacity />
-        </div>
-
-        {/* Right Side: Attendance Rate & Recent Activity */}
-        <div className="lg:col-span-5">
-          <DashboardAttendanceSummary />
-        </div>
+      {/* 3. Operational Insights: Schedule & Attendance Side-by-Side */}
+      <div className="grid gap-6 lg:grid-cols-2 items-start">
+        <DashboardUpcomingAppointments />
+        <DashboardAttendanceSummary />
       </div>
 
-      {/* 4. Refined Management Sections & Quick Navigation */}
+      {/* 4. Groups Capacity Overview */}
+      <DashboardGroupsCapacity />
+
+      {/* 5. Refined Management Sections & Quick Navigation */}
       <DashboardSectionsNav />
-    </section>
+    </div>
   );
 }

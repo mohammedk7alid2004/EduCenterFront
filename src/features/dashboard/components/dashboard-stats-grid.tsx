@@ -74,7 +74,7 @@ function StatCard({
   return (
     <Link
       to={route}
-      className={`group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-xs transition duration-200 hover:-translate-y-0.5 hover:shadow-md ${styles.hoverBorder}`}
+      className={`group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md ${styles.hoverBorder}`}
     >
       <div
         className={`pointer-events-none absolute -top-12 end-0 size-28 rounded-full blur-2xl ${styles.topGlow}`}
@@ -204,7 +204,7 @@ export function DashboardStatsGrid(): JSX.Element {
   const visibleStats = stats.filter((s) => s.visible);
 
   return (
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+    <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
       {visibleStats.map(({ key, ...props }) => (
         <StatCard key={key} {...props} />
       ))}
