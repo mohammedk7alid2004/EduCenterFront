@@ -61,6 +61,10 @@ import {
   UserRoundPlus,
   Users,
   X,
+  Activity,
+  BarChart3,
+  Sparkles,
+  TrendingUp,
 } from 'lucide-react';
 
 function brandIcon(path: string) {
@@ -232,6 +236,10 @@ export const icons = {
   userRoundPlus: UserRoundPlus,
   users: Users,
   close: X,
+  activity: Activity,
+  chart: BarChart3,
+  sparkles: Sparkles,
+  trendingUp: TrendingUp,
 } as const;
 
 export type IconName = keyof typeof icons;

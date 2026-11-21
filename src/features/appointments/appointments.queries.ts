@@ -14,7 +14,7 @@ import {
 } from './appointments.api';
 import type { AppointmentDto, AppointmentFilters, AppointmentValues } from './appointments.types';
 import { OPTIONS_PAGE_SIZE } from './appointments.constants';
-export function useAppointments(filters: AppointmentFilters, calendar = false) {
+export function useAppointments(filters: AppointmentFilters, calendar = false, enabled = true) {
   const { i18n } = useTranslation();
   return useQuery<PaginatedResult<AppointmentDto>, ApiError>({
     queryKey: [...QUERY_KEYS.appointments, i18n.language, filters, calendar],
@@ -34,6 +34,7 @@ export function useAppointments(filters: AppointmentFilters, calendar = false) {
       }
       return { ...first, items };
     },
+    enabled,
   });
 }
 export function useAppointment(id?: string) {

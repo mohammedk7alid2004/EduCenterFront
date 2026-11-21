@@ -11,11 +11,12 @@ import {
   toggleClassroomStatus,
 } from './classrooms.api';
 import type { ClassroomDto, ClassroomValues } from './classrooms.types';
-export function useClassrooms(filters: ListFilters) {
+export function useClassrooms(filters: ListFilters, enabled = true) {
   const { i18n } = useTranslation();
   return useQuery<PaginatedResult<ClassroomDto>, ApiError>({
     queryKey: [...QUERY_KEYS.classrooms, i18n.language, filters],
     queryFn: ({ signal }) => fetchClassrooms(filters, signal),
+    enabled,
   });
 }
 export function useClassroom(id?: string) {

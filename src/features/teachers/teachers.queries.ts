@@ -19,11 +19,12 @@ import type {
   UpdateTeacherPayload,
 } from './teachers.types';
 
-export function useTeachers(filters: TeacherFilters = {}) {
+export function useTeachers(filters: TeacherFilters = {}, enabled = true) {
   const { i18n } = useTranslation();
   return useQuery<PaginatedList<TeacherDto>, ApiError>({
     queryKey: [...QUERY_KEYS.teachers, i18n.language, filters],
     queryFn: ({ signal }) => fetchTeachers(filters, signal),
+    enabled,
   });
 }
 

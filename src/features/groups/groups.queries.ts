@@ -13,11 +13,12 @@ import {
 } from './groups.api';
 import type { GroupDto, GroupFilters, ConnectStudentsPayload, StudentOption } from './groups.types';
 
-export function useGroups(filters: GroupFilters) {
+export function useGroups(filters: GroupFilters, enabled = true) {
   const { i18n } = useTranslation();
   return useQuery<PaginatedResult<GroupDto>, ApiError>({
     queryKey: [...QUERY_KEYS.groups, i18n.language, filters],
     queryFn: ({ signal }) => fetchGroups(filters, signal),
+    enabled,
   });
 }
 

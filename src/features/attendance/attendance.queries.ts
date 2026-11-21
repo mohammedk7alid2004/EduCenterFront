@@ -13,10 +13,11 @@ import type {
   AttendanceStudentOption,
   AttendanceValues,
 } from './attendance.types';
-export function useAttendance(filters: AttendanceFilters) {
+export function useAttendance(filters: AttendanceFilters, enabled = true) {
   return useQuery<PaginatedResult<AttendanceDto>, ApiError>({
     queryKey: [...QUERY_KEYS.attendance, filters],
     queryFn: ({ signal }) => fetchAttendance(filters, signal),
+    enabled,
   });
 }
 export function useAttendanceItem(id?: string) {

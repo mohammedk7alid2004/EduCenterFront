@@ -11,11 +11,12 @@ import {
   fetchStudentEducation,
 } from './students.api';
 import type { StudentDto, StudentFilters, StudentValues, StudentOption } from './students.types';
-export function useStudents(filters: StudentFilters) {
+export function useStudents(filters: StudentFilters, enabled = true) {
   const { i18n } = useTranslation();
   return useQuery<PaginatedResult<StudentDto>, ApiError>({
     queryKey: [...QUERY_KEYS.students, i18n.language, filters],
     queryFn: ({ signal }) => fetchStudents(filters, signal),
+    enabled,
   });
 }
 export function useStudent(id?: string) {
