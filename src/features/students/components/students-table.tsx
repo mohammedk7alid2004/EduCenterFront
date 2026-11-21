@@ -79,6 +79,11 @@ export function StudentsTable({
       cell: (row) => <bdi>{row.phoneNumber || t('common.noValue')}</bdi>,
     },
     {
+      id: 'parentPhoneNumber',
+      header: t('students.form.parentPhoneNumber'),
+      cell: (row) => <bdi>{row.parentPhoneNumber || t('common.noValue')}</bdi>,
+    },
+    {
       id: 'level',
       header: t('students.form.level'),
       cell: (row) => studentLocalizedName(row.educationLevel, i18n.language) || t('common.noValue'),
