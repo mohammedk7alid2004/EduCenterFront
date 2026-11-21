@@ -58,6 +58,7 @@ import {
   ToggleLeft,
   ToggleRight,
   Trash2,
+  UserRoundPlus,
   Users,
   X,
 } from 'lucide-react';
@@ -228,6 +229,7 @@ export const icons = {
   toggleLeft: ToggleLeft,
   toggleRight: ToggleRight,
   trash: Trash2,
+  userRoundPlus: UserRoundPlus,
   users: Users,
   close: X,
 } as const;
