@@ -83,11 +83,19 @@ export function DashboardSidebar({
               />
             )}
             <SidebarLink
-              route={ROUTES.classrooms}
-              icon="classroom"
-              label={t('nav.classrooms')}
+              route={ROUTES.teachers}
+              icon="teacher"
+              label={t('nav.teachers')}
               onClick={onClose}
             />
+            {can(PERMISSIONS.groups.read) && (
+              <SidebarLink
+                route={ROUTES.groups}
+                icon="users"
+                label={t('nav.groups')}
+                onClick={onClose}
+              />
+            )}
             <SidebarLink
               route={ROUTES.subjects}
               icon="graduationCap"
@@ -95,9 +103,9 @@ export function DashboardSidebar({
               onClick={onClose}
             />
             <SidebarLink
-              route={ROUTES.teachers}
-              icon="teacher"
-              label={t('nav.teachers')}
+              route={ROUTES.classrooms}
+              icon="classroom"
+              label={t('nav.classrooms')}
               onClick={onClose}
             />
           </SidebarSection>

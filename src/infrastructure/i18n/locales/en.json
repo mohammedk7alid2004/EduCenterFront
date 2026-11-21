@@ -743,5 +743,44 @@
       "deleted": "Students deleted successfully.",
       "status": "Student status updated successfully."
     }
+  },
+  "groups": {
+    "title": "Groups",
+    "description": "Manage Your Company Branches And Locations",
+    "viewTitle": "View Group",
+    "connectTitle": "Connect The Student To The Group",
+    "connectDescription": "Assign and connect enrolled students to this group",
+    "groupName": "Group Name",
+    "subject": "Subject",
+    "level": "Level",
+    "grade": "Grade",
+    "noOfStudents": "No Of Students",
+    "maxCapacity": "Max Capacity",
+    "status": "Status",
+    "active": "Active",
+    "deactivated": "Deactivated",
+    "student": "Student",
+    "students": "Students",
+    "selectStudents": "Select Students",
+    "searchStudents": "Search student by name or phone...",
+    "studentCount": "{{count}} Student",
+    "personCount": "{{count}} Person",
+    "capacityReached": "Maximum capacity reached ({{max}} Person)",
+    "noStudentsSelected": "No students selected yet",
+    "delete": {
+      "title": "Delete Group",
+      "description": "Are you sure you want to delete this group?",
+      "bulkTitle": "Delete All Groups",
+      "bulkDescription": "Are you sure you want to delete all selected groups?"
+    },
+    "feedback": {
+      "connected": "Students connected to the group successfully.",
+      "deleted": "Group deleted successfully.",
+      "bulkDeleted": "Selected groups deleted successfully."
+    },
+    "empty": {
+      "title": "No Groups",
+      "description": "No groups found matching your search."
+    }
   }
 }

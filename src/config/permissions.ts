@@ -46,6 +46,14 @@ export const PERMISSIONS = {
     delete: 'Appointments.Delete',
     toggleStatus: 'Appointments.ToggleStatus',
   },
+  groups: {
+    read: 'Appointments.GetAll',
+    detail: 'Appointments.GetById',
+    create: 'Appointments.Create',
+    update: 'Appointments.Update',
+    delete: 'Appointments.Delete',
+    connectStudents: 'Appointments.Update',
+  },
   classrooms: {
     create: 'Classrooms.Create',
     update: 'Classrooms.Update',

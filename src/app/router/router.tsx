@@ -77,6 +77,19 @@ export const router = createBrowserRouter([
         },
       },
       {
+        path: ROUTES.groups,
+        lazy: async () => {
+          const { GroupsPage } = await import('@/features/groups');
+          return {
+            Component: () => (
+              <ProtectedRoute permission={PERMISSIONS.groups.read}>
+                <GroupsPage />
+              </ProtectedRoute>
+            ),
+          };
+        },
+      },
+      {
         path: ROUTES.systemManagement,
         lazy: async () => ({
           Component: (await import('@/features/system-management')).SystemManagementPage,
