@@ -123,7 +123,8 @@
     "profile": "الملف الشخصي",
     "access": "إدارة المستخدمين والصلاحيات",
     "contactUs": "تواصل معنا",
-    "students": "إدارة الطلاب"
+    "students": "إدارة الطلاب",
+    "attendance": "الحضور"
   },
   "auth": {
     "splash": {
@@ -786,5 +787,24 @@
       "title": "لا توجد مجموعات",
       "description": "لم يتم العثور على أي مجموعات تطابق البحث."
     }
+  },
+  "attendance": {
+    "title": "الحضور",
+    "description": "تسجيل ومراجعة حضور الطلاب.",
+    "create": "تسجيل حضور طالب",
+    "recordTitle": "تسجيل حضور طالب",
+    "viewTitle": "عرض حضور الطالب",
+    "student": "الطالب",
+    "selectStudent": "اختر الطالب",
+    "fullName": "الاسم بالكامل",
+    "phoneNumber": "رقم الهاتف",
+    "email": "البريد الإلكتروني",
+    "group": "المجموعة",
+    "status": "الحالة",
+    "selectStatus": "اختر الحالة",
+    "notes": "ملاحظات",
+    "notesPlaceholder": "أدخل ملاحظات...",
+    "statuses": { "present": "حاضر", "late": "متأخر", "excused": "بعذر" },
+    "feedback": { "recorded": "تم تسجيل الحضور بنجاح." }
   }
 }

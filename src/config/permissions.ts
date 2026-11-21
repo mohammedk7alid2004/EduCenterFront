@@ -54,6 +54,11 @@ export const PERMISSIONS = {
     delete: 'Appointments.Delete',
     connectStudents: 'Appointments.Update',
   },
+  attendance: {
+    read: 'Attendance.GetAll',
+    detail: 'Attendance.GetById',
+    record: 'Attendance.Record',
+  },
   classrooms: {
     create: 'Classrooms.Create',
     update: 'Classrooms.Update',

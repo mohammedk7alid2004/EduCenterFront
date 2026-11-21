@@ -36,6 +36,7 @@ export const ROUTES = {
   contactUs: '/contact-us',
   students: '/students',
   groups: '/groups',
+  attendance: '/attendance',
 } as const;
 export const API_ENDPOINTS = {
   students: {
@@ -134,10 +135,17 @@ export const API_ENDPOINTS = {
     grades: '/v1/select-menu/GetEducationGrades',
     subjects: '/v1/select-menu/GetSubjects',
   },
+  attendance: {
+    getAll: '/v1/Attendance',
+    detail: (id: string) => `/v1/Attendance/${encodeURIComponent(id)}`,
+    record: '/v1/Attendance',
+    students: '/v1/select-menu/GetStudents',
+  },
 } as const;
 export const QUERY_KEYS = {
   students: ['students'],
   groups: ['groups'],
+  attendance: ['attendance'],
   contactUs: ['contact-us'],
   appointments: ['appointments'],
   systemManagement: ['system-management'],

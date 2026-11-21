@@ -121,6 +121,18 @@ export function DashboardSidebar({
               {t('nav.students')}
             </NavLink>
           )}
+          {can(PERMISSIONS.attendance.read) && (
+            <NavLink
+              to={ROUTES.attendance}
+              onClick={onClose}
+              className={({ isActive }) =>
+                `flex min-h-12 items-center gap-3 rounded-xl px-2 ${isActive ? 'bg-card text-primary' : 'text-card hover:bg-card/5'}`
+              }
+            >
+              <Icon name="schedule" className="size-5 shrink-0" />
+              {t('nav.attendance')}
+            </NavLink>
+          )}
 
           {(can(PERMISSIONS.roles.read) || can(PERMISSIONS.employees.read)) && (
             <SidebarSection

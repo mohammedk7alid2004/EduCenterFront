@@ -212,6 +212,7 @@ export const icons = {
   graduationCap: GraduationCap,
   teacher: Presentation,
   addSquare: SquarePlus,
+  listChecks: ListChecks,
   schedule: ListChecks,
   dashboard: LayoutDashboard,
   loader: LoaderCircle,

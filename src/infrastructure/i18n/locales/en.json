@@ -123,7 +123,8 @@
     "profile": "My Profile",
     "access": "Users & Access",
     "contactUs": "Contact Us",
-    "students": "Students"
+    "students": "Students",
+    "attendance": "Attendance"
   },
   "auth": {
     "splash": {
@@ -786,5 +787,24 @@
       "title": "No Groups",
       "description": "No groups found matching your search."
     }
+  },
+  "attendance": {
+    "title": "Attendance",
+    "description": "Record and review student attendance.",
+    "create": "Student Attendance",
+    "recordTitle": "Student Attendance",
+    "viewTitle": "View Student Attendance",
+    "student": "Student",
+    "selectStudent": "Select Student",
+    "fullName": "Full Name",
+    "phoneNumber": "Phone Number",
+    "email": "Email",
+    "group": "Group",
+    "status": "Status",
+    "selectStatus": "Select Status",
+    "notes": "Notes",
+    "notesPlaceholder": "Enter Notes...",
+    "statuses": { "present": "Present", "late": "Late", "excused": "Excused" },
+    "feedback": { "recorded": "Your attendance has been successfully recorded." }
   }
 }

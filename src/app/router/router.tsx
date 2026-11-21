@@ -90,6 +90,19 @@ export const router = createBrowserRouter([
         },
       },
       {
+        path: ROUTES.attendance,
+        lazy: async () => {
+          const { AttendancePage } = await import('@/features/attendance');
+          return {
+            Component: () => (
+              <ProtectedRoute permission={PERMISSIONS.attendance.read}>
+                <AttendancePage />
+              </ProtectedRoute>
+            ),
+          };
+        },
+      },
+      {
         path: ROUTES.systemManagement,
         lazy: async () => ({
           Component: (await import('@/features/system-management')).SystemManagementPage,
