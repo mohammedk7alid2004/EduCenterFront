@@ -107,7 +107,7 @@ export function GroupsTable({
               title={t('groups.connectTitle')}
               className="grid size-14 place-items-center rounded-xl bg-info/15 text-info transition hover:bg-info/25"
             >
-              <Icon name="userRoundPlus" className="size-7" />
+              <Icon name="link" className="size-7" />
             </button>
           )}
           {can(PERMISSIONS.groups.delete) && (
