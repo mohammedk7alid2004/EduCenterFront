@@ -61,6 +61,7 @@ export function useConfirm(): {
           onClose={close}
           pending={pending}
           variant="danger"
+          showCloseButton={false}
         >
           {options.description && (
             <p className="mb-7 text-center text-muted">{options.description}</p>

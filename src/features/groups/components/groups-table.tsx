@@ -4,6 +4,7 @@ import { usePermission } from '@/infrastructure/auth';
 import { DataTable, Icon, type Column } from '@/shared/components';
 import { groupLocalizedName } from '../groups.lib';
 import type { GroupDto } from '../groups.types';
+import { GroupStatusBadge } from './group-status-badge';
 
 export function GroupsTable({
   rows,
@@ -58,11 +59,7 @@ export function GroupsTable({
     {
       id: 'noOfStudents',
       header: t('groups.noOfStudents'),
-      cell: (row) => (
-        <span className="font-medium text-primary">
-          {t('groups.studentCount', { count: row.studentsCount ?? 0 })}
-        </span>
-      ),
+      cell: (row) => t('groups.studentCount', { count: row.studentsCount ?? 0 }),
     },
     {
       id: 'level',
@@ -84,17 +81,7 @@ export function GroupsTable({
     {
       id: 'status',
       header: t('groups.status'),
-      cell: (row) => (
-        <span
-          className={`inline-flex items-center rounded-full border px-3 py-0.5 text-xs font-medium ${
-            row.isActive
-              ? 'border-emerald-500/40 bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400'
-              : 'border-rose-500/40 bg-rose-50 text-rose-600 dark:bg-rose-950/30 dark:text-rose-400'
-          }`}
-        >
-          {t(row.isActive ? 'groups.active' : 'groups.deactivated')}
-        </span>
-      ),
+      cell: (row) => <GroupStatusBadge status={row.status} />,
     },
     {
       id: 'actions',
@@ -118,9 +105,9 @@ export function GroupsTable({
               onClick={() => onConnect(row)}
               aria-label={t('groups.connectTitle')}
               title={t('groups.connectTitle')}
-              className="grid size-[38px] place-items-center rounded-lg bg-primary/10 text-primary transition hover:bg-primary/20"
+              className="grid size-[38px] place-items-center rounded-lg bg-iconSurface text-primary transition hover:bg-primary/15"
             >
-              <Icon name="link" className="size-5" />
+              <Icon name="users" className="size-5" />
             </button>
           )}
           {can(PERMISSIONS.groups.delete) && (

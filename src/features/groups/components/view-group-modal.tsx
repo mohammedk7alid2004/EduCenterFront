@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { DetailField, ErrorState, LoadingState, Modal, StatusBadge } from '@/shared/components';
+import { DetailField, ErrorState, LoadingState, Modal } from '@/shared/components';
 import { useGroup } from '../groups.queries';
 import { groupLocalizedName } from '../groups.lib';
+import { GroupStatusBadge } from './group-status-badge';
 
 export function ViewGroupModal({ id, onClose }: { id: string; onClose: () => void }): JSX.Element {
   const { t, i18n } = useTranslation();
@@ -33,7 +34,7 @@ export function ViewGroupModal({ id, onClose }: { id: string; onClose: () => voi
             {t('groups.personCount', { count: row.maxCapacity })}
           </DetailField>
           <DetailField label={t('groups.status')}>
-            <StatusBadge active={row.isActive} />
+            <GroupStatusBadge status={row.status} />
           </DetailField>
         </dl>
       ) : null}

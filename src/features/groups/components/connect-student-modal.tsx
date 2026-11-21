@@ -1,19 +1,12 @@
 import { useState, useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import {
-  Button,
-  ErrorState,
-  FeedbackDialog,
-  Icon,
-  LoadingState,
-  Modal,
-  StatusBadge,
-} from '@/shared/components';
+import { Button, ErrorState, FeedbackDialog, Icon, LoadingState, Modal } from '@/shared/components';
 import { useOnline, useDebouncedValue } from '@/shared/hooks';
 import { useGroup, useConnectStudents, useStudentsOption } from '../groups.queries';
 import { groupLocalizedName } from '../groups.lib';
 import type { StudentOption } from '../groups.types';
+import { GroupStatusBadge } from './group-status-badge';
 
 export function ConnectStudentModal({
   groupId,
@@ -101,7 +94,7 @@ export function ConnectStudentModal({
   return (
     <Modal
       title={t('groups.connectTitle')}
-      icon="link"
+      icon="users"
       size="form"
       onClose={onClose}
       pending={connectMutation.isPending}
@@ -113,7 +106,7 @@ export function ConnectStudentModal({
       ) : group ? (
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Group details summary */}
-          <div className="grid grid-cols-1 gap-y-4 rounded-xl border border-muted/30 bg-muted/5 p-4 sm:grid-cols-2 sm:gap-x-8">
+          <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-8">
             <div>
               <span className="block text-xs text-muted">{t('groups.groupName')}</span>
               <span className="font-semibold text-foreground">{group.groupName}</span>
@@ -148,13 +141,13 @@ export function ConnectStudentModal({
             </div>
             <div>
               <span className="block text-xs text-muted">{t('groups.noOfStudents')}</span>
-              <span className="inline-flex items-center rounded-lg border border-emerald-500/40 bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400">
+              <span className="inline-flex items-center rounded-lg border border-success bg-success/10 px-2.5 py-0.5 text-xs font-semibold text-success">
                 {selectedStudents.length}
               </span>
             </div>
             <div className="sm:col-span-2">
               <span className="block text-xs text-muted">{t('groups.status')}</span>
-              <StatusBadge active={group.isActive} />
+              <GroupStatusBadge status={group.status} />
             </div>
           </div>
 
@@ -275,7 +268,7 @@ export function ConnectStudentModal({
             <Button
               type="button"
               variant="ghost"
-              className="rounded-xl border border-muted/40 text-foreground"
+              className="rounded-xl border border-primary text-primary"
               disabled={connectMutation.isPending}
               onClick={onClose}
             >
