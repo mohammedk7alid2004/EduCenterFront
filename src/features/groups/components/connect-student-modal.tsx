@@ -30,8 +30,9 @@ export function ConnectStudentModal({
 
   const debouncedSearch = useDebouncedValue(search, 300);
 
-  // Fetch available students matching the group's grade (or all if not filtered) and search term
+  // A grade belongs to a level in the API, so both selections are required before loading students.
   const studentsQuery = useStudentsOption(
+    group?.levelId ?? undefined,
     group?.gradeId ?? undefined,
     debouncedSearch || undefined,
   );
@@ -199,6 +200,14 @@ export function ConnectStudentModal({
                     className="w-full bg-transparent px-2 py-1 text-sm outline-none placeholder:text-muted"
                   />
                 </div>
+                <button
+                  type="button"
+                  aria-label={t('groups.selectStudents')}
+                  onClick={() => setDropdownOpen((open) => !open)}
+                  className="grid size-7 place-items-center rounded-lg text-muted transition hover:bg-subtle hover:text-primary"
+                >
+                  <Icon name={dropdownOpen ? 'chevronUp' : 'chevronDown'} className="size-4" />
+                </button>
               </div>
 
               {/* Dropdown list */}

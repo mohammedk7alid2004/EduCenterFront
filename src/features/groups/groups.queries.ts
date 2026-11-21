@@ -55,10 +55,11 @@ export function useConnectStudents() {
   });
 }
 
-export function useStudentsOption(gradeId?: string, search?: string) {
+export function useStudentsOption(levelId?: string, gradeId?: string, search?: string) {
   return useQuery<StudentOption[], ApiError>({
-    queryKey: [...QUERY_KEYS.groups, QUERY_KEYS.options, 'students', gradeId, search],
+    queryKey: [...QUERY_KEYS.groups, QUERY_KEYS.options, 'students', levelId, gradeId, search],
     queryFn: ({ signal }) => fetchStudentsOption(gradeId, search, signal),
+    enabled: Boolean(levelId && gradeId),
   });
 }
 

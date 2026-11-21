@@ -27,6 +27,7 @@ export const theme = {
     overlay: '0 0 0',
     danger: '255 76 91',
     success: '0 185 124',
+    info: '76 141 246',
     warning: '244 177 59',
   },
   dark: {
@@ -57,6 +58,7 @@ export const theme = {
     overlay: '0 0 0',
     danger: '252 165 165',
     success: '134 239 172',
+    info: '147 197 253',
     warning: '253 230 138',
   },
   radius: '0.75rem',

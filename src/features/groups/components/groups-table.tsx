@@ -94,7 +94,7 @@ export function GroupsTable({
               onClick={() => onView(row)}
               aria-label={t('common.view')}
               title={t('groups.viewTitle')}
-              className="grid size-[38px] place-items-center rounded-lg bg-success/10 text-success transition hover:bg-success/20"
+              className="grid size-10 place-items-center rounded-xl bg-success/10 text-success transition hover:bg-success/20"
             >
               <Icon name="eye" className="size-5" />
             </button>
@@ -105,7 +105,7 @@ export function GroupsTable({
               onClick={() => onConnect(row)}
               aria-label={t('groups.connectTitle')}
               title={t('groups.connectTitle')}
-              className="grid size-[38px] place-items-center rounded-lg bg-iconSurface text-primary transition hover:bg-primary/15"
+              className="grid size-10 place-items-center rounded-xl bg-info/15 text-info transition hover:bg-info/25"
             >
               <Icon name="users" className="size-5" />
             </button>
@@ -117,7 +117,7 @@ export function GroupsTable({
               onClick={() => onDelete(row)}
               aria-label={t('common.delete')}
               title={t('groups.delete.title')}
-              className="grid size-[38px] place-items-center rounded-lg bg-danger/10 text-danger transition hover:bg-danger/20 disabled:opacity-50"
+              className="grid size-10 place-items-center rounded-xl bg-danger/10 text-danger transition hover:bg-danger/20 disabled:opacity-50"
             >
               <Icon name="trash" className="size-5" />
             </button>
