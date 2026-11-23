@@ -8,7 +8,7 @@ interface ModalProps {
   icon: IconName;
   onClose: () => void;
   pending?: boolean;
-  size?: 'default' | 'form' | 'wide';
+  size?: 'default' | 'form' | 'appointment' | 'wide';
   variant?: 'default' | 'feedback' | 'danger';
   showCloseButton?: boolean;
 }
@@ -49,7 +49,7 @@ export function Modal({
       onClick={(event) => {
         if (event.target === event.currentTarget && !pending) onClose();
       }}
-      className={`relative m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] overflow-y-auto bg-card text-foreground shadow-xl backdrop:bg-overlay/50 ${variant === 'feedback' ? 'max-w-[440px] rounded-xl px-5 py-5' : variant === 'danger' ? 'max-w-[556px] rounded-3xl p-6 py-7' : 'rounded-3xl p-6'} ${variant !== 'default' ? '' : size === 'wide' ? 'max-w-[794px]' : size === 'form' ? 'max-w-[701px]' : 'max-w-[635px]'}`}
+      className={`relative m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] overflow-y-auto bg-card text-foreground shadow-xl backdrop:bg-overlay/50 ${variant === 'feedback' ? 'max-w-[440px] rounded-xl px-5 py-5' : variant === 'danger' ? 'max-w-[556px] rounded-3xl p-6 py-7' : size === 'appointment' ? 'rounded-2xl p-4 sm:p-5' : 'rounded-3xl p-6'} ${variant !== 'default' ? '' : size === 'wide' ? 'max-w-[794px]' : size === 'form' ? 'max-w-[701px]' : size === 'appointment' ? 'max-w-[590px]' : 'max-w-[635px]'}`}
     >
       {variant !== 'default' ? (
         <div
@@ -79,7 +79,9 @@ export function Modal({
           )}
         </div>
       ) : (
-        <div className="mb-8 flex items-center justify-between gap-4">
+        <div
+          className={`flex items-center justify-between gap-4 ${size === 'appointment' ? 'mb-5' : 'mb-8'}`}
+        >
           <div className="flex items-center gap-2.5">
             <span className="grid size-10 place-items-center rounded-xl bg-primary/10 text-primary">
               <Icon name={icon} className="size-5" />

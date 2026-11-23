@@ -164,7 +164,13 @@ function AppointmentForm({
       />
     );
   return (
-    <Modal title={title} icon="clock" size="form" onClose={onClose} pending={mutation.isPending}>
+    <Modal
+      title={title}
+      icon="clock"
+      size="appointment"
+      onClose={onClose}
+      pending={mutation.isPending}
+    >
       <form
         noValidate
         onSubmit={handleSubmit((values) => {
@@ -205,7 +211,7 @@ function AppointmentForm({
         )}
         <fieldset
           disabled={mutation.isPending}
-          className="grid min-w-0 grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2"
+          className="grid min-w-0 grid-cols-1 gap-x-3 gap-y-4 sm:grid-cols-2"
         >
           <Input
             {...register('groupName')}
@@ -438,7 +444,7 @@ function AppointmentForm({
             />
           </div>
         </fieldset>
-        <div className="mt-10 flex flex-wrap justify-end gap-4">
+        <div className="mt-6 flex flex-wrap justify-end gap-3">
           <Button
             type="button"
             variant="ghost"
