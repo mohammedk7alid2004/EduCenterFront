@@ -86,16 +86,16 @@ export function GroupsTable({
       id: 'actions',
       header: t('common.actions'),
       cell: (row) => (
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           {can(PERMISSIONS.groups.detail) && (
             <button
               type="button"
               onClick={() => onView(row)}
               aria-label={t('common.view')}
               title={t('groups.viewTitle')}
-              className="grid size-14 place-items-center rounded-xl bg-success/10 text-success transition hover:bg-success/20"
+              className="grid size-[38px] place-items-center rounded-lg bg-success/10 text-success transition hover:bg-success/20"
             >
-              <Icon name="eye" className="size-7" />
+              <Icon name="eye" className="size-5" />
             </button>
           )}
           {can(PERMISSIONS.groups.connectStudents) && (
@@ -104,9 +104,9 @@ export function GroupsTable({
               onClick={() => onConnect(row)}
               aria-label={t('groups.connectTitle')}
               title={t('groups.connectTitle')}
-              className="grid size-14 place-items-center rounded-xl bg-info/15 text-info transition hover:bg-info/25"
+              className="grid size-[38px] place-items-center rounded-lg bg-info/15 text-info transition hover:bg-info/25"
             >
-              <Icon name="userRoundPlus" className="size-7" />
+              <Icon name="userRoundPlus" className="size-5" />
             </button>
           )}
           {can(PERMISSIONS.groups.delete) && (
@@ -116,9 +116,9 @@ export function GroupsTable({
               onClick={() => onDelete(row)}
               aria-label={t('common.delete')}
               title={t('groups.delete.title')}
-              className="grid size-14 place-items-center rounded-xl bg-danger/10 text-danger transition hover:bg-danger/20 disabled:opacity-50"
+              className="grid size-[38px] place-items-center rounded-lg bg-danger/10 text-danger transition hover:bg-danger/20 disabled:opacity-50"
             >
-              <Icon name="trash" className="size-7" />
+              <Icon name="trash" className="size-5" />
             </button>
           )}
         </div>

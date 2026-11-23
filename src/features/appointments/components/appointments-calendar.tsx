@@ -11,8 +11,7 @@ import {
   timeMinutes,
 } from '../appointments.lib';
 import { CALENDAR_HOUR_HEIGHT, CALENDAR_PERIOD, WEEK_DAYS } from '../appointments.constants';
-import type { AppointmentDto } from '../appointments.types';
-import { AppointmentCalendarEvent } from './appointment-calendar-event';
+import { AppointmentCalendarEvent, type CalendarAppointment } from './appointment-calendar-event';
 const eventColors = [
   'bg-calendarTeal text-qrPaper',
   'bg-calendarPurple text-qrPaper',
@@ -32,13 +31,13 @@ function color(id: string) {
     Array.from(id).reduce((sum, char) => sum + char.charCodeAt(0), 0) % eventColors.length
   ];
 }
-export function AppointmentsCalendar({
+export function AppointmentsCalendar<T extends CalendarAppointment>({
   rows,
   onView,
   onQr,
 }: {
-  rows: AppointmentDto[];
-  onView: (row: AppointmentDto) => void;
+  rows: T[];
+  onView: (row: T) => void;
   onQr: (id: string) => void;
 }): JSX.Element {
   const { t, i18n } = useTranslation();
@@ -70,7 +69,7 @@ export function AppointmentsCalendar({
   const dayLabel = new Intl.DateTimeFormat(i18n.language, { weekday: 'short' });
   const number = new Intl.NumberFormat(i18n.language, { minimumIntegerDigits: 2 });
   const matching = (day: Date) => rows.filter((row) => row.days.includes(day.getDay()));
-  const eventTitle = (row: AppointmentDto) =>
+  const eventTitle = (row: CalendarAppointment) =>
     `${row.groupName} · ${localizedName(row.subject, i18n.language)} · ${formatAppointmentTime(row.startTime, i18n.language)} – ${formatAppointmentTime(row.endTime, i18n.language)} · ${row.teacher}`;
   return (
     <section

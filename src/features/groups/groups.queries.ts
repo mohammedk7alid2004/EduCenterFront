@@ -12,12 +12,28 @@ import {
   type GroupOptionItem,
 } from './groups.api';
 import type { GroupDto, GroupFilters, ConnectStudentsPayload, StudentOption } from './groups.types';
+import { GROUP_CALENDAR_PAGE_SIZE } from './groups.constants';
 
-export function useGroups(filters: GroupFilters, enabled = true) {
+export function useGroups(filters: GroupFilters, calendar = false, enabled = true) {
   const { i18n } = useTranslation();
   return useQuery<PaginatedResult<GroupDto>, ApiError>({
-    queryKey: [...QUERY_KEYS.groups, i18n.language, filters],
-    queryFn: ({ signal }) => fetchGroups(filters, signal),
+    queryKey: [...QUERY_KEYS.groups, i18n.language, filters, calendar],
+    queryFn: async ({ signal }) => {
+      if (!calendar) return fetchGroups(filters, signal);
+      const first = await fetchGroups(
+        { ...filters, pageNumber: 1, pageSize: GROUP_CALENDAR_PAGE_SIZE },
+        signal,
+      );
+      const items = [...first.items];
+      for (let page = 2; page <= first.totalPages; page++) {
+        const next = await fetchGroups(
+          { ...filters, pageNumber: page, pageSize: GROUP_CALENDAR_PAGE_SIZE },
+          signal,
+        );
+        items.push(...next.items);
+      }
+      return { ...first, items };
+    },
     enabled,
   });
 }

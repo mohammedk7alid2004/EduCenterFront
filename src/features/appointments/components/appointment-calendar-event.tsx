@@ -5,8 +5,20 @@ import { usePermission } from '@/infrastructure/auth';
 import { Icon } from '@/shared/components';
 import { localizedName, formatAppointmentTime } from '../appointments.lib';
 import { APPOINTMENT_STATUS } from '../appointments.constants';
-import type { AppointmentDto } from '../appointments.types';
-export function AppointmentCalendarEvent({
+import type { LocalizedName } from '../appointments.types';
+
+export interface CalendarAppointment {
+  id: string;
+  groupName: string;
+  subject: LocalizedName;
+  teacher: string;
+  startTime: string;
+  endTime: string;
+  days: number[];
+  status: number;
+}
+
+export function AppointmentCalendarEvent<T extends CalendarAppointment>({
   row,
   title,
   color,
@@ -14,11 +26,11 @@ export function AppointmentCalendarEvent({
   onView,
   onQr,
 }: {
-  row: AppointmentDto;
+  row: T;
   title: string;
   color: string;
   style: CSSProperties;
-  onView: (row: AppointmentDto) => void;
+  onView: (row: T) => void;
   onQr: (id: string) => void;
 }): JSX.Element {
   const { t, i18n } = useTranslation();

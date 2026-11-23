@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import { LIST_PARAMS } from '@/config';
 import { useListControls, useOnline } from '@/shared/hooks';
-import { ManagementList, useConfirm } from '@/shared/components';
+import { Icon, ManagementList, useConfirm } from '@/shared/components';
+import { AppointmentsCalendar } from '@/features/appointments';
 import { useGroups, useDeleteGroups } from './groups.queries';
-import { GROUP_FILTER_PARAMS } from './groups.constants';
+import { GROUP_FILTER_PARAMS, GROUP_VIEW } from './groups.constants';
 import type { GroupDto } from './groups.types';
 import { GroupsTable } from './components/groups-table';
 import { GroupsFilters } from './components/groups-filters';
@@ -21,13 +22,17 @@ export function GroupsPage(): JSX.Element {
   const subjectId = params.get(GROUP_FILTER_PARAMS.subject) ?? '';
   const levelId = params.get(GROUP_FILTER_PARAMS.level) ?? '';
   const gradeId = levelId ? (params.get(GROUP_FILTER_PARAMS.grade) ?? '') : '';
+  const calendar = params.get(GROUP_FILTER_PARAMS.view) === GROUP_VIEW.calendar;
 
-  const query = useGroups({
-    ...controls.filters,
-    subjectId: subjectId || undefined,
-    levelId: levelId || undefined,
-    gradeId: gradeId || undefined,
-  });
+  const query = useGroups(
+    {
+      ...controls.filters,
+      subjectId: subjectId || undefined,
+      levelId: levelId || undefined,
+      gradeId: gradeId || undefined,
+    },
+    calendar,
+  );
 
   const deleteMutation = useDeleteGroups();
   const { confirm, dialog } = useConfirm();
@@ -92,6 +97,7 @@ export function GroupsPage(): JSX.Element {
         fetching={query.isFetching}
         error={query.error}
         onRetry={() => void query.refetch()}
+        pagination={!calendar}
         filterContent={
           <GroupsFilters
             subjectId={subjectId}
@@ -111,16 +117,53 @@ export function GroupsPage(): JSX.Element {
             }
           />
         }
+        searchActions={
+          <div
+            role="group"
+            aria-label={t('appointments.viewMode')}
+            className="flex gap-1 rounded-xl border border-border p-1"
+          >
+            {[GROUP_VIEW.calendar, GROUP_VIEW.list].map((value) => (
+              <button
+                type="button"
+                key={value}
+                aria-label={t(`appointments.${value}View`)}
+                aria-pressed={calendar === (value === GROUP_VIEW.calendar)}
+                onClick={() =>
+                  setParams((current) => {
+                    const next = new URLSearchParams(current);
+                    next.set(GROUP_FILTER_PARAMS.view, value);
+                    return next;
+                  })
+                }
+                className={`grid size-9 place-items-center rounded-lg ${calendar === (value === GROUP_VIEW.calendar) ? 'bg-primary text-card' : 'bg-subtle text-primary'}`}
+              >
+                <Icon
+                  name={value === GROUP_VIEW.calendar ? 'scheduleGrid' : 'scheduleList'}
+                  className="size-5"
+                />
+              </button>
+            ))}
+          </div>
+        }
       >
-        <GroupsTable
-          rows={query.data?.items ?? []}
-          startIndex={(controls.page - 1) * controls.pageSize}
-          pending={pending}
-          onView={(group) => setViewingId(group.id)}
-          onConnect={(group) => setConnectingId(group.id)}
-          onDelete={handleDeleteSingle}
-          onDeleteSelected={handleDeleteSelected}
-        />
+        {calendar ? (
+          <AppointmentsCalendar
+            rows={query.data?.items ?? []}
+            onView={(group) => setViewingId(group.id)}
+            onQr={(id) => setViewingId(id)}
+          />
+        ) : (
+          <GroupsTable
+            rows={query.data?.items ?? []}
+            startIndex={(controls.page - 1) * controls.pageSize}
+            pending={pending}
+            onView={(group) => setViewingId(group.id)}
+            onConnect={(group) => setConnectingId(group.id)}
+            onDelete={handleDeleteSingle}
+            onDeleteSelected={handleDeleteSelected}
+          />
+        )}
       </ManagementList>
 
       {viewingId && <ViewGroupModal id={viewingId} onClose={() => setViewingId(null)} />}

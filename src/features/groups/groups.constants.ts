@@ -10,4 +10,8 @@ export const GROUP_FILTER_PARAMS = {
   level: 'level',
   grade: 'grade',
   status: 'status',
+  view: 'view',
 } as const;
+
+export const GROUP_VIEW = { calendar: 'calendar', list: 'list' } as const;
+export const GROUP_CALENDAR_PAGE_SIZE = 100;
