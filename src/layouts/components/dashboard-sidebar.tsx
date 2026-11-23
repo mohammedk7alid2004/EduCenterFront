@@ -18,12 +18,18 @@ export function DashboardSidebar({
   const brand = useCenterBrand();
   const isSystem =
     location.pathname.startsWith(ROUTES.roles) || location.pathname.startsWith(ROUTES.employees);
-  const [openGroup, setOpenGroup] = useState<string | null>(
-    isSystem ? SIDEBAR_GROUP.system : SIDEBAR_GROUP.schedule,
-  );
+  const isSchedule = [
+    ROUTES.appointments,
+    ROUTES.teachers,
+    ROUTES.groups,
+    ROUTES.subjects,
+    ROUTES.classrooms,
+  ].some((route) => location.pathname.startsWith(route));
+  const activeGroup = isSystem ? SIDEBAR_GROUP.system : isSchedule ? SIDEBAR_GROUP.schedule : null;
+  const [openGroup, setOpenGroup] = useState<string | null>(activeGroup);
   useEffect(() => {
-    setOpenGroup(isSystem ? SIDEBAR_GROUP.system : SIDEBAR_GROUP.schedule);
-  }, [isSystem]);
+    setOpenGroup(activeGroup);
+  }, [activeGroup]);
   return (
     <>
       {open && (
