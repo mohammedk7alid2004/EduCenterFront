@@ -19,7 +19,7 @@ export function AppointmentsPage(): JSX.Element {
   const can = usePermission();
   const controls = useListControls();
   const [params, setParams] = useSearchParams();
-  const calendar = params.get(APPOINTMENT_PARAMS.view) === APPOINTMENT_VIEW.calendar;
+  const calendar = params.get(APPOINTMENT_PARAMS.view) !== APPOINTMENT_VIEW.list;
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<AppointmentDto | null>(null);
   const [qrId, setQrId] = useState<string | null>(null);
