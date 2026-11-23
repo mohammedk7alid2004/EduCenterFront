@@ -112,9 +112,18 @@
       "noUpcomingSessions": "لا توجد حصص مجدولة لليوم حالياً",
       "viewAllAppointments": "عرض كل المواعيد",
       "attendanceRate": "معدل الحضور والغياب",
+      "attendanceToday": "حضور اليوم",
+      "attendanceChartSubtitle": "الحضور اليومي حسب الحالة",
+      "chartPeriod": "فترة الرسم البياني",
+      "chartPeriods": {
+        "week": "آخر 7 أيام",
+        "twoWeeks": "آخر 14 يوم",
+        "month": "آخر 30 يوم"
+      },
       "presentRate": "نسبة الحضور",
       "lateRate": "متأخر",
       "excusedRate": "معتذر",
+      "absentRate": "غائب",
       "groupsCapacity": "معدل إشغال واستيعاب المجموعات",
       "capacityStudents": "{{count}} / {{max}} طالب",
       "recentAttendance": "آخر عمليات الحضور المسجلة",
@@ -841,7 +850,7 @@
     "selectStatus": "اختر الحالة",
     "notes": "ملاحظات",
     "notesPlaceholder": "أدخل ملاحظات...",
-    "statuses": { "present": "حاضر", "late": "متأخر", "excused": "بعذر" },
+    "statuses": { "present": "حاضر", "late": "متأخر", "excused": "بعذر", "absent": "غائب" },
     "feedback": { "recorded": "تم تسجيل الحضور بنجاح." }
   }
 }

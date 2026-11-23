@@ -19,11 +19,13 @@ export function DashboardAttendanceSummary(): JSX.Element {
   const presentCount = items.filter((item) => item.status === ATTENDANCE_STATUS.present).length;
   const lateCount = items.filter((item) => item.status === ATTENDANCE_STATUS.late).length;
   const excusedCount = items.filter((item) => item.status === ATTENDANCE_STATUS.excused).length;
+  const absentCount = items.filter((item) => item.status === ATTENDANCE_STATUS.absent).length;
   const totalCount = items.length;
 
   const presentPercent = totalCount > 0 ? Math.round((presentCount / totalCount) * 100) : 0;
   const latePercent = totalCount > 0 ? Math.round((lateCount / totalCount) * 100) : 0;
   const excusedPercent = totalCount > 0 ? Math.round((excusedCount / totalCount) * 100) : 0;
+  const absentPercent = totalCount > 0 ? Math.round((absentCount / totalCount) * 100) : 0;
 
   return (
     <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
@@ -66,13 +68,18 @@ export function DashboardAttendanceSummary(): JSX.Element {
               />
               <div
                 style={{ width: `${latePercent}%` }}
-                className="bg-danger transition-all duration-500"
+                className="bg-warning transition-all duration-500"
                 title={`${t('pages.dashboard.lateRate')}: ${latePercent}%`}
               />
               <div
                 style={{ width: `${excusedPercent}%` }}
-                className="bg-info transition-all duration-500"
+                className="bg-danger transition-all duration-500"
                 title={`${t('pages.dashboard.excusedRate')}: ${excusedPercent}%`}
+              />
+              <div
+                style={{ width: `${absentPercent}%` }}
+                className="bg-info transition-all duration-500"
+                title={`${t('pages.dashboard.absentRate')}: ${absentPercent}%`}
               />
             </>
           ) : (
@@ -81,18 +88,22 @@ export function DashboardAttendanceSummary(): JSX.Element {
         </div>
 
         {/* Breakdown Pills */}
-        <div className="mt-3 grid grid-cols-3 gap-2 text-center text-xs">
+        <div className="mt-3 grid grid-cols-2 gap-2 text-center text-xs sm:grid-cols-4">
           <div className="rounded-xl bg-success/10 p-2 text-success">
             <p className="font-bold text-sm">{presentCount}</p>
             <p className="text-[11px] font-medium">{t('pages.dashboard.presentRate')}</p>
           </div>
-          <div className="rounded-xl bg-danger/10 p-2 text-danger">
+          <div className="rounded-xl bg-warning/10 p-2 text-warning">
             <p className="font-bold text-sm">{lateCount}</p>
             <p className="text-[11px] font-medium">{t('pages.dashboard.lateRate')}</p>
           </div>
-          <div className="rounded-xl bg-info/10 p-2 text-info">
+          <div className="rounded-xl bg-danger/10 p-2 text-danger">
             <p className="font-bold text-sm">{excusedCount}</p>
             <p className="text-[11px] font-medium">{t('pages.dashboard.excusedRate')}</p>
+          </div>
+          <div className="rounded-xl bg-info/10 p-2 text-info">
+            <p className="font-bold text-sm">{absentCount}</p>
+            <p className="text-[11px] font-medium">{t('pages.dashboard.absentRate')}</p>
           </div>
         </div>
       </div>

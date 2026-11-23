@@ -1,5 +1,6 @@
 import { DashboardBanner } from './components/dashboard-banner';
 import { DashboardStatsGrid } from './components/dashboard-stats-grid';
+import { DashboardAttendanceChart } from './components/dashboard-attendance-chart';
 import { DashboardUpcomingAppointments } from './components/dashboard-upcoming-appointments';
 import { DashboardAttendanceSummary } from './components/dashboard-attendance-summary';
 import { DashboardGroupsCapacity } from './components/dashboard-groups-capacity';
@@ -10,6 +11,8 @@ export function DashboardPage(): JSX.Element {
     <div className="flex flex-col gap-6 pb-10">
       {/* 1. Header Banner & Welcome */}
       <DashboardBanner />
+
+      <DashboardAttendanceChart />
 
       {/* 2. Key Metrics & KPI Summary Cards */}
       <DashboardStatsGrid />

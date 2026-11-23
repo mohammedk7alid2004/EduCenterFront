@@ -112,9 +112,18 @@
       "noUpcomingSessions": "No sessions scheduled for today",
       "viewAllAppointments": "View All Appointments",
       "attendanceRate": "Attendance Rate & Breakdown",
+      "attendanceToday": "Attendance Today",
+      "attendanceChartSubtitle": "Daily attendance by status",
+      "chartPeriod": "Chart period",
+      "chartPeriods": {
+        "week": "Last 7 days",
+        "twoWeeks": "Last 14 days",
+        "month": "Last 30 days"
+      },
       "presentRate": "Present",
       "lateRate": "Late",
       "excusedRate": "Excused",
+      "absentRate": "Absent",
       "groupsCapacity": "Groups Capacity & Occupancy",
       "capacityStudents": "{{count}} / {{max}} students",
       "recentAttendance": "Recent Attendance Activity",
@@ -841,7 +850,7 @@
     "selectStatus": "Select Status",
     "notes": "Notes",
     "notesPlaceholder": "Enter Notes...",
-    "statuses": { "present": "Present", "late": "Late", "excused": "Excused" },
+    "statuses": { "present": "Present", "late": "Late", "excused": "Excused", "absent": "Absent" },
     "feedback": { "recorded": "Your attendance has been successfully recorded." }
   }
 }
