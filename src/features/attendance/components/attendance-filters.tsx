@@ -1,9 +1,15 @@
 import { useTranslation } from 'react-i18next';
-import { Button, Select } from '@/shared/components';
+import { Button } from '@/shared/components';
 import { ATTENDANCE_FILTER_STATUSES } from '../attendance.constants';
 import { ATTENDANCE_STATUS } from '../attendance.types';
 
 type FilterKey = 'status' | 'groupName' | 'date';
+
+const attendanceStatusKeys: Record<(typeof ATTENDANCE_FILTER_STATUSES)[number], string> = {
+  [ATTENDANCE_STATUS.present]: 'present',
+  [ATTENDANCE_STATUS.late]: 'late',
+  [ATTENDANCE_STATUS.excused]: 'excused',
+};
 
 export function AttendanceFilters({
   status,
@@ -23,19 +29,27 @@ export function AttendanceFilters({
   return (
     <>
       <div className="grid grid-cols-1 items-end gap-4 md:grid-cols-3">
-        <Select
-          id="attendance-status-filter"
-          label={t('attendance.status')}
-          value={status}
-          onChange={(event) => onChange('status', event.target.value)}
-          placeholder={t('common.all')}
-          options={ATTENDANCE_FILTER_STATUSES.map((value) => ({
-            id: String(value),
-            name: t(
-              `attendance.statuses.${value === ATTENDANCE_STATUS.present ? 'present' : value === ATTENDANCE_STATUS.late ? 'late' : 'excused'}`,
-            ),
-          }))}
-        />
+        <fieldset>
+          <legend className="mb-2 text-sm font-medium">{t('attendance.status')}</legend>
+          <div className="flex min-h-10 flex-wrap items-center gap-x-4 gap-y-2 rounded-full border border-muted/60 bg-card px-4">
+            {ATTENDANCE_FILTER_STATUSES.map((value) => (
+              <label
+                key={value}
+                className="flex cursor-pointer items-center gap-2 text-sm text-foreground"
+              >
+                <input
+                  type="radio"
+                  name="attendance-status-filter"
+                  value={value}
+                  checked={status === String(value)}
+                  onChange={(event) => onChange('status', event.target.value)}
+                  className="size-4 accent-primary"
+                />
+                {t(`attendance.statuses.${attendanceStatusKeys[value]}`)}
+              </label>
+            ))}
+          </div>
+        </fieldset>
         <div>
           <label htmlFor="attendance-group-filter" className="mb-2 block text-sm font-medium">
             {t('attendance.groupName')}
