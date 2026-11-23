@@ -1,11 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Icon } from '@/shared/components';
 import { useAttendance } from '@/features/attendance/attendance.queries';
 import { ATTENDANCE_STATUS, type AttendanceStatus } from '@/features/attendance/attendance.types';
 import { DASHBOARD_ATTENDANCE_REFRESH_INTERVAL_MS } from '../dashboard.constants';
 
-const CHART_PERIOD = { week: 7, twoWeeks: 14, month: 30 } as const;
+const DASHBOARD_CHART_DAYS = 7;
 
 type ChartStatus = keyof typeof ATTENDANCE_STATUS;
 
@@ -29,9 +28,6 @@ function statusKey(status: AttendanceStatus): ChartStatus {
 
 export function DashboardAttendanceChart(): JSX.Element {
   const { t, i18n } = useTranslation();
-  const [period, setPeriod] = useState<(typeof CHART_PERIOD)[keyof typeof CHART_PERIOD]>(
-    CHART_PERIOD.week,
-  );
   const query = useAttendance(
     { pageNumber: 1, pageSize: 100 },
     true,
@@ -39,15 +35,15 @@ export function DashboardAttendanceChart(): JSX.Element {
   );
   const days = useMemo(() => {
     const today = new Date();
-    return Array.from({ length: period }, (_, index) => {
+    return Array.from({ length: DASHBOARD_CHART_DAYS }, (_, index) => {
       const day = new Date(
         today.getFullYear(),
         today.getMonth(),
-        today.getDate() - (period - 1 - index),
+        today.getDate() - (DASHBOARD_CHART_DAYS - 1 - index),
       );
       return { key: dateKey(day), date: day };
     });
-  }, [period]);
+  }, []);
   const data = useMemo(
     () =>
       days.map(({ key, date }) => {
@@ -67,55 +63,52 @@ export function DashboardAttendanceChart(): JSX.Element {
   const max = Math.max(1, ...data.map((item) => item.total));
   const formatter = new Intl.DateTimeFormat(i18n.language, { weekday: 'short' });
 
+  const axisValues = [max, Math.ceil((max * 3) / 4), Math.ceil(max / 2), Math.ceil(max / 4), 0];
+
   return (
-    <section className="rounded-3xl border border-border bg-card p-5 shadow-sm sm:p-6">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <span className="grid size-10 place-items-center rounded-xl bg-primary/10 text-primary">
-            <Icon name="chart" className="size-5" />
-          </span>
-          <div>
-            <h2 className="text-base font-semibold">{t('pages.dashboard.attendanceToday')}</h2>
-            <p className="text-xs text-muted">{t('pages.dashboard.attendanceChartSubtitle')}</p>
-          </div>
-        </div>
-        <select
-          value={period}
-          onChange={(event) => setPeriod(Number(event.target.value) as typeof period)}
-          aria-label={t('pages.dashboard.chartPeriod')}
-          className="h-9 rounded-xl border border-border bg-card px-3 text-xs font-medium text-primary outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
-        >
-          {Object.entries(CHART_PERIOD).map(([key, value]) => (
-            <option key={key} value={value}>
-              {t(`pages.dashboard.chartPeriods.${key}`)}
-            </option>
+    <section className="w-full max-w-2xl rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-5">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <h2 className="text-sm font-semibold text-foreground">
+          {t('pages.dashboard.attendanceToday')}
+        </h2>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[10px] text-tableHeading sm:text-xs">
+          {chartSeries.map((series) => (
+            <span key={series.key} className="flex items-center gap-1.5">
+              <span className={`size-2 rounded-[2px] ${series.color}`} />
+              {t(`pages.dashboard.${series.key}Rate`)}
+            </span>
           ))}
-        </select>
+        </div>
       </div>
-      <div className="mb-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-tableHeading">
-        {chartSeries.map((series) => (
-          <span key={series.key} className="flex items-center gap-1.5">
-            <span className={`size-2 rounded-sm ${series.color}`} />
-            {t(`pages.dashboard.${series.key}Rate`)}
-          </span>
-        ))}
-      </div>
-      <div className="flex h-64 items-end gap-2 border-b border-border px-1 pt-4 sm:gap-4">
-        {data.map((item) => (
-          <div
-            key={item.key}
-            className="flex min-w-0 flex-1 flex-col items-center gap-2 self-stretch"
-          >
-            <div className="flex w-full flex-1 items-end justify-center">
+      <div className="relative h-64 ps-8">
+        <div className="absolute inset-y-0 start-8 end-0 flex flex-col justify-between">
+          {axisValues.map((value, index) => (
+            <div key={`${value}-${index}`} className="border-t border-border/70" />
+          ))}
+        </div>
+        <div className="absolute inset-y-0 start-0 flex flex-col justify-between text-[10px] text-muted">
+          {axisValues.map((value, index) => (
+            <span key={`${value}-${index}`}>{value}</span>
+          ))}
+        </div>
+        <div className="relative flex h-full items-end gap-2 px-2 sm:gap-4">
+          {data.map((item) => (
+            <div
+              key={item.key}
+              className="group relative flex min-w-0 flex-1 flex-col items-center justify-end gap-2 self-stretch pt-3"
+            >
+              <div className="pointer-events-none absolute bottom-[calc(100%-42px)] z-10 w-36 rounded-lg bg-primary px-2.5 py-2 text-[10px] text-card opacity-0 shadow-lg transition-opacity group-hover:opacity-100">
+                <p className="mb-1 font-semibold">{formatter.format(item.date)}</p>
+                {chartSeries.map((series) => (
+                  <p key={series.key} className="flex justify-between gap-3">
+                    <span>{t(`pages.dashboard.${series.key}Rate`)}</span>
+                    <span>{item.counts[series.key]}</span>
+                  </p>
+                ))}
+              </div>
               <div
-                title={chartSeries
-                  .map(
-                    (series) =>
-                      `${t(`pages.dashboard.${series.key}Rate`)}: ${item.counts[series.key]}`,
-                  )
-                  .join('\n')}
-                className="flex w-full max-w-10 flex-col-reverse overflow-hidden rounded-t-md bg-subtle transition-[height] duration-300"
-                style={{ height: `${Math.max(item.total ? 10 : 2, (item.total / max) * 100)}%` }}
+                className="flex w-full max-w-8 flex-col-reverse overflow-hidden rounded-t-[4px] bg-subtle transition-[height] duration-300 sm:max-w-10"
+                style={{ height: `${Math.max(item.total ? 10 : 1, (item.total / max) * 100)}%` }}
               >
                 {chartSeries.map((series) =>
                   item.counts[series.key] ? (
@@ -127,12 +120,12 @@ export function DashboardAttendanceChart(): JSX.Element {
                   ) : null,
                 )}
               </div>
+              <span className="truncate text-[10px] font-medium text-tableHeading sm:text-[11px]">
+                {formatter.format(item.date)}
+              </span>
             </div>
-            <span className="truncate text-[11px] font-medium text-tableHeading">
-              {formatter.format(item.date)}
-            </span>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );
