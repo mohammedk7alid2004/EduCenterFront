@@ -9,6 +9,7 @@ import { useGroups } from '@/features/groups/groups.queries';
 import { useAppointments } from '@/features/appointments/appointments.queries';
 import { useAttendance } from '@/features/attendance/attendance.queries';
 import { useClassrooms } from '@/features/classrooms/classrooms.queries';
+import { DASHBOARD_ATTENDANCE_REFRESH_INTERVAL_MS } from '../dashboard.constants';
 
 interface StatCardProps {
   title: string;
@@ -129,7 +130,11 @@ export function DashboardStatsGrid(): JSX.Element {
   const teachersQuery = useTeachers({ pageNumber: 1, pageSize: 1 }, canTeachers);
   const groupsQuery = useGroups({ pageNumber: 1, pageSize: 1 }, canGroups);
   const appointmentsQuery = useAppointments({ pageNumber: 1, pageSize: 1 }, false, canAppointments);
-  const attendanceQuery = useAttendance({ pageNumber: 1, pageSize: 1 }, canAttendance);
+  const attendanceQuery = useAttendance(
+    { pageNumber: 1, pageSize: 1 },
+    canAttendance,
+    DASHBOARD_ATTENDANCE_REFRESH_INTERVAL_MS,
+  );
   const classroomsQuery = useClassrooms({ pageNumber: 1, pageSize: 1 }, canClassrooms);
 
   const stats: (StatCardProps & { key: string; visible: boolean })[] = [

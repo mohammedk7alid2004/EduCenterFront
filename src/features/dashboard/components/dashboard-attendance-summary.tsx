@@ -5,10 +5,15 @@ import { Icon } from '@/shared/components';
 import { useAttendance } from '@/features/attendance/attendance.queries';
 import { ATTENDANCE_STATUS } from '@/features/attendance/attendance.types';
 import { AttendanceStatusBadge } from '@/features/attendance/components/attendance-status-badge';
+import { DASHBOARD_ATTENDANCE_REFRESH_INTERVAL_MS } from '../dashboard.constants';
 
 export function DashboardAttendanceSummary(): JSX.Element {
   const { t } = useTranslation();
-  const query = useAttendance({ pageNumber: 1, pageSize: 15 });
+  const query = useAttendance(
+    { pageNumber: 1, pageSize: 15 },
+    true,
+    DASHBOARD_ATTENDANCE_REFRESH_INTERVAL_MS,
+  );
   const items = query.data?.items ?? [];
 
   const presentCount = items.filter((item) => item.status === ATTENDANCE_STATUS.present).length;
