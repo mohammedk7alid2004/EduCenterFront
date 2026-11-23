@@ -21,10 +21,11 @@ import {
   useAppointmentGrades,
   useSaveAppointment,
 } from '../appointments.queries';
-import { APPOINTMENT_ITERATION, APPOINTMENT_STATUS, WEEK_DAYS } from '../appointments.constants';
+import { APPOINTMENT_ITERATION, APPOINTMENT_STATUS } from '../appointments.constants';
 import type { AppointmentDto, AppointmentValues } from '../appointments.types';
 import { localizedName, timeMinutes } from '../appointments.lib';
 import { AppointmentSelect } from './appointment-select';
+import { AppointmentDaysSelect } from './appointment-days-select';
 import { AppointmentTimeField } from './appointment-time-field';
 export function AppointmentFormModal({
   appointment,
@@ -338,39 +339,14 @@ function AppointmentForm({
               name="days"
               control={control}
               render={({ field }) => (
-                <div
-                  role="group"
-                  aria-labelledby="appointment-days-label"
-                  className="flex flex-wrap gap-2"
-                >
-                  {WEEK_DAYS.map((day) => (
-                    <label
-                      key={day}
-                      className={`cursor-pointer rounded-full border px-3 py-1.5 text-xs ${field.value.includes(day) ? 'border-primary bg-permissionSurface text-primary' : 'border-border text-tableHeading'}`}
-                    >
-                      <input
-                        type="checkbox"
-                        className="me-1 accent-primary"
-                        checked={field.value.includes(day)}
-                        onChange={(event) =>
-                          field.onChange(
-                            event.target.checked
-                              ? [...field.value, day]
-                              : field.value.filter((value) => value !== day),
-                          )
-                        }
-                      />
-                      {t(`appointments.days.${day}`)}
-                    </label>
-                  ))}
-                </div>
+                <AppointmentDaysSelect
+                  value={field.value}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  error={errors.days?.message}
+                />
               )}
             />
-            {errors.days && (
-              <p role="alert" className="mt-1 text-xs text-danger">
-                {errors.days.message}
-              </p>
-            )}
           </div>
           <AppointmentSelect
             {...register('iteration', { valueAsNumber: true })}

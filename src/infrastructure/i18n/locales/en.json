@@ -606,6 +606,7 @@
     "noOptions": "No available options.",
     "groupPlaceholder": "Enter Group Name",
     "selectPlaceholder": "Select an option",
+    "selectDays": "Select days",
     "selectTeacher": "Select a subject, then a teacher",
     "time": "Time",
     "separator": ", ",
