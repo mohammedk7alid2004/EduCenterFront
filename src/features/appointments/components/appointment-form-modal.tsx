@@ -353,22 +353,31 @@ function AppointmentForm({
               {t('appointments.fields.iteration')}
               <span className="ms-1 text-danger">*</span>
             </legend>
-            <div className="flex min-h-10 flex-wrap items-center gap-x-4 gap-y-2 rounded-full border border-muted/60 bg-card px-4">
-              {Object.entries(APPOINTMENT_ITERATION).map(([key, value]) => (
-                <label
-                  key={key}
-                  className="flex cursor-pointer items-center gap-2 text-sm text-foreground"
-                >
-                  <input
-                    {...register('iteration', { valueAsNumber: true })}
-                    type="radio"
-                    value={value}
-                    className="size-4 accent-primary"
-                  />
-                  {t(`appointments.iterations.${key}`)}
-                </label>
-              ))}
-            </div>
+            <Controller
+              name="iteration"
+              control={control}
+              render={({ field }) => (
+                <div className="flex min-h-10 flex-wrap items-center gap-x-4 gap-y-2 rounded-full border border-muted/60 bg-card px-4">
+                  {Object.entries(APPOINTMENT_ITERATION).map(([key, value]) => (
+                    <label
+                      key={key}
+                      className="flex cursor-pointer items-center gap-2 text-sm text-foreground"
+                    >
+                      <input
+                        type="radio"
+                        name={field.name}
+                        value={value}
+                        checked={field.value === value}
+                        onChange={() => field.onChange(value)}
+                        onBlur={field.onBlur}
+                        className="size-4 accent-primary"
+                      />
+                      {t(`appointments.iterations.${key}`)}
+                    </label>
+                  ))}
+                </div>
+              )}
+            />
             {errors.iteration?.message && (
               <p role="alert" className="mt-1 text-xs text-danger">
                 {errors.iteration.message}
