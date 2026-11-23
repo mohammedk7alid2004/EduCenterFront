@@ -74,7 +74,9 @@ export function DashboardSidebar({
           <NavLink
             to={ROUTES.dashboard}
             onClick={handleNavigation}
-            className="flex h-12 items-center gap-3 rounded-xl px-2 text-card hover:bg-card/5"
+            className={({ isActive }) =>
+              `flex h-12 items-center gap-3 rounded-xl px-2 ${isActive ? 'bg-card text-primary' : 'text-card hover:bg-card/5'}`
+            }
           >
             <Icon name="home" className="size-5" />
             {t('nav.dashboard')}

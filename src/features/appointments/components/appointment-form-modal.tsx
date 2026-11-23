@@ -348,16 +348,33 @@ function AppointmentForm({
               )}
             />
           </div>
-          <AppointmentSelect
-            {...register('iteration', { valueAsNumber: true })}
-            label={t('appointments.fields.iteration')}
-            requiredAsterisk
-            error={errors.iteration?.message}
-            options={Object.entries(APPOINTMENT_ITERATION).map(([key, value]) => ({
-              id: String(value),
-              name: t(`appointments.iterations.${key}`),
-            }))}
-          />
+          <fieldset>
+            <legend className="mb-2 text-sm font-medium">
+              {t('appointments.fields.iteration')}
+              <span className="ms-1 text-danger">*</span>
+            </legend>
+            <div className="flex min-h-10 flex-wrap items-center gap-x-4 gap-y-2 rounded-full border border-muted/60 bg-card px-4">
+              {Object.entries(APPOINTMENT_ITERATION).map(([key, value]) => (
+                <label
+                  key={key}
+                  className="flex cursor-pointer items-center gap-2 text-sm text-foreground"
+                >
+                  <input
+                    {...register('iteration', { valueAsNumber: true })}
+                    type="radio"
+                    value={value}
+                    className="size-4 accent-primary"
+                  />
+                  {t(`appointments.iterations.${key}`)}
+                </label>
+              ))}
+            </div>
+            {errors.iteration?.message && (
+              <p role="alert" className="mt-1 text-xs text-danger">
+                {errors.iteration.message}
+              </p>
+            )}
+          </fieldset>
           <Input
             {...register('numberOfIterations', { valueAsNumber: true })}
             type="number"
