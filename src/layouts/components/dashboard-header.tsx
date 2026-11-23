@@ -41,9 +41,13 @@ export function DashboardHeader({ onMenuClick }: { onMenuClick: () => void }): J
                 ? 'employees'
                 : location.pathname.startsWith(ROUTES.teachers)
                   ? 'teachers'
-                  : location.pathname.startsWith(ROUTES.subjects)
-                    ? 'subjects'
-                    : 'dashboard';
+                  : location.pathname.startsWith(ROUTES.groups)
+                    ? 'groups'
+                    : location.pathname.startsWith(ROUTES.subjects)
+                      ? 'subjects'
+                      : location.pathname.startsWith(ROUTES.attendance)
+                        ? 'attendance'
+                        : 'dashboard';
   return (
     <header className="dashboard-header relative flex min-h-[77px] flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
       <div className="flex min-w-0 items-center gap-2 text-sm">
@@ -61,7 +65,10 @@ export function DashboardHeader({ onMenuClick }: { onMenuClick: () => void }): J
               ? 'nav.system'
               : isSystem
                 ? 'nav.access'
-                : section === 'profile' || section === 'contactUs' || section === 'students'
+                : section === 'profile' ||
+                    section === 'contactUs' ||
+                    section === 'students' ||
+                    section === 'attendance'
                   ? 'nav.dashboard'
                   : section === 'dashboard'
                     ? 'nav.dashboard'
