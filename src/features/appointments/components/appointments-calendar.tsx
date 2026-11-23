@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PERMISSIONS } from '@/config';
 import { usePermission } from '@/infrastructure/auth';
-import { Button, EmptyState, Icon } from '@/shared/components';
+import { EmptyState, Icon } from '@/shared/components';
 import {
   calendarDates,
   formatAppointmentTime,
@@ -20,6 +20,12 @@ const eventColors = [
   'bg-calendarNavy text-qrPaper',
   'bg-calendarInk text-qrPaper',
   'bg-calendarYellow text-calendarInk',
+  'bg-calendarBlue text-qrPaper',
+  'bg-calendarCoral text-qrPaper',
+  'bg-calendarGreen text-qrPaper',
+  'bg-calendarOrange text-calendarInk',
+  'bg-calendarRose text-qrPaper',
+  'bg-calendarIndigo text-qrPaper',
 ];
 function color(id: string) {
   return eventColors[
@@ -71,7 +77,7 @@ export function AppointmentsCalendar({
       aria-label={t('appointments.calendar.title')}
       className="rounded-3xl bg-card p-4 shadow-sm sm:p-7"
     >
-      <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
+      <div className="mb-7 grid grid-cols-1 items-center gap-4 lg:grid-cols-[1fr_auto_1fr]">
         <div className="flex items-center gap-3">
           <button
             type="button"
@@ -91,10 +97,7 @@ export function AppointmentsCalendar({
             <Icon name="chevronRight" className="size-5 shrink-0 rtl:rotate-180" />
           </button>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <Button variant="ghost" onClick={() => setDate(new Date())}>
-            {t('appointments.calendar.today')}
-          </Button>
+        <div className="flex flex-wrap items-center gap-3 lg:justify-self-center">
           <div
             role="group"
             aria-label={t('appointments.calendar.period')}
@@ -114,10 +117,6 @@ export function AppointmentsCalendar({
           </div>
         </div>
       </div>
-      <p className="mb-6 flex items-start gap-2 rounded-xl bg-iconSurface/50 p-3 text-xs leading-5 text-tableHeading">
-        <Icon name="info" className="mt-0.5 size-4 shrink-0" />
-        {t('appointments.calendar.previewNote')}
-      </p>
       {!rows.length ? (
         <EmptyState />
       ) : (
