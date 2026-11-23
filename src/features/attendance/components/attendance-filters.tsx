@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { Button } from '@/shared/components';
+import { Button, Select } from '@/shared/components';
+import { useGroups } from '@/features/groups/groups.queries';
 import { ATTENDANCE_FILTER_STATUSES } from '../attendance.constants';
 import { ATTENDANCE_STATUS } from '../attendance.types';
 
@@ -9,6 +10,7 @@ const attendanceStatusKeys: Record<(typeof ATTENDANCE_FILTER_STATUSES)[number], 
   [ATTENDANCE_STATUS.present]: 'present',
   [ATTENDANCE_STATUS.late]: 'late',
   [ATTENDANCE_STATUS.excused]: 'excused',
+  [ATTENDANCE_STATUS.absent]: 'absent',
 };
 
 export function AttendanceFilters({
@@ -25,6 +27,7 @@ export function AttendanceFilters({
   onClear: () => void;
 }): JSX.Element {
   const { t } = useTranslation();
+  const groups = useGroups({ pageNumber: 1, pageSize: 100 });
 
   return (
     <>
@@ -50,19 +53,18 @@ export function AttendanceFilters({
             ))}
           </div>
         </fieldset>
-        <div>
-          <label htmlFor="attendance-group-filter" className="mb-2 block text-sm font-medium">
-            {t('attendance.groupName')}
-          </label>
-          <input
-            id="attendance-group-filter"
-            type="search"
-            value={groupName}
-            onChange={(event) => onChange('groupName', event.target.value)}
-            placeholder={t('attendance.groupName')}
-            className="h-10 w-full rounded-full border border-muted/60 bg-card px-4 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
-          />
-        </div>
+        <Select
+          id="attendance-group-filter"
+          label={t('attendance.groupName')}
+          value={groupName}
+          onChange={(event) => onChange('groupName', event.target.value)}
+          placeholder={t(groups.isPending ? 'common.loading' : 'common.all')}
+          disabled={groups.isPending || Boolean(groups.error)}
+          options={(groups.data?.items ?? []).map((group) => ({
+            id: group.groupName,
+            name: group.groupName,
+          }))}
+        />
         <div>
           <label htmlFor="attendance-date-filter" className="mb-2 block text-sm font-medium">
             {t('attendance.date')}

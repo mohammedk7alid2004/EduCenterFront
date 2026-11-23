@@ -10,4 +10,5 @@ export const ATTENDANCE_FILTER_STATUSES = [
   ATTENDANCE_STATUS.present,
   ATTENDANCE_STATUS.late,
   ATTENDANCE_STATUS.excused,
+  ATTENDANCE_STATUS.absent,
 ] as const;

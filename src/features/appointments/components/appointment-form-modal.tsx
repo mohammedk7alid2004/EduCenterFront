@@ -134,7 +134,10 @@ function AppointmentForm({
     },
   });
   const subjectId = watch('subjectId');
+  const teacherId = watch('teacherId');
   const levelId = watch('levelId');
+  const gradeId = watch('gradeId');
+  const classroomId = watch('classroomId');
   const classroomCapacity = classrooms.data?.find(
     (option) => option.id === watch('classroomId'),
   )?.capacity;
@@ -223,6 +226,7 @@ function AppointmentForm({
           />
           <AppointmentSelect
             {...register('subjectId', { onChange: () => setValue('teacherId', '') })}
+            value={subjectId}
             label={t('appointments.fields.subject')}
             requiredAsterisk
             error={errors.subjectId?.message}
@@ -239,6 +243,7 @@ function AppointmentForm({
           />
           <AppointmentSelect
             {...register('teacherId')}
+            value={teacherId}
             label={t('appointments.fields.teacher')}
             requiredAsterisk
             error={errors.teacherId?.message}
@@ -260,6 +265,7 @@ function AppointmentForm({
                   setValue('maxCapacity', capacity, { shouldDirty: true, shouldValidate: true });
               },
             })}
+            value={classroomId}
             label={t('appointments.fields.classroom')}
             requiredAsterisk
             error={errors.classroomId?.message}
@@ -278,6 +284,7 @@ function AppointmentForm({
             {...register('levelId', {
               onChange: () => setValue('gradeId', '', { shouldDirty: true }),
             })}
+            value={levelId}
             label={t('appointments.fields.level')}
             requiredAsterisk
             error={errors.levelId?.message}
@@ -290,6 +297,7 @@ function AppointmentForm({
           />
           <AppointmentSelect
             {...register('gradeId')}
+            value={gradeId}
             label={t('appointments.fields.grade')}
             requiredAsterisk
             error={errors.gradeId?.message}
@@ -425,14 +433,24 @@ function AppointmentForm({
               />
             )}
           />
-          <AppointmentSelect
-            {...register('status', { valueAsNumber: true })}
-            label={t('common.status')}
-            error={errors.status?.message}
-            options={Object.entries(APPOINTMENT_STATUS).map(([key, value]) => ({
-              id: String(value),
-              name: t(`appointments.statuses.${key}`),
-            }))}
+          <Controller
+            name="status"
+            control={control}
+            render={({ field }) => (
+              <AppointmentSelect
+                ref={field.ref}
+                name={field.name}
+                value={field.value}
+                onBlur={field.onBlur}
+                onChange={(event) => field.onChange(Number(event.target.value))}
+                label={t('common.status')}
+                error={errors.status?.message}
+                options={Object.entries(APPOINTMENT_STATUS).map(([key, value]) => ({
+                  id: String(value),
+                  name: t(`appointments.statuses.${key}`),
+                }))}
+              />
+            )}
           />
           <div className="sm:col-span-2">
             <label htmlFor="appointment-notes" className="mb-2 block text-sm font-medium">
