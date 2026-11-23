@@ -17,85 +17,20 @@ interface StatCardProps {
   subtitle: string;
   route: string;
   icon: IconName;
-  colorScheme: 'teal' | 'purple' | 'amber' | 'blue' | 'emerald' | 'rose';
   loading: boolean;
 }
 
-const colorStyles = {
-  teal: {
-    iconBg: 'bg-primary/10 text-primary border-primary/20',
-    badgeBg: 'bg-primary/5 text-primary border-primary/10',
-    hoverBorder: 'hover:border-primary/50',
-    topGlow: 'bg-primary/5',
-  },
-  purple: {
-    iconBg: 'bg-calendarPurple/10 text-calendarPurple border-calendarPurple/20',
-    badgeBg: 'bg-calendarPurple/5 text-calendarPurple border-calendarPurple/10',
-    hoverBorder: 'hover:border-calendarPurple/50',
-    topGlow: 'bg-calendarPurple/5',
-  },
-  amber: {
-    iconBg: 'bg-accent/10 text-accent border-accent/20',
-    badgeBg: 'bg-accent/5 text-accent border-accent/10',
-    hoverBorder: 'hover:border-accent/50',
-    topGlow: 'bg-accent/5',
-  },
-  blue: {
-    iconBg: 'bg-info/10 text-info border-info/20',
-    badgeBg: 'bg-info/5 text-info border-info/10',
-    hoverBorder: 'hover:border-info/50',
-    topGlow: 'bg-info/5',
-  },
-  emerald: {
-    iconBg: 'bg-success/10 text-success border-success/20',
-    badgeBg: 'bg-success/5 text-success border-success/10',
-    hoverBorder: 'hover:border-success/50',
-    topGlow: 'bg-success/5',
-  },
-  rose: {
-    iconBg: 'bg-terracotta/10 text-terracotta border-terracotta/20',
-    badgeBg: 'bg-terracotta/5 text-terracotta border-terracotta/10',
-    hoverBorder: 'hover:border-terracotta/50',
-    topGlow: 'bg-terracotta/5',
-  },
-};
-
-function StatCard({
-  title,
-  count,
-  subtitle,
-  route,
-  icon,
-  colorScheme,
-  loading,
-}: StatCardProps): JSX.Element {
-  const { t } = useTranslation();
-  const styles = colorStyles[colorScheme];
-
+function StatCard({ title, count, subtitle, route, icon, loading }: StatCardProps): JSX.Element {
   return (
     <Link
       to={route}
-      className={`group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md ${styles.hoverBorder}`}
+      className="group flex min-h-36 flex-col justify-between rounded-xl border border-border bg-card p-4 transition hover:border-primary/40"
     >
-      <div
-        className={`pointer-events-none absolute -top-12 end-0 size-28 rounded-full blur-2xl ${styles.topGlow}`}
-      />
-
       <div className="flex items-start justify-between gap-3">
-        <span
-          className={`grid size-12 shrink-0 place-items-center rounded-xl border transition group-hover:scale-105 ${styles.iconBg}`}
-        >
-          <Icon name={icon} className="size-6" />
+        <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary">
+          <Icon name={icon} className="size-5" />
         </span>
-        <span
-          className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium transition ${styles.badgeBg}`}
-        >
-          <span>{t('pages.dashboard.open')}</span>
-          <Icon
-            name="arrowRight"
-            className="size-3 transition group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5"
-          />
-        </span>
+        <Icon name="arrowRight" className="size-4 text-muted rtl:rotate-180" />
       </div>
 
       <div className="mt-4">
@@ -146,7 +81,6 @@ export function DashboardStatsGrid(): JSX.Element {
       subtitle: t('pages.dashboard.activeStudents'),
       route: ROUTES.students,
       icon: 'students',
-      colorScheme: 'teal',
       loading: studentsQuery.isPending,
     },
     {
@@ -157,7 +91,6 @@ export function DashboardStatsGrid(): JSX.Element {
       subtitle: t('pages.dashboard.activeTeachers'),
       route: ROUTES.teachers,
       icon: 'graduationCap',
-      colorScheme: 'purple',
       loading: teachersQuery.isPending,
     },
     {
@@ -168,7 +101,6 @@ export function DashboardStatsGrid(): JSX.Element {
       subtitle: t('pages.dashboard.activeGroups'),
       route: ROUTES.groups,
       icon: 'users',
-      colorScheme: 'amber',
       loading: groupsQuery.isPending,
     },
     {
@@ -179,7 +111,6 @@ export function DashboardStatsGrid(): JSX.Element {
       subtitle: t('pages.dashboard.scheduledAppointments'),
       route: ROUTES.appointments,
       icon: 'clock',
-      colorScheme: 'blue',
       loading: appointmentsQuery.isPending,
     },
     {
@@ -190,7 +121,6 @@ export function DashboardStatsGrid(): JSX.Element {
       subtitle: t('pages.dashboard.recordedAttendance'),
       route: ROUTES.attendance,
       icon: 'listChecks',
-      colorScheme: 'emerald',
       loading: attendanceQuery.isPending,
     },
     {
@@ -201,7 +131,6 @@ export function DashboardStatsGrid(): JSX.Element {
       subtitle: t('pages.dashboard.availableClassrooms'),
       route: ROUTES.classrooms,
       icon: 'classroom',
-      colorScheme: 'rose',
       loading: classroomsQuery.isPending,
     },
   ];
@@ -209,7 +138,7 @@ export function DashboardStatsGrid(): JSX.Element {
   const visibleStats = stats.filter((s) => s.visible);
 
   return (
-    <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
+    <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
       {visibleStats.map(({ key, ...props }) => (
         <StatCard key={key} {...props} />
       ))}
