@@ -30,6 +30,13 @@ export function DashboardSidebar({
   useEffect(() => {
     setOpenGroup(activeGroup);
   }, [activeGroup]);
+  const toggleSection = (section: string): void => {
+    setOpenGroup((currentSection) => (currentSection === section ? null : section));
+  };
+  const handleNavigation = (): void => {
+    setOpenGroup(null);
+    onClose();
+  };
   return (
     <>
       {open && (
@@ -54,7 +61,7 @@ export function DashboardSidebar({
           <button
             type="button"
             aria-label={t('common.close')}
-            onClick={onClose}
+            onClick={handleNavigation}
             className="absolute end-3 top-3 lg:hidden"
           >
             <Icon name="close" className="size-5" />
@@ -66,7 +73,7 @@ export function DashboardSidebar({
         >
           <NavLink
             to={ROUTES.dashboard}
-            onClick={onClose}
+            onClick={handleNavigation}
             className="flex h-12 items-center gap-3 rounded-xl px-2 text-card hover:bg-card/5"
           >
             <Icon name="home" className="size-5" />
@@ -76,49 +83,47 @@ export function DashboardSidebar({
             title={t('nav.schedule')}
             icon="schedule"
             expanded={openGroup === SIDEBAR_GROUP.schedule}
-            onToggle={() =>
-              setOpenGroup(openGroup === SIDEBAR_GROUP.schedule ? null : SIDEBAR_GROUP.schedule)
-            }
+            onToggle={() => toggleSection(SIDEBAR_GROUP.schedule)}
           >
             {can(PERMISSIONS.appointments.read) && (
               <SidebarLink
                 route={ROUTES.appointments}
                 icon="clock"
                 label={t('nav.appointments')}
-                onClick={onClose}
+                onClick={handleNavigation}
               />
             )}
             <SidebarLink
               route={ROUTES.teachers}
               icon="teacher"
               label={t('nav.teachers')}
-              onClick={onClose}
+              onClick={handleNavigation}
             />
             {can(PERMISSIONS.groups.read) && (
               <SidebarLink
                 route={ROUTES.groups}
                 icon="users"
                 label={t('nav.groups')}
-                onClick={onClose}
+                onClick={handleNavigation}
               />
             )}
             <SidebarLink
               route={ROUTES.subjects}
               icon="graduationCap"
               label={t('nav.subjects')}
-              onClick={onClose}
+              onClick={handleNavigation}
             />
             <SidebarLink
               route={ROUTES.classrooms}
               icon="classroom"
               label={t('nav.classrooms')}
-              onClick={onClose}
+              onClick={handleNavigation}
             />
           </SidebarSection>
           {can(PERMISSIONS.students.read) && (
             <NavLink
               to={ROUTES.students}
-              onClick={onClose}
+              onClick={handleNavigation}
               className={({ isActive }) =>
                 `flex min-h-12 items-center gap-3 rounded-xl px-2 ${isActive ? 'bg-card text-primary' : 'text-card hover:bg-card/5'}`
               }
@@ -130,7 +135,7 @@ export function DashboardSidebar({
           {can(PERMISSIONS.attendance.read) && (
             <NavLink
               to={ROUTES.attendance}
-              onClick={onClose}
+              onClick={handleNavigation}
               className={({ isActive }) =>
                 `flex min-h-12 items-center gap-3 rounded-xl px-2 ${isActive ? 'bg-card text-primary' : 'text-card hover:bg-card/5'}`
               }
@@ -145,16 +150,14 @@ export function DashboardSidebar({
               title={t('nav.access')}
               icon="system"
               expanded={openGroup === SIDEBAR_GROUP.system}
-              onToggle={() =>
-                setOpenGroup(openGroup === SIDEBAR_GROUP.system ? null : SIDEBAR_GROUP.system)
-              }
+              onToggle={() => toggleSection(SIDEBAR_GROUP.system)}
             >
               {can(PERMISSIONS.roles.read) && (
                 <SidebarLink
                   route={ROUTES.roles}
                   icon="permission"
                   label={t('nav.roles')}
-                  onClick={onClose}
+                  onClick={handleNavigation}
                 />
               )}
               {can(PERMISSIONS.employees.read) && (
@@ -162,7 +165,7 @@ export function DashboardSidebar({
                   route={ROUTES.employees}
                   icon="users"
                   label={t('nav.employees')}
-                  onClick={onClose}
+                  onClick={handleNavigation}
                 />
               )}
             </SidebarSection>
@@ -170,7 +173,7 @@ export function DashboardSidebar({
           {can(PERMISSIONS.contactUs.read) && (
             <NavLink
               to={ROUTES.contactUs}
-              onClick={onClose}
+              onClick={handleNavigation}
               className={({ isActive }) =>
                 `flex min-h-12 items-center gap-3 rounded-xl px-2 ${isActive ? 'bg-card text-primary' : 'text-card hover:bg-card/5'}`
               }
@@ -182,7 +185,7 @@ export function DashboardSidebar({
           {SYSTEM_TABS.some((tab) => can(tab.read)) && (
             <NavLink
               to={ROUTES.systemManagement}
-              onClick={onClose}
+              onClick={handleNavigation}
               className={({ isActive }) =>
                 `flex min-h-12 items-center gap-3 rounded-xl px-2 text-sm ${isActive ? 'bg-subtle text-primary' : 'text-card hover:bg-card/5'}`
               }
