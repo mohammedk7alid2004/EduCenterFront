@@ -90,34 +90,34 @@ export function DashboardSidebar({
                 route={ROUTES.appointments}
                 icon="clock"
                 label={t('nav.appointments')}
-                onClick={handleNavigation}
+                onClick={onClose}
               />
             )}
             <SidebarLink
               route={ROUTES.teachers}
               icon="teacher"
               label={t('nav.teachers')}
-              onClick={handleNavigation}
+              onClick={onClose}
             />
             {can(PERMISSIONS.groups.read) && (
               <SidebarLink
                 route={ROUTES.groups}
                 icon="users"
                 label={t('nav.groups')}
-                onClick={handleNavigation}
+                onClick={onClose}
               />
             )}
             <SidebarLink
               route={ROUTES.subjects}
               icon="graduationCap"
               label={t('nav.subjects')}
-              onClick={handleNavigation}
+              onClick={onClose}
             />
             <SidebarLink
               route={ROUTES.classrooms}
               icon="classroom"
               label={t('nav.classrooms')}
-              onClick={handleNavigation}
+              onClick={onClose}
             />
           </SidebarSection>
           {can(PERMISSIONS.students.read) && (
@@ -157,7 +157,7 @@ export function DashboardSidebar({
                   route={ROUTES.roles}
                   icon="permission"
                   label={t('nav.roles')}
-                  onClick={handleNavigation}
+                  onClick={onClose}
                 />
               )}
               {can(PERMISSIONS.employees.read) && (
@@ -165,7 +165,7 @@ export function DashboardSidebar({
                   route={ROUTES.employees}
                   icon="users"
                   label={t('nav.employees')}
-                  onClick={handleNavigation}
+                  onClick={onClose}
                 />
               )}
             </SidebarSection>

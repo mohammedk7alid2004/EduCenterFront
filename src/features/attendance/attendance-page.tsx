@@ -20,8 +20,11 @@ export function AttendancePage(): JSX.Element {
   const statusValue = params.get(ATTENDANCE_FILTER_PARAMS.status) ?? '';
   const groupName = params.get(ATTENDANCE_FILTER_PARAMS.groupName) ?? '';
   const attendanceDate = params.get(ATTENDANCE_FILTER_PARAMS.date) ?? '';
-  const status = ATTENDANCE_FILTER_STATUSES.includes(Number(statusValue) as AttendanceStatus)
-    ? (Number(statusValue) as AttendanceStatus)
+  const selectedStatus = Number(statusValue);
+  const status = ATTENDANCE_FILTER_STATUSES.includes(
+    selectedStatus as (typeof ATTENDANCE_FILTER_STATUSES)[number],
+  )
+    ? (selectedStatus as AttendanceStatus)
     : undefined;
   const query = useAttendance({
     ...controls.filters,
