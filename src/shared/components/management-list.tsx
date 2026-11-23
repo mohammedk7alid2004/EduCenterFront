@@ -36,6 +36,7 @@ export function ManagementList(props: ManagementListProps): JSX.Element {
   const online = useOnline();
   const [filterOpen, setFilterOpen] = useState(false);
   const { controls, totalPages } = props;
+  const hasFilters = props.statusFilter !== false || Boolean(props.filterContent);
   const firstPage = Math.max(1, Math.min(controls.page - 2, totalPages - 4));
   useEffect(() => {
     if (!props.loading && !props.fetching && !props.error && controls.page > totalPages)
@@ -91,7 +92,7 @@ export function ManagementList(props: ManagementListProps): JSX.Element {
             className="h-[43px] w-full rounded-[10px] border border-muted bg-card pe-4 ps-10 text-xs shadow-sm outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/10"
           />
         </div>
-        {props.statusFilter !== false && (
+        {hasFilters && (
           <Button
             variant="ghost"
             aria-expanded={filterOpen}
@@ -107,22 +108,26 @@ export function ManagementList(props: ManagementListProps): JSX.Element {
       {filterOpen && (
         <div className="flex flex-wrap items-center gap-3 rounded-xl border border-border bg-subtle p-4">
           {props.filterContent && <div className="w-full">{props.filterContent}</div>}
-          <label htmlFor="status-filter" className="text-sm">
-            {t('common.status')}
-          </label>
-          <select
-            id="status-filter"
-            value={controls.status}
-            onChange={(event) => controls.setStatus(event.target.value)}
-            className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
-          >
-            <option value={STATUS_FILTER.all}>{t('common.all')}</option>
-            <option value={STATUS_FILTER.active}>{t('common.active')}</option>
-            <option value={STATUS_FILTER.inactive}>{t('common.inactive')}</option>
-          </select>
-          <Button variant="ghost" onClick={() => controls.setStatus(STATUS_FILTER.all)}>
-            {t('common.clearFilters')}
-          </Button>
+          {props.statusFilter !== false && (
+            <>
+              <label htmlFor="status-filter" className="text-sm">
+                {t('common.status')}
+              </label>
+              <select
+                id="status-filter"
+                value={controls.status}
+                onChange={(event) => controls.setStatus(event.target.value)}
+                className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
+              >
+                <option value={STATUS_FILTER.all}>{t('common.all')}</option>
+                <option value={STATUS_FILTER.active}>{t('common.active')}</option>
+                <option value={STATUS_FILTER.inactive}>{t('common.inactive')}</option>
+              </select>
+              <Button variant="ghost" onClick={() => controls.setStatus(STATUS_FILTER.all)}>
+                {t('common.clearFilters')}
+              </Button>
+            </>
+          )}
         </div>
       )}
       {!online && (

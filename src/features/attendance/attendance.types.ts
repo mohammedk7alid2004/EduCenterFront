@@ -13,7 +13,11 @@ export interface AttendanceDto {
   notes: string | null;
   attendanceDate: string;
 }
-export type AttendanceFilters = ListFilters;
+export interface AttendanceFilters extends ListFilters {
+  status?: AttendanceStatus;
+  attendanceDate?: string;
+  groupName?: string;
+}
 export interface AttendanceStudentOption {
   id: string;
   name: string;

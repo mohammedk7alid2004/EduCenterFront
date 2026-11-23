@@ -23,7 +23,9 @@ export async function fetchAttendance(
       {
         signal,
         params: {
-          Search: filters.name,
+          Search: filters.groupName || filters.name,
+          Status: filters.status,
+          AttendanceDate: filters.attendanceDate,
           PageNumber: filters.pageNumber,
           PageSize: filters.pageSize,
         },

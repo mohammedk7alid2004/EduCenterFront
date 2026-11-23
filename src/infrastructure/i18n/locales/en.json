@@ -846,6 +846,8 @@
     "phoneNumber": "Phone Number",
     "email": "Email",
     "group": "Group",
+    "groupName": "Group name",
+    "date": "Attendance date",
     "status": "Status",
     "selectStatus": "Select Status",
     "notes": "Notes",
