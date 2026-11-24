@@ -27,10 +27,15 @@ export interface AttendanceAppointmentOption {
   id: string;
   groupName: string;
   classroomName: string;
+  days: number[];
+}
+export interface AttendanceFormValues extends AttendanceValues {
+  sessionDay: string;
 }
 export interface AttendanceValues {
   studentId: string;
   appointmentId: string;
+  sessionDate: string;
   status: AttendanceStatus | '';
   notes: string;
 }
