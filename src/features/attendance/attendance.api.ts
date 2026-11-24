@@ -119,3 +119,27 @@ export async function recordAttendance(
     throw normalizeApiError(error);
   }
 }
+export async function exportAttendance(
+  filters: AttendanceFilters,
+  signal?: AbortSignal,
+): Promise<Blob> {
+  try {
+    const { data } = await apiClient.get<Blob>(endpoints.export, {
+      responseType: 'blob',
+      signal,
+      params: {
+        Search: filters.groupName || filters.name,
+        Status: filters.status,
+        AttendanceDate: filters.attendanceDate,
+      },
+    });
+    if (data.type.includes('json')) {
+      const result: ApiResult<unknown> = JSON.parse(await data.text());
+      assertApiSuccess(result);
+      throw new Error('errors.unknown');
+    }
+    return data;
+  } catch (error) {
+    throw normalizeApiError(error);
+  }
+}
