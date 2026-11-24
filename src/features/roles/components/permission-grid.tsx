@@ -45,7 +45,11 @@ export function PermissionGrid({
             [...groups].map(([group, entries]) => (
               <div key={group} className="rounded-2xl bg-permissionSurface p-3">
                 <h3 className="mb-6 text-base font-medium">
-                  {t(`permissionGroups.${group}`, { defaultValue: humanizePermission(group) })}
+                  {t(`permissionGroups.${group}`, {
+                    defaultValue: t(`permissionGroups.${group.replace(/\s+/g, '')}`, {
+                      defaultValue: humanizePermission(group),
+                    }),
+                  })}
                 </h3>
                 <div className="space-y-4">
                   {entries.map((permission) => {
@@ -53,7 +57,9 @@ export function PermissionGrid({
                       permission.permissionName.lastIndexOf('.') + 1,
                     );
                     const label = t(`permissionActions.${action}`, {
-                      defaultValue: humanizePermission(action),
+                      defaultValue: t(`permissionActions.${action.replace(/\s+/g, '')}`, {
+                        defaultValue: humanizePermission(action),
+                      }),
                     });
                     const active = selected.includes(permission.permissionId);
                     return (
