@@ -895,6 +895,7 @@
     "selectAppointmentFirst": "Select an appointment first",
     "sessionDate": "Lesson date",
     "sessionDateWrongDay": "The date is not on the selected lesson day.",
+    "statusLocked": "Attendance is already recorded for this lesson. The status is locked; you can only edit the notes.",
     "sessionDateFuture": "The date cannot be in the future.",
     "classroom": "Classroom",
     "classroomAuto": "Selected automatically from appointment",
