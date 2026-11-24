@@ -22,7 +22,7 @@ export function AppointmentsPage(): JSX.Element {
   const calendar = params.get(APPOINTMENT_PARAMS.view) !== APPOINTMENT_VIEW.list;
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<AppointmentDto | null>(null);
-  const [qrId, setQrId] = useState<string | null>(null);
+  const [qrTarget, setQrTarget] = useState<{ id: string; day?: number } | null>(null);
   const [viewing, setViewing] = useState<AppointmentDto | null>(null);
   const subject = params.get(APPOINTMENT_PARAMS.subject) ?? '';
   const teacher = params.get(APPOINTMENT_PARAMS.teacher) ?? '';
@@ -119,13 +119,17 @@ export function AppointmentsPage(): JSX.Element {
         }
       >
         {calendar ? (
-          <AppointmentsCalendar rows={query.data?.items ?? []} onView={setViewing} onQr={setQrId} />
+          <AppointmentsCalendar
+            rows={query.data?.items ?? []}
+            onView={setViewing}
+            onQr={(id, day) => setQrTarget({ id, day })}
+          />
         ) : (
           <AppointmentsTable
             rows={query.data?.items ?? []}
             startIndex={(controls.page - 1) * controls.pageSize}
             onView={setViewing}
-            onQr={setQrId}
+            onQr={(id, day) => setQrTarget({ id, day })}
             onEdit={(row) => {
               setEditing(row);
               setFormOpen(true);
@@ -136,7 +140,13 @@ export function AppointmentsPage(): JSX.Element {
       {formOpen && (
         <AppointmentFormModal appointment={editing} onClose={() => setFormOpen(false)} />
       )}
-      {qrId && <AppointmentQrModal id={qrId} onClose={() => setQrId(null)} />}
+      {qrTarget && (
+        <AppointmentQrModal
+          id={qrTarget.id}
+          initialDay={qrTarget.day}
+          onClose={() => setQrTarget(null)}
+        />
+      )}
       {viewing && <ViewAppointmentModal id={viewing.id} onClose={() => setViewing(null)} />}
     </>
   );

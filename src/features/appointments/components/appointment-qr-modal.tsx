@@ -6,23 +6,31 @@ import { useOnline } from '@/shared/hooks';
 import { Button, ErrorState, Icon, LoadingState, Modal } from '@/shared/components';
 import { useAppointment } from '../appointments.queries';
 import {
-  exportAllLecturesQr,
+  exportAllDaysQr,
   exportAppointmentQr,
   generateAppointmentQr,
 } from '../appointments-qr.lib';
-import {
-  appointmentLectureCount,
-  formatAppointmentTime,
-  localizedName,
-  upcomingAppointmentDates,
-} from '../appointments.lib';
+import { appointmentDayDate, formatAppointmentTime, localizedName } from '../appointments.lib';
+import { WEEK_DAYS } from '../appointments.constants';
 import type { AppointmentDto } from '../appointments.types';
+
+const DAY_NAMES_EN: Record<number, string> = {
+  0: 'sunday',
+  1: 'monday',
+  2: 'tuesday',
+  3: 'wednesday',
+  4: 'thursday',
+  5: 'friday',
+  6: 'saturday',
+};
 
 export function AppointmentQrModal({
   id,
+  initialDay,
   onClose,
 }: {
   id: string;
+  initialDay?: number;
   onClose: () => void;
 }): JSX.Element {
   const { t } = useTranslation();
@@ -42,58 +50,66 @@ export function AppointmentQrModal({
       </Modal>
     );
 
-  return <QrContent row={query.data} onClose={onClose} />;
+  return <QrContent row={query.data} initialDay={initialDay} onClose={onClose} />;
 }
 
-function QrContent({ row, onClose }: { row: AppointmentDto; onClose: () => void }): JSX.Element {
+function QrContent({
+  row,
+  initialDay,
+  onClose,
+}: {
+  row: AppointmentDto;
+  initialDay?: number;
+  onClose: () => void;
+}): JSX.Element {
   const { t, i18n } = useTranslation();
   const brand = useCenterBrand();
   const logoSource = brand.data?.navbarLogoUrl || undefined;
 
-  const totalLectures = useMemo(
-    () => appointmentLectureCount(row.days, row.iteration, row.numberOfIterations),
-    [row.days, row.iteration, row.numberOfIterations],
-  );
+  const sortedDays = useMemo(() => {
+    const list = row.days && row.days.length > 0 ? [...row.days] : [new Date().getDay()];
+    return list.sort(
+      (a, b) =>
+        WEEK_DAYS.indexOf(a as (typeof WEEK_DAYS)[number]) -
+        WEEK_DAYS.indexOf(b as (typeof WEEK_DAYS)[number]),
+    );
+  }, [row.days]);
 
-  const dates = useMemo(
-    () => upcomingAppointmentDates(row.days, totalLectures),
-    [row.days, totalLectures],
-  );
+  const [selectedDay, setSelectedDay] = useState<number>(() => {
+    if (initialDay !== undefined && sortedDays.includes(initialDay)) return initialDay;
+    const today = new Date().getDay();
+    if (sortedDays.includes(today)) return today;
+    return sortedDays[0];
+  });
 
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const activeIndex = Math.min(Math.max(selectedIndex, 0), Math.max(0, dates.length - 1));
+  const activeDay = sortedDays.includes(selectedDay) ? selectedDay : sortedDays[0];
 
-  const lectures = useMemo(() => {
+  const dayItems = useMemo(() => {
     const subject = localizedName(row.subject, i18n.language);
     const grade = row.gradeName ? localizedName(row.gradeName, i18n.language) : row.grade;
     const timeRange = `${formatAppointmentTime(row.startTime, i18n.language)} – ${formatAppointmentTime(row.endTime, i18n.language)}`;
-    const count = dates.length || 1;
 
-    return dates.map((date, index) => {
-      const lectureNumber = index + 1;
+    return sortedDays.map((dayNumber) => {
+      const dayName = t(`appointments.days.${dayNumber}`);
+      const date = appointmentDayDate(dayNumber);
       const formattedDate = new Intl.DateTimeFormat(i18n.language, {
         weekday: 'long',
         day: 'numeric',
         month: 'short',
         year: 'numeric',
       }).format(date);
-
-      const shortDate = new Intl.DateTimeFormat(i18n.language, {
-        weekday: 'short',
-        day: 'numeric',
-        month: 'short',
-      }).format(date);
+      const dayKey = DAY_NAMES_EN[dayNumber] || `day-${dayNumber}`;
 
       const labels = [
         row.teacher,
         [row.groupName, subject, grade].filter(Boolean).join(' · '),
-        `${t('appointments.qr.lectureOf', { current: lectureNumber, total: count })} · ${formattedDate} · ${timeRange}`,
+        `${dayName} (${formattedDate}) · ${timeRange}`,
       ];
 
       const entries = [
-        [t('appointments.qr.lecture'), `${lectureNumber} / ${count}`],
-        [t('appointments.qr.lectureDate'), formattedDate],
-        [t('common.id'), `${row.id}-L${lectureNumber}`],
+        [t('appointments.fields.days'), dayName],
+        [t('common.date'), formattedDate],
+        [t('common.id'), `${row.id}-day-${dayNumber}`],
         [t('appointments.fields.groupName'), row.groupName],
         [t('appointments.fields.teacher'), row.teacher],
         [t('appointments.fields.subject'), subject],
@@ -107,11 +123,10 @@ function QrContent({ row, onClose }: { row: AppointmentDto; onClose: () => void 
       ];
 
       return {
-        index,
-        lectureNumber,
-        date,
+        dayNumber,
+        dayName,
+        dayKey,
         formattedDate,
-        selectorLabel: `${t('appointments.qr.lectureNumber', { number: lectureNumber })} - ${shortDate}`,
         labels,
         payload: entries
           .filter(([, value]) => value)
@@ -119,9 +134,9 @@ function QrContent({ row, onClose }: { row: AppointmentDto; onClose: () => void 
           .join('\n'),
       };
     });
-  }, [row, dates, i18n.language, t]);
+  }, [row, sortedDays, i18n.language, t]);
 
-  const currentLecture = lectures[activeIndex] ?? lectures[0];
+  const currentItem = dayItems.find((item) => item.dayNumber === activeDay) ?? dayItems[0];
 
   const [image, setImage] = useState('');
   const [error, setError] = useState<Error | null>(null);
@@ -130,12 +145,12 @@ function QrContent({ row, onClose }: { row: AppointmentDto; onClose: () => void 
   const [exportError, setExportError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!currentLecture) return;
+    if (!currentItem) return;
     let cancelled = false;
     setImage('');
     setError(null);
 
-    void generateAppointmentQr(currentLecture.payload, undefined, logoSource)
+    void generateAppointmentQr(currentItem.payload, undefined, logoSource)
       .then((result) => {
         if (!cancelled) setImage(result);
       })
@@ -146,21 +161,21 @@ function QrContent({ row, onClose }: { row: AppointmentDto; onClose: () => void 
     return () => {
       cancelled = true;
     };
-  }, [currentLecture, retry, logoSource]);
+  }, [currentItem, retry, logoSource]);
 
   async function exportCurrent(format: 'png' | 'pdf') {
-    if (busy || !currentLecture) return;
+    if (busy || !currentItem) return;
     setBusy(format);
     setExportError(null);
     try {
       await exportAppointmentQr({
-        payload: currentLecture.payload,
-        labels: currentLecture.labels,
+        payload: currentItem.payload,
+        labels: currentItem.labels,
         id: row.id,
         language: i18n.language,
         format,
         logoSource,
-        lectureNumber: currentLecture.lectureNumber,
+        dayKey: currentItem.dayKey,
       });
     } catch {
       setExportError(new Error('appointments.qr.exportFailed'));
@@ -170,15 +185,14 @@ function QrContent({ row, onClose }: { row: AppointmentDto; onClose: () => void 
   }
 
   async function exportAll() {
-    if (busy || lectures.length === 0) return;
+    if (busy || dayItems.length === 0) return;
     setBusy('all');
     setExportError(null);
     try {
-      await exportAllLecturesQr({
-        lectures: lectures.map((l) => ({
-          payload: l.payload,
-          labels: l.labels,
-          lectureNumber: l.lectureNumber,
+      await exportAllDaysQr({
+        days: dayItems.map((item) => ({
+          payload: item.payload,
+          labels: item.labels,
         })),
         id: row.id,
         language: i18n.language,
@@ -204,55 +218,37 @@ function QrContent({ row, onClose }: { row: AppointmentDto; onClose: () => void 
         <LoadingState />
       ) : (
         <div className="flex flex-col items-center">
-          {lectures.length > 1 && (
-            <div className="mb-4 flex w-full max-w-sm items-center justify-between gap-2">
-              <button
-                type="button"
-                aria-label={t('appointments.qr.previousLecture')}
-                disabled={activeIndex === 0 || Boolean(busy)}
-                onClick={() => setSelectedIndex((prev) => Math.max(0, prev - 1))}
-                className="grid size-9 shrink-0 place-items-center rounded-full bg-iconSurface text-primary transition hover:bg-card disabled:cursor-not-allowed disabled:opacity-30"
-              >
-                <Icon name="chevronLeft" className="size-5 shrink-0 rtl:rotate-180" />
-              </button>
-
-              <div className="relative min-w-0 flex-1">
-                <select
-                  id="lecture-select"
-                  aria-label={t('appointments.qr.selectLecture')}
-                  value={activeIndex}
+          {dayItems.length > 1 && (
+            <div
+              role="tablist"
+              aria-label={t('appointments.fields.days')}
+              className="mb-5 flex flex-wrap justify-center gap-2"
+            >
+              {dayItems.map((item) => (
+                <button
+                  key={item.dayNumber}
+                  type="button"
+                  role="tab"
+                  aria-selected={item.dayNumber === activeDay}
                   disabled={Boolean(busy)}
-                  onChange={(event) => setSelectedIndex(Number(event.target.value))}
-                  className="h-9 w-full appearance-none rounded-xl border border-muted/60 bg-card pe-8 ps-3 text-center text-xs font-semibold text-foreground outline-none transition focus:border-primary sm:text-sm"
+                  onClick={() => setSelectedDay(item.dayNumber)}
+                  className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-semibold transition sm:text-sm ${
+                    item.dayNumber === activeDay
+                      ? 'bg-primary text-card shadow-sm'
+                      : 'bg-permissionSurface text-primary hover:bg-primary/10'
+                  }`}
                 >
-                  {lectures.map((item) => (
-                    <option key={item.lectureNumber} value={item.index}>
-                      {item.selectorLabel}
-                    </option>
-                  ))}
-                </select>
-                <Icon
-                  name="chevronDown"
-                  className="pointer-events-none absolute end-2.5 top-2.5 size-4 text-primary"
-                />
-              </div>
-
-              <button
-                type="button"
-                aria-label={t('appointments.qr.nextLecture')}
-                disabled={activeIndex >= lectures.length - 1 || Boolean(busy)}
-                onClick={() => setSelectedIndex((prev) => Math.min(lectures.length - 1, prev + 1))}
-                className="grid size-9 shrink-0 place-items-center rounded-full bg-iconSurface text-primary transition hover:bg-card disabled:cursor-not-allowed disabled:opacity-30"
-              >
-                <Icon name="chevronRight" className="size-5 shrink-0 rtl:rotate-180" />
-              </button>
+                  <Icon name="scheduleGrid" className="size-4" />
+                  <span>{item.dayName}</span>
+                </button>
+              ))}
             </div>
           )}
 
           <img
             src={image}
             alt={t('appointments.qr.alt', {
-              lecture: currentLecture.lectureNumber,
+              day: currentItem.dayName,
               name: row.groupName,
             })}
             width={320}
@@ -261,10 +257,7 @@ function QrContent({ row, onClose }: { row: AppointmentDto; onClose: () => void 
           />
 
           <span className="mt-3 rounded-full bg-permissionSurface px-3 py-1 text-xs font-semibold text-primary">
-            {t('appointments.qr.lectureOf', {
-              current: currentLecture.lectureNumber,
-              total: lectures.length,
-            })}
+            {t('appointments.qr.dayBarcode', { day: currentItem.dayName })}
           </span>
 
           <p className="mt-2 text-base font-bold text-foreground">{row.groupName}</p>
@@ -277,7 +270,7 @@ function QrContent({ row, onClose }: { row: AppointmentDto; onClose: () => void 
           </p>
 
           <p className="mt-1 text-center text-xs text-muted">
-            {currentLecture.formattedDate} · {formatAppointmentTime(row.startTime, i18n.language)} –{' '}
+            {currentItem.formattedDate} · {formatAppointmentTime(row.startTime, i18n.language)} –{' '}
             {formatAppointmentTime(row.endTime, i18n.language)}
           </p>
 
@@ -296,7 +289,7 @@ function QrContent({ row, onClose }: { row: AppointmentDto; onClose: () => void 
               onClick={() => void exportCurrent('png')}
             >
               <Icon name="imageFile" className="size-4" />
-              {t('appointments.qr.exportCurrentPng')}
+              {t('appointments.qr.exportDayPng')}
             </Button>
             <Button
               variant="ghost"
@@ -306,9 +299,9 @@ function QrContent({ row, onClose }: { row: AppointmentDto; onClose: () => void 
               onClick={() => void exportCurrent('pdf')}
             >
               <Icon name="pdfFile" className="size-4" />
-              {t('appointments.qr.exportCurrentPdf')}
+              {t('appointments.qr.exportDayPdf')}
             </Button>
-            {lectures.length > 1 && (
+            {dayItems.length > 1 && (
               <Button
                 className="rounded-xl px-5"
                 disabled={Boolean(busy)}
@@ -316,7 +309,7 @@ function QrContent({ row, onClose }: { row: AppointmentDto; onClose: () => void 
                 onClick={() => void exportAll()}
               >
                 <Icon name="download" className="size-4" />
-                {t('appointments.qr.exportAllPdf')}
+                {t('appointments.qr.exportAllDaysPdf')}
               </Button>
             )}
           </div>

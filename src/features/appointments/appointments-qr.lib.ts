@@ -125,7 +125,7 @@ export async function exportAppointmentQr({
   language,
   format,
   logoSource,
-  lectureNumber,
+  dayKey,
 }: {
   payload: string;
   labels: string[];
@@ -133,11 +133,11 @@ export async function exportAppointmentQr({
   language: string;
   format: 'png' | 'pdf';
   logoSource?: string;
-  lectureNumber?: number;
+  dayKey?: string;
 }): Promise<void> {
   const canvas = await renderAppointmentQrCanvas({ payload, labels, language, logoSource });
   const sanitizedId = id.replace(/[^a-zA-Z0-9-]/g, '');
-  const suffix = lectureNumber !== undefined ? `-lecture-${lectureNumber}` : '';
+  const suffix = dayKey ? `-${dayKey}` : '';
   const fileName = `appointment-${sanitizedId}${suffix}-qr.${format}`;
   if (format === QR_EXPORT_FORMAT.pdf) {
     const { jsPDF } = await import('jspdf');
@@ -160,25 +160,25 @@ export async function exportAppointmentQr({
   }
 }
 
-export async function exportAllLecturesQr({
-  lectures,
+export async function exportAllDaysQr({
+  days,
   id,
   language,
   logoSource,
 }: {
-  lectures: { payload: string; labels: string[]; lectureNumber: number }[];
+  days: { payload: string; labels: string[] }[];
   id: string;
   language: string;
   logoSource?: string;
 }): Promise<void> {
-  if (lectures.length === 0) return;
+  if (days.length === 0) return;
   const { jsPDF } = await import('jspdf');
   let pdf: InstanceType<typeof jsPDF> | null = null;
 
-  for (let i = 0; i < lectures.length; i++) {
+  for (let i = 0; i < days.length; i++) {
     const canvas = await renderAppointmentQrCanvas({
-      payload: lectures[i].payload,
-      labels: lectures[i].labels,
+      payload: days[i].payload,
+      labels: days[i].labels,
       language,
       logoSource,
     });
@@ -197,7 +197,7 @@ export async function exportAllLecturesQr({
 
   if (pdf) {
     const sanitizedId = id.replace(/[^a-zA-Z0-9-]/g, '');
-    const fileName = `appointment-${sanitizedId}-all-lectures.pdf`;
+    const fileName = `appointment-${sanitizedId}-all-days.pdf`;
     downloadBlob(pdf.output('blob'), fileName);
   }
 }

@@ -14,6 +14,15 @@ export function formatAppointmentTime(value: string, language: string, compact =
   }).format(date);
 }
 
+export function appointmentDayDate(dayOfWeek: number, from = new Date()): Date {
+  const cycleStart = new Date(from.getFullYear(), from.getMonth(), from.getDate());
+  cycleStart.setDate(cycleStart.getDate() - ((cycleStart.getDay() + 1) % 7));
+  const offset = (dayOfWeek + 1) % 7;
+  const date = new Date(cycleStart);
+  date.setDate(date.getDate() + offset);
+  return date;
+}
+
 export function appointmentLectureCount(
   days: number[],
   iteration: number,

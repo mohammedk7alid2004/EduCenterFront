@@ -38,7 +38,7 @@ export function AppointmentsCalendar<T extends CalendarAppointment>({
 }: {
   rows: T[];
   onView: (row: T) => void;
-  onQr: (id: string) => void;
+  onQr: (id: string, day?: number) => void;
 }): JSX.Element {
   const { t, i18n } = useTranslation();
   const can = usePermission();
@@ -173,7 +173,7 @@ export function AppointmentsCalendar<T extends CalendarAppointment>({
                               <button
                                 type="button"
                                 aria-label={t('appointments.qr.open', { name: row.groupName })}
-                                onClick={() => onQr(row.id)}
+                                onClick={() => onQr(row.id, day.getDay())}
                                 className="grid size-6 shrink-0 place-items-center rounded-md bg-permissionSurface text-primary"
                               >
                                 <Icon name="qrCode" className="size-3.5" />
@@ -269,7 +269,7 @@ export function AppointmentsCalendar<T extends CalendarAppointment>({
                         title={eventTitle(row)}
                         color={color(row.id)}
                         onView={onView}
-                        onQr={onQr}
+                        onQr={(id) => onQr(id, day.getDay())}
                         style={{
                           top:
                             ((timeMinutes(row.startTime) - firstHour * 60) / 60) *

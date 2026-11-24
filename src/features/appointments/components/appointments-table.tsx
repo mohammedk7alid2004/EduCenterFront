@@ -26,7 +26,7 @@ export function AppointmentsTable({
   startIndex?: number;
   onView: (row: AppointmentDto) => void;
   onEdit: (row: AppointmentDto) => void;
-  onQr: (id: string) => void;
+  onQr: (id: string, day?: number) => void;
 }): JSX.Element {
   const { t, i18n } = useTranslation();
   const can = usePermission();

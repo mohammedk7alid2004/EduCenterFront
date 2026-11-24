@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   appointmentCycleStartDate,
+  appointmentDayDate,
   appointmentLectureCount,
   calendarDates,
   layoutAppointments,
@@ -55,5 +56,14 @@ describe('appointment calendar', () => {
     const tuesday = new Date(2026, 10, 24);
     const start = appointmentCycleStartDate(tuesday);
     expect(start.getDay()).toBe(6);
+  });
+  it('maps day of week to date in the cycle', () => {
+    const tuesday = new Date(2026, 10, 24); // Tuesday Nov 24
+    const saturdayDate = appointmentDayDate(6, tuesday);
+    const tuesdayDate = appointmentDayDate(2, tuesday);
+    expect(saturdayDate.getDay()).toBe(6);
+    expect(tuesdayDate.getDay()).toBe(2);
+    expect(saturdayDate.getDate()).toBe(21);
+    expect(tuesdayDate.getDate()).toBe(24);
   });
 });
