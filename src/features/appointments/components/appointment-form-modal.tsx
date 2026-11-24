@@ -134,10 +134,7 @@ function AppointmentForm({
     },
   });
   const subjectId = watch('subjectId');
-  const teacherId = watch('teacherId');
   const levelId = watch('levelId');
-  const gradeId = watch('gradeId');
-  const classroomId = watch('classroomId');
   const classroomCapacity = classrooms.data?.find(
     (option) => option.id === watch('classroomId'),
   )?.capacity;
@@ -224,89 +221,137 @@ function AppointmentForm({
             error={errors.groupName?.message}
             placeholder={t('appointments.groupPlaceholder')}
           />
-          <AppointmentSelect
-            {...register('subjectId', { onChange: () => setValue('teacherId', '') })}
-            value={subjectId}
-            label={t('appointments.fields.subject')}
-            requiredAsterisk
-            error={errors.subjectId?.message}
-            disabled={subjects.isPending}
-            placeholder={t('appointments.selectPlaceholder')}
-            options={currentOption(
-              (subjects.data ?? []).map((option) => ({
-                id: option.id,
-                name: localizedName(option.name, i18n.language),
-              })),
-              appointment?.subjectId,
-              appointment && localizedName(appointment.subject, i18n.language),
+          <Controller
+            name="subjectId"
+            control={control}
+            render={({ field }) => (
+              <AppointmentSelect
+                ref={field.ref}
+                name={field.name}
+                value={field.value}
+                onBlur={field.onBlur}
+                onChange={(event) => {
+                  field.onChange(event);
+                  setValue('teacherId', '', { shouldDirty: true });
+                }}
+                label={t('appointments.fields.subject')}
+                requiredAsterisk
+                error={errors.subjectId?.message}
+                disabled={subjects.isPending}
+                placeholder={t('appointments.selectPlaceholder')}
+                options={currentOption(
+                  (subjects.data ?? []).map((option) => ({
+                    id: option.id,
+                    name: localizedName(option.name, i18n.language),
+                  })),
+                  appointment?.subjectId,
+                  appointment && localizedName(appointment.subject, i18n.language),
+                )}
+              />
             )}
           />
-          <AppointmentSelect
-            {...register('teacherId')}
-            value={teacherId}
-            label={t('appointments.fields.teacher')}
-            requiredAsterisk
-            error={errors.teacherId?.message}
-            disabled={!subjectId || teachers.isPending}
-            placeholder={t('appointments.selectTeacher')}
-            options={currentOption(
-              teachers.data ?? [],
-              subjectId === appointment?.subjectId ? appointment?.teacherId : undefined,
-              appointment?.teacher,
+          <Controller
+            name="teacherId"
+            control={control}
+            render={({ field }) => (
+              <AppointmentSelect
+                ref={field.ref}
+                name={field.name}
+                value={field.value}
+                onBlur={field.onBlur}
+                onChange={field.onChange}
+                label={t('appointments.fields.teacher')}
+                requiredAsterisk
+                error={errors.teacherId?.message}
+                disabled={!subjectId || teachers.isPending}
+                placeholder={t('appointments.selectTeacher')}
+                options={currentOption(
+                  teachers.data ?? [],
+                  subjectId === appointment?.subjectId ? appointment?.teacherId : undefined,
+                  appointment?.teacher,
+                )}
+              />
             )}
           />
-          <AppointmentSelect
-            {...register('classroomId', {
-              onChange: (event: React.ChangeEvent<HTMLSelectElement>) => {
-                const capacity = classrooms.data?.find(
-                  (option) => option.id === event.target.value,
-                )?.capacity;
-                if (typeof capacity === 'number' && capacity > 0)
-                  setValue('maxCapacity', capacity, { shouldDirty: true, shouldValidate: true });
-              },
-            })}
-            value={classroomId}
-            label={t('appointments.fields.classroom')}
-            requiredAsterisk
-            error={errors.classroomId?.message}
-            disabled={classrooms.isPending}
-            placeholder={t('appointments.selectPlaceholder')}
-            options={currentOption(
-              (classrooms.data ?? []).map((option) => ({
-                id: option.id,
-                name: localizedName(option.name, i18n.language),
-              })),
-              appointment?.classroomId,
-              appointment && localizedName(appointment.classroom, i18n.language),
+          <Controller
+            name="classroomId"
+            control={control}
+            render={({ field }) => (
+              <AppointmentSelect
+                ref={field.ref}
+                name={field.name}
+                value={field.value}
+                onBlur={field.onBlur}
+                onChange={(event) => {
+                  field.onChange(event);
+                  const capacity = classrooms.data?.find(
+                    (option) => option.id === event.target.value,
+                  )?.capacity;
+                  if (typeof capacity === 'number' && capacity > 0)
+                    setValue('maxCapacity', capacity, { shouldDirty: true, shouldValidate: true });
+                }}
+                label={t('appointments.fields.classroom')}
+                requiredAsterisk
+                error={errors.classroomId?.message}
+                disabled={classrooms.isPending}
+                placeholder={t('appointments.selectPlaceholder')}
+                options={currentOption(
+                  (classrooms.data ?? []).map((option) => ({
+                    id: option.id,
+                    name: localizedName(option.name, i18n.language),
+                  })),
+                  appointment?.classroomId,
+                  appointment && localizedName(appointment.classroom, i18n.language),
+                )}
+              />
             )}
           />
-          <AppointmentSelect
-            {...register('levelId', {
-              onChange: () => setValue('gradeId', '', { shouldDirty: true }),
-            })}
-            value={levelId}
-            label={t('appointments.fields.level')}
-            requiredAsterisk
-            error={errors.levelId?.message}
-            disabled={levels.isPending}
-            placeholder={t('appointments.selectPlaceholder')}
-            options={(levels.data ?? []).map((option) => ({
-              id: option.id,
-              name: localizedName(option.name, i18n.language),
-            }))}
+          <Controller
+            name="levelId"
+            control={control}
+            render={({ field }) => (
+              <AppointmentSelect
+                ref={field.ref}
+                name={field.name}
+                value={field.value}
+                onBlur={field.onBlur}
+                onChange={(event) => {
+                  field.onChange(event);
+                  setValue('gradeId', '', { shouldDirty: true });
+                }}
+                label={t('appointments.fields.level')}
+                requiredAsterisk
+                error={errors.levelId?.message}
+                disabled={levels.isPending}
+                placeholder={t('appointments.selectPlaceholder')}
+                options={(levels.data ?? []).map((option) => ({
+                  id: option.id,
+                  name: localizedName(option.name, i18n.language),
+                }))}
+              />
+            )}
           />
-          <AppointmentSelect
-            {...register('gradeId')}
-            value={gradeId}
-            label={t('appointments.fields.grade')}
-            requiredAsterisk
-            error={errors.gradeId?.message}
-            disabled={!levelId || grades.isPending}
-            placeholder={t('appointments.selectGrade')}
-            options={(grades.data ?? []).map((option) => ({
-              id: option.id,
-              name: localizedName(option.name, i18n.language),
-            }))}
+          <Controller
+            name="gradeId"
+            control={control}
+            render={({ field }) => (
+              <AppointmentSelect
+                ref={field.ref}
+                name={field.name}
+                value={field.value}
+                onBlur={field.onBlur}
+                onChange={field.onChange}
+                label={t('appointments.fields.grade')}
+                requiredAsterisk
+                error={errors.gradeId?.message}
+                disabled={!levelId || grades.isPending}
+                placeholder={t('appointments.selectGrade')}
+                options={(grades.data ?? []).map((option) => ({
+                  id: option.id,
+                  name: localizedName(option.name, i18n.language),
+                }))}
+              />
+            )}
           />
           <Controller
             name="startTime"
