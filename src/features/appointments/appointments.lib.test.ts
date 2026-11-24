@@ -1,5 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { calendarDates, layoutAppointments, timeMinutes } from './appointments.lib';
+import {
+  appointmentCycleStartDate,
+  appointmentLectureCount,
+  calendarDates,
+  layoutAppointments,
+  timeMinutes,
+  upcomingAppointmentDates,
+} from './appointments.lib';
 describe('appointment calendar', () => {
   it('starts weeks on Saturday and crosses month/year boundaries', () => {
     const dates = calendarDates(new Date(2027, 0, 1), 'weekly');
@@ -28,5 +35,25 @@ describe('appointment calendar', () => {
       [0, 1],
     ]);
     expect(timeMinutes('00:30:00')).toBe(30);
+  });
+  it('calculates total lecture counts based on iteration pattern and days', () => {
+    expect(appointmentLectureCount([0, 2], 1, 4)).toBe(8);
+    expect(appointmentLectureCount([1], 1, 4)).toBe(4);
+    expect(appointmentLectureCount([0, 2], 2, 1)).toBe(8);
+    expect(appointmentLectureCount([], 1, 5)).toBe(5);
+  });
+  it('generates correct upcoming appointment dates matching days of week', () => {
+    const saturday = new Date(2026, 10, 21); // Nov 21, 2026 is Saturday (6)
+    const dates = upcomingAppointmentDates([0, 2], 4, saturday);
+    expect(dates).toHaveLength(4);
+    expect(dates[0].getDay()).toBe(0); // Sunday Nov 22
+    expect(dates[1].getDay()).toBe(2); // Tuesday Nov 24
+    expect(dates[2].getDay()).toBe(0); // Sunday Nov 29
+    expect(dates[3].getDay()).toBe(2); // Tuesday Dec 1
+  });
+  it('rewinds cycle start date to Saturday', () => {
+    const tuesday = new Date(2026, 10, 24);
+    const start = appointmentCycleStartDate(tuesday);
+    expect(start.getDay()).toBe(6);
   });
 });

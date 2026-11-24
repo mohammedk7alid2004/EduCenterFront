@@ -58,21 +58,17 @@ export async function generateAppointmentQr(
   context.drawImage(logo, (size - width) / 2, (size - height) / 2, width, height);
   return canvas.toDataURL('image/png');
 }
-export async function exportAppointmentQr({
+export async function renderAppointmentQrCanvas({
   payload,
   labels,
-  id,
   language,
-  format,
   logoSource,
 }: {
   payload: string;
   labels: string[];
-  id: string;
   language: string;
-  format: 'png' | 'pdf';
   logoSource?: string;
-}): Promise<void> {
+}): Promise<HTMLCanvasElement> {
   await document.fonts.ready;
   const qr = new window.Image();
   qr.src = await generateAppointmentQr(payload, APPOINTMENT_QR.exportSize, logoSource);
@@ -119,7 +115,30 @@ export async function exportAppointmentQr({
       canvas.width - APPOINTMENT_QR.codeTop * 2,
     ),
   );
-  const fileName = `appointment-${id.replace(/[^a-zA-Z0-9-]/g, '')}-qr.${format}`;
+  return canvas;
+}
+
+export async function exportAppointmentQr({
+  payload,
+  labels,
+  id,
+  language,
+  format,
+  logoSource,
+  lectureNumber,
+}: {
+  payload: string;
+  labels: string[];
+  id: string;
+  language: string;
+  format: 'png' | 'pdf';
+  logoSource?: string;
+  lectureNumber?: number;
+}): Promise<void> {
+  const canvas = await renderAppointmentQrCanvas({ payload, labels, language, logoSource });
+  const sanitizedId = id.replace(/[^a-zA-Z0-9-]/g, '');
+  const suffix = lectureNumber !== undefined ? `-lecture-${lectureNumber}` : '';
+  const fileName = `appointment-${sanitizedId}${suffix}-qr.${format}`;
   if (format === QR_EXPORT_FORMAT.pdf) {
     const { jsPDF } = await import('jspdf');
     const pdf = new jsPDF({
@@ -138,5 +157,47 @@ export async function exportAppointmentQr({
       ),
     );
     downloadBlob(blob, fileName);
+  }
+}
+
+export async function exportAllLecturesQr({
+  lectures,
+  id,
+  language,
+  logoSource,
+}: {
+  lectures: { payload: string; labels: string[]; lectureNumber: number }[];
+  id: string;
+  language: string;
+  logoSource?: string;
+}): Promise<void> {
+  if (lectures.length === 0) return;
+  const { jsPDF } = await import('jspdf');
+  let pdf: InstanceType<typeof jsPDF> | null = null;
+
+  for (let i = 0; i < lectures.length; i++) {
+    const canvas = await renderAppointmentQrCanvas({
+      payload: lectures[i].payload,
+      labels: lectures[i].labels,
+      language,
+      logoSource,
+    });
+    if (!pdf) {
+      pdf = new jsPDF({
+        unit: 'px',
+        format: [canvas.width, canvas.height],
+        orientation: 'portrait',
+        compress: true,
+      });
+    } else {
+      pdf.addPage([canvas.width, canvas.height], 'portrait');
+    }
+    pdf.addImage(canvas, 'PNG', 0, 0, canvas.width, canvas.height);
+  }
+
+  if (pdf) {
+    const sanitizedId = id.replace(/[^a-zA-Z0-9-]/g, '');
+    const fileName = `appointment-${sanitizedId}-all-lectures.pdf`;
+    downloadBlob(pdf.output('blob'), fileName);
   }
 }

@@ -14,10 +14,42 @@ export function formatAppointmentTime(value: string, language: string, compact =
   }).format(date);
 }
 
-export function upcomingAppointmentDates(days: number[], count: number, from = new Date()): Date[] {
+export function appointmentLectureCount(
+  days: number[],
+  iteration: number,
+  numberOfIterations: number,
+): number {
+  const safeCount = Math.max(numberOfIterations || 1, 1);
+  const daysCount = Math.max(days?.length ?? 1, 1);
+  if (iteration === 1) {
+    return Math.max(1, safeCount * daysCount);
+  }
+  if (iteration === 2) {
+    return Math.max(1, safeCount * daysCount * 4);
+  }
+  return safeCount;
+}
+
+export function appointmentCycleStartDate(from = new Date()): Date {
+  const date = new Date(from.getFullYear(), from.getMonth(), from.getDate());
+  date.setDate(date.getDate() - ((date.getDay() + 1) % 7));
+  return date;
+}
+
+export function upcomingAppointmentDates(days: number[], count: number, from?: Date): Date[] {
+  const base = from ?? appointmentCycleStartDate();
+  const limit = Math.min(Math.max(count, 1), 100);
+  const cursor = new Date(base.getFullYear(), base.getMonth(), base.getDate());
+
+  if (!days || days.length === 0) {
+    return Array.from({ length: limit }, (_, i) => {
+      const date = new Date(cursor);
+      date.setDate(date.getDate() + i * 7);
+      return date;
+    });
+  }
+
   const selectedDays = new Set(days);
-  const limit = Math.min(Math.max(count, 1), 8);
-  const cursor = new Date(from.getFullYear(), from.getMonth(), from.getDate());
   const dates: Date[] = [];
 
   while (dates.length < limit) {

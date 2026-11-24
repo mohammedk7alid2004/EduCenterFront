@@ -5,14 +5,19 @@ import { useCenterBrand } from '@/features/system-management';
 import { useOnline } from '@/shared/hooks';
 import { Button, ErrorState, Icon, LoadingState, Modal } from '@/shared/components';
 import { useAppointment } from '../appointments.queries';
-import { exportAppointmentQr, generateAppointmentQr } from '../appointments-qr.lib';
 import {
-  localizedName,
+  exportAllLecturesQr,
+  exportAppointmentQr,
+  generateAppointmentQr,
+} from '../appointments-qr.lib';
+import {
+  appointmentLectureCount,
   formatAppointmentTime,
+  localizedName,
   upcomingAppointmentDates,
 } from '../appointments.lib';
-import { APPOINTMENT_ITERATION, QR_EXPORT_FORMAT } from '../appointments.constants';
 import type { AppointmentDto } from '../appointments.types';
+
 export function AppointmentQrModal({
   id,
   onClose,
@@ -23,6 +28,7 @@ export function AppointmentQrModal({
   const { t } = useTranslation();
   const query = useAppointment(id);
   const online = useOnline();
+
   if (!query.data)
     return (
       <Modal title={t('appointments.qr.title')} icon="qrCode" onClose={onClose}>
@@ -35,90 +41,147 @@ export function AppointmentQrModal({
         )}
       </Modal>
     );
+
   return <QrContent row={query.data} onClose={onClose} />;
 }
+
 function QrContent({ row, onClose }: { row: AppointmentDto; onClose: () => void }): JSX.Element {
   const { t, i18n } = useTranslation();
   const brand = useCenterBrand();
   const logoSource = brand.data?.navbarLogoUrl || undefined;
-  const [image, setImage] = useState('');
-  const [error, setError] = useState<Error | null>(null);
-  const [retry, setRetry] = useState(0);
-  const [busy, setBusy] = useState<'png' | 'pdf' | null>(null);
-  const [exportError, setExportError] = useState<Error | null>(null);
-  const data = useMemo(() => {
+
+  const totalLectures = useMemo(
+    () => appointmentLectureCount(row.days, row.iteration, row.numberOfIterations),
+    [row.days, row.iteration, row.numberOfIterations],
+  );
+
+  const dates = useMemo(
+    () => upcomingAppointmentDates(row.days, totalLectures),
+    [row.days, totalLectures],
+  );
+
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const activeIndex = Math.min(Math.max(selectedIndex, 0), Math.max(0, dates.length - 1));
+
+  const lectures = useMemo(() => {
     const subject = localizedName(row.subject, i18n.language);
     const grade = row.gradeName ? localizedName(row.gradeName, i18n.language) : row.grade;
-    const dates = upcomingAppointmentDates(row.days, row.numberOfIterations).map((date) =>
-      new Intl.DateTimeFormat(i18n.language, {
+    const timeRange = `${formatAppointmentTime(row.startTime, i18n.language)} – ${formatAppointmentTime(row.endTime, i18n.language)}`;
+    const count = dates.length || 1;
+
+    return dates.map((date, index) => {
+      const lectureNumber = index + 1;
+      const formattedDate = new Intl.DateTimeFormat(i18n.language, {
         weekday: 'long',
         day: 'numeric',
         month: 'short',
-      }).format(date),
-    );
-    const sessionDates = dates.join(' · ');
-    const labels = [row.teacher, [subject, grade].filter(Boolean).join(' · '), sessionDates];
-    const entries = [
-      [t('common.id'), row.id],
-      [t('appointments.fields.groupName'), row.groupName],
-      [t('appointments.fields.teacher'), row.teacher],
-      [t('appointments.fields.subject'), subject],
-      [t('appointments.fields.classroom'), localizedName(row.classroom, i18n.language)],
-      [
-        t('appointments.fields.level'),
-        row.levelName ? localizedName(row.levelName, i18n.language) : row.level,
-      ],
-      [t('appointments.fields.grade'), grade],
-      [
-        t('appointments.time'),
-        `${formatAppointmentTime(row.startTime, i18n.language)} – ${formatAppointmentTime(row.endTime, i18n.language)}`,
-      ],
-      [
-        t('appointments.fields.days'),
-        row.days.map((day) => t(`appointments.days.${day}`)).join(t('appointments.separator')),
-      ],
-      [
-        t('appointments.fields.iteration'),
-        t(
-          `appointments.iterations.${Object.entries(APPOINTMENT_ITERATION).find(([, value]) => value === row.iteration)?.[0]}`,
-        ),
-      ],
-      [t('appointments.fields.numberOfIterations'), String(row.numberOfIterations)],
-      [t('appointments.qr.sessionDates'), sessionDates],
-    ];
-    return {
-      labels,
-      payload: entries
-        .filter(([, value]) => value)
-        .map(([label, value]) => `${label}: ${value}`)
-        .join('\n'),
-    };
-  }, [row, i18n.language, t]);
+        year: 'numeric',
+      }).format(date);
+
+      const shortDate = new Intl.DateTimeFormat(i18n.language, {
+        weekday: 'short',
+        day: 'numeric',
+        month: 'short',
+      }).format(date);
+
+      const labels = [
+        row.teacher,
+        [row.groupName, subject, grade].filter(Boolean).join(' · '),
+        `${t('appointments.qr.lectureOf', { current: lectureNumber, total: count })} · ${formattedDate} · ${timeRange}`,
+      ];
+
+      const entries = [
+        [t('appointments.qr.lecture'), `${lectureNumber} / ${count}`],
+        [t('appointments.qr.lectureDate'), formattedDate],
+        [t('common.id'), `${row.id}-L${lectureNumber}`],
+        [t('appointments.fields.groupName'), row.groupName],
+        [t('appointments.fields.teacher'), row.teacher],
+        [t('appointments.fields.subject'), subject],
+        [t('appointments.fields.classroom'), localizedName(row.classroom, i18n.language)],
+        [
+          t('appointments.fields.level'),
+          row.levelName ? localizedName(row.levelName, i18n.language) : row.level,
+        ],
+        [t('appointments.fields.grade'), grade],
+        [t('appointments.time'), timeRange],
+      ];
+
+      return {
+        index,
+        lectureNumber,
+        date,
+        formattedDate,
+        selectorLabel: `${t('appointments.qr.lectureNumber', { number: lectureNumber })} - ${shortDate}`,
+        labels,
+        payload: entries
+          .filter(([, value]) => value)
+          .map(([label, value]) => `${label}: ${value}`)
+          .join('\n'),
+      };
+    });
+  }, [row, dates, i18n.language, t]);
+
+  const currentLecture = lectures[activeIndex] ?? lectures[0];
+
+  const [image, setImage] = useState('');
+  const [error, setError] = useState<Error | null>(null);
+  const [retry, setRetry] = useState(0);
+  const [busy, setBusy] = useState<'png' | 'pdf' | 'all' | null>(null);
+  const [exportError, setExportError] = useState<Error | null>(null);
+
   useEffect(() => {
+    if (!currentLecture) return;
     let cancelled = false;
     setImage('');
     setError(null);
-    void generateAppointmentQr(data.payload, undefined, logoSource)
+
+    void generateAppointmentQr(currentLecture.payload, undefined, logoSource)
       .then((result) => {
         if (!cancelled) setImage(result);
       })
       .catch(() => {
         if (!cancelled) setError(new Error('appointments.qr.generationFailed'));
       });
+
     return () => {
       cancelled = true;
     };
-  }, [data.payload, retry, logoSource]);
-  async function exportFile(format: 'png' | 'pdf') {
-    if (busy) return;
+  }, [currentLecture, retry, logoSource]);
+
+  async function exportCurrent(format: 'png' | 'pdf') {
+    if (busy || !currentLecture) return;
     setBusy(format);
     setExportError(null);
     try {
       await exportAppointmentQr({
-        ...data,
+        payload: currentLecture.payload,
+        labels: currentLecture.labels,
         id: row.id,
         language: i18n.language,
         format,
+        logoSource,
+        lectureNumber: currentLecture.lectureNumber,
+      });
+    } catch {
+      setExportError(new Error('appointments.qr.exportFailed'));
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  async function exportAll() {
+    if (busy || lectures.length === 0) return;
+    setBusy('all');
+    setExportError(null);
+    try {
+      await exportAllLecturesQr({
+        lectures: lectures.map((l) => ({
+          payload: l.payload,
+          labels: l.labels,
+          lectureNumber: l.lectureNumber,
+        })),
+        id: row.id,
+        language: i18n.language,
         logoSource,
       });
     } catch {
@@ -127,6 +190,7 @@ function QrContent({ row, onClose }: { row: AppointmentDto; onClose: () => void 
       setBusy(null);
     }
   }
+
   return (
     <Modal
       title={t('appointments.qr.title')}
@@ -140,43 +204,121 @@ function QrContent({ row, onClose }: { row: AppointmentDto; onClose: () => void 
         <LoadingState />
       ) : (
         <div className="flex flex-col items-center">
+          {lectures.length > 1 && (
+            <div className="mb-4 flex w-full max-w-sm items-center justify-between gap-2">
+              <button
+                type="button"
+                aria-label={t('appointments.qr.previousLecture')}
+                disabled={activeIndex === 0 || Boolean(busy)}
+                onClick={() => setSelectedIndex((prev) => Math.max(0, prev - 1))}
+                className="grid size-9 shrink-0 place-items-center rounded-full bg-iconSurface text-primary transition hover:bg-card disabled:cursor-not-allowed disabled:opacity-30"
+              >
+                <Icon name="chevronLeft" className="size-5 shrink-0 rtl:rotate-180" />
+              </button>
+
+              <div className="relative min-w-0 flex-1">
+                <select
+                  id="lecture-select"
+                  aria-label={t('appointments.qr.selectLecture')}
+                  value={activeIndex}
+                  disabled={Boolean(busy)}
+                  onChange={(event) => setSelectedIndex(Number(event.target.value))}
+                  className="h-9 w-full appearance-none rounded-xl border border-muted/60 bg-card pe-8 ps-3 text-center text-xs font-semibold text-foreground outline-none transition focus:border-primary sm:text-sm"
+                >
+                  {lectures.map((item) => (
+                    <option key={item.lectureNumber} value={item.index}>
+                      {item.selectorLabel}
+                    </option>
+                  ))}
+                </select>
+                <Icon
+                  name="chevronDown"
+                  className="pointer-events-none absolute end-2.5 top-2.5 size-4 text-primary"
+                />
+              </div>
+
+              <button
+                type="button"
+                aria-label={t('appointments.qr.nextLecture')}
+                disabled={activeIndex >= lectures.length - 1 || Boolean(busy)}
+                onClick={() => setSelectedIndex((prev) => Math.min(lectures.length - 1, prev + 1))}
+                className="grid size-9 shrink-0 place-items-center rounded-full bg-iconSurface text-primary transition hover:bg-card disabled:cursor-not-allowed disabled:opacity-30"
+              >
+                <Icon name="chevronRight" className="size-5 shrink-0 rtl:rotate-180" />
+              </button>
+            </div>
+          )}
+
           <img
             src={image}
-            alt={t('appointments.qr.alt', { name: row.groupName })}
+            alt={t('appointments.qr.alt', {
+              lecture: currentLecture.lectureNumber,
+              name: row.groupName,
+            })}
             width={320}
             height={320}
-            className="aspect-square w-64 max-w-full bg-qrPaper sm:w-72"
+            className="aspect-square w-64 max-w-full rounded-2xl bg-qrPaper shadow-sm sm:w-72"
           />
-          <div className="mt-3 flex flex-wrap justify-center gap-x-8 gap-y-2 text-center text-sm font-medium">
-            {data.labels.slice(0, 2).map((label, index) => (
-              <span key={index} className="max-w-full break-words">
-                {label}
-              </span>
-            ))}
-          </div>
-          <p className="mt-2 text-sm text-tableHeading">{row.groupName}</p>
-          <p className="mt-1 text-center text-xs text-muted">{data.labels[2]}</p>
+
+          <span className="mt-3 rounded-full bg-permissionSurface px-3 py-1 text-xs font-semibold text-primary">
+            {t('appointments.qr.lectureOf', {
+              current: currentLecture.lectureNumber,
+              total: lectures.length,
+            })}
+          </span>
+
+          <p className="mt-2 text-base font-bold text-foreground">{row.groupName}</p>
+
+          <p className="mt-1 text-center text-sm text-tableHeading">
+            {row.teacher} · {localizedName(row.subject, i18n.language)}
+            {row.grade
+              ? ` · ${row.gradeName ? localizedName(row.gradeName, i18n.language) : row.grade}`
+              : ''}
+          </p>
+
+          <p className="mt-1 text-center text-xs text-muted">
+            {currentLecture.formattedDate} · {formatAppointmentTime(row.startTime, i18n.language)} –{' '}
+            {formatAppointmentTime(row.endTime, i18n.language)}
+          </p>
+
           {exportError && (
             <p role="alert" className="mt-4 text-sm text-danger">
               {t(exportError.message)}
             </p>
           )}
-          <div className="mt-8 flex w-full flex-wrap justify-center gap-4">
-            {Object.values(QR_EXPORT_FORMAT).map((format) => (
+
+          <div className="mt-6 flex w-full flex-wrap justify-center gap-3">
+            <Button
+              variant="ghost"
+              className="rounded-xl border border-primary text-primary"
+              disabled={Boolean(busy)}
+              loading={busy === 'png'}
+              onClick={() => void exportCurrent('png')}
+            >
+              <Icon name="imageFile" className="size-4" />
+              {t('appointments.qr.exportCurrentPng')}
+            </Button>
+            <Button
+              variant="ghost"
+              className="rounded-xl border border-primary text-primary"
+              disabled={Boolean(busy)}
+              loading={busy === 'pdf'}
+              onClick={() => void exportCurrent('pdf')}
+            >
+              <Icon name="pdfFile" className="size-4" />
+              {t('appointments.qr.exportCurrentPdf')}
+            </Button>
+            {lectures.length > 1 && (
               <Button
-                key={format}
-                className="rounded-xl"
+                className="rounded-xl px-5"
                 disabled={Boolean(busy)}
-                loading={busy === format}
-                onClick={() => void exportFile(format)}
+                loading={busy === 'all'}
+                onClick={() => void exportAll()}
               >
-                {t(`appointments.qr.${format}`)}
-                <Icon
-                  name={format === QR_EXPORT_FORMAT.png ? 'imageFile' : 'pdfFile'}
-                  className="size-4"
-                />
+                <Icon name="download" className="size-4" />
+                {t('appointments.qr.exportAllPdf')}
               </Button>
-            ))}
+            )}
           </div>
         </div>
       )}
