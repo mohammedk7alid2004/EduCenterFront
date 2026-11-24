@@ -275,6 +275,7 @@
   },
   "teachers": {
     "title": "Teachers",
+    "export": "Export Excel",
     "create": "Add New Teacher",
     "search": "Search teachers…",
     "table": {
@@ -768,6 +769,7 @@
   },
   "students": {
     "title": "Students",
+    "export": "Export Excel",
     "description": "Manage student profiles, education levels and grades.",
     "create": "Add New Student",
     "studentName": "Student Name",

@@ -9,6 +9,7 @@ import {
   deleteStudents,
   toggleStudentStatus,
   fetchStudentEducation,
+  exportStudents,
 } from './students.api';
 import type { StudentDto, StudentFilters, StudentValues, StudentOption } from './students.types';
 export function useStudents(filters: StudentFilters, enabled = true) {
@@ -60,5 +61,10 @@ export function useToggleStudentStatus() {
     onSuccess: () => {
       void client.invalidateQueries({ queryKey: QUERY_KEYS.students });
     },
+  });
+}
+export function useStudentsExport() {
+  return useMutation<Blob, ApiError, StudentFilters>({
+    mutationFn: (filters) => exportStudents(filters),
   });
 }

@@ -30,6 +30,9 @@ export const PERMISSIONS = {
     delete: 'Students.Delete',
     toggleStatus: 'Students.ToggleStatus',
   },
+  teachers: {
+    read: 'Teachers.GetAll',
+  },
   contactUs: {
     read: 'ContactUs.ViewAll',
     detail: 'ContactUs.ShowOne',

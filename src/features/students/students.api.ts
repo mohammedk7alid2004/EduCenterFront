@@ -97,3 +97,26 @@ export async function fetchStudentEducation(
     throw normalizeApiError(error);
   }
 }
+export async function exportStudents(filters: StudentFilters, signal?: AbortSignal): Promise<Blob> {
+  try {
+    const { data } = await apiClient.get<Blob>(endpoints.export, {
+      responseType: 'blob',
+      signal,
+      params: {
+        Search: filters.name,
+        IsActive: filters.isActive,
+        EducationLevelId: filters.educationLevelId,
+        EducationGradeId: filters.educationGradeId,
+        Gender: filters.gender,
+      },
+    });
+    if (data.type.includes('json')) {
+      const result: ApiResult<unknown> = JSON.parse(await data.text());
+      assertApiSuccess(result);
+      throw new Error('errors.unknown');
+    }
+    return data;
+  } catch (error) {
+    throw normalizeApiError(error);
+  }
+}

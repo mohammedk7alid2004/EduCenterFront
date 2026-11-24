@@ -46,6 +46,7 @@ export const API_ENDPOINTS = {
     update: '/v1/Students',
     delete: '/v1/Students',
     toggleStatus: (id: string) => `/v1/Students/toggle-status/${encodeURIComponent(id)}`,
+    export: '/v1/Students/ExportExcel',
     levels: '/v1/select-menu/GetEducationLevels',
     grades: '/v1/select-menu/GetEducationGrades',
   },
@@ -124,6 +125,7 @@ export const API_ENDPOINTS = {
     update: '/v1/Teachers',
     delete: '/v1/Teachers',
     toggleStatus: (id: string) => `/v1/Teachers/toggle-status/${id}`,
+    export: '/v1/Teachers/ExportExcel',
   },
   groups: {
     getAll: '/v1/Appointments/GetAll',

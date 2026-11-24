@@ -107,3 +107,27 @@ export async function toggleTeacherStatus(id: string, signal?: AbortSignal): Pro
     throw normalizeApiError(error);
   }
 }
+
+export async function exportTeachers(filters: TeacherFilters, signal?: AbortSignal): Promise<Blob> {
+  try {
+    const params: Record<string, string | number | boolean> = {};
+    if (filters.name) params['Name'] = filters.name;
+    if (filters.email) params['Email'] = filters.email;
+    if (filters.phoneNumber) params['PhoneNumber'] = filters.phoneNumber;
+    if (filters.subjectId) params['SubjectId'] = filters.subjectId;
+    if (filters.isActive !== undefined) params['IsActive'] = filters.isActive;
+    const { data } = await apiClient.get<Blob>(API_ENDPOINTS.teachers.export, {
+      responseType: 'blob',
+      params,
+      signal,
+    });
+    if (data.type.includes('json')) {
+      const result: ApiResult<unknown> = JSON.parse(await data.text());
+      assertApiSuccess(result);
+      throw new Error('errors.unknown');
+    }
+    return data;
+  } catch (error) {
+    throw normalizeApiError(error);
+  }
+}

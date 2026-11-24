@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
+import { toast } from 'sonner';
 import { LIST_PARAMS, PERMISSIONS } from '@/config';
 import { usePermission } from '@/infrastructure/auth';
-import { useListControls } from '@/shared/hooks';
-import { ManagementList } from '@/shared/components';
-import { useStudents } from './students.queries';
+import { useListControls, useOnline } from '@/shared/hooks';
+import { Button, Icon, ManagementList } from '@/shared/components';
+import { downloadBlob } from '@/shared/utils';
+import { useStudents, useStudentsExport } from './students.queries';
 import { STUDENT_FILTER_PARAMS, STUDENT_GENDER } from './students.constants';
 import type { StudentDto } from './students.types';
 import { StudentFilters } from './components/student-filters';
@@ -15,6 +17,7 @@ import { ViewStudentModal } from './components/view-student-modal';
 export function StudentsPage(): JSX.Element {
   const { t } = useTranslation();
   const controls = useListControls();
+  const online = useOnline();
   const [params, setParams] = useSearchParams();
   const level = params.get(STUDENT_FILTER_PARAMS.level) ?? '';
   const grade = level ? (params.get(STUDENT_FILTER_PARAMS.grade) ?? '') : '';
@@ -22,12 +25,14 @@ export function StudentsPage(): JSX.Element {
     Object.values(STUDENT_GENDER).find(
       (value) => value === params.get(STUDENT_FILTER_PARAMS.gender),
     ) ?? '';
-  const query = useStudents({
+  const filters = {
     ...controls.filters,
     educationLevelId: level || undefined,
     educationGradeId: grade || undefined,
     gender: gender || undefined,
-  });
+  };
+  const query = useStudents(filters);
+  const exporter = useStudentsExport();
   const can = usePermission();
   const [editing, setEditing] = useState<StudentDto | null>(null);
   const [formOpen, setFormOpen] = useState(false);
@@ -76,6 +81,27 @@ export function StudentsPage(): JSX.Element {
               })
             }
           />
+        }
+        searchActions={
+          can(PERMISSIONS.students.read) ? (
+            <Button
+              type="button"
+              variant="ghost"
+              className="h-[43px] rounded-xl border border-primary/20 bg-card text-primary"
+              disabled={!online || exporter.isPending}
+              loading={exporter.isPending}
+              onClick={() =>
+                exporter.mutate(filters, {
+                  onSuccess: (file) => downloadBlob(file, 'Students.xlsx'),
+                  onError: (error) =>
+                    toast.error(t(error.message, { defaultValue: error.message })),
+                })
+              }
+            >
+              <Icon name="download" className="size-4" />
+              {t('students.export')}
+            </Button>
+          ) : undefined
         }
       >
         <StudentsTable

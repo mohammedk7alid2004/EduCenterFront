@@ -8,6 +8,7 @@ import {
   fetchTeacher,
   fetchTeachers,
   toggleTeacherStatus,
+  exportTeachers,
   updateTeacher,
 } from './teachers.api';
 import type {
@@ -74,5 +75,11 @@ export function useToggleTeacherStatus() {
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: QUERY_KEYS.teachers });
     },
+  });
+}
+
+export function useTeachersExport() {
+  return useMutation<Blob, ApiError, TeacherFilters>({
+    mutationFn: (filters) => exportTeachers(filters),
   });
 }
