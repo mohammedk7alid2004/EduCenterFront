@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -19,6 +19,7 @@ import {
   useAttendanceAppointmentOptions,
   useAttendanceStudents,
   useRecordAttendance,
+  useRecordedAttendance,
 } from '../attendance.queries';
 export function AttendanceFormModal({ onClose }: { onClose: () => void }): JSX.Element {
   const { t } = useTranslation();
@@ -73,6 +74,21 @@ export function AttendanceFormModal({ onClose }: { onClose: () => void }): JSX.E
   );
   const appointmentField = register('appointmentId');
   const sessionDayField = register('sessionDay');
+  const selectedSessionDate = watch('sessionDate');
+  const recorded = useRecordedAttendance(selectedStudentId, selectedAppointmentId, selectedSessionDate);
+  const lockedRecord = recorded.data?.isStatusLocked ? recorded.data : null;
+  const wasLocked = useRef(false);
+  useEffect(() => {
+    if (lockedRecord) {
+      wasLocked.current = true;
+      setValue('status', lockedRecord.status);
+      setValue('notes', lockedRecord.notes ?? '');
+    } else if (wasLocked.current) {
+      wasLocked.current = false;
+      setValue('status', '');
+      setValue('notes', '');
+    }
+  }, [lockedRecord?.id, lockedRecord?.status, lockedRecord?.notes, Boolean(lockedRecord)]); // eslint-disable-line react-hooks/exhaustive-deps
   const selectedSessionDay = watch('sessionDay');
   if (success)
     return (
@@ -204,17 +220,24 @@ export function AttendanceFormModal({ onClose }: { onClose: () => void }): JSX.E
               }
               placeholder={t('attendance.classroomAuto')}
             />
-            <Select
-              {...register('status')}
-              label={t('attendance.status')}
-              requiredAsterisk
-              error={errors.status?.message}
-              options={Object.entries(ATTENDANCE_STATUS).map(([key, value]) => ({
-                id: String(value),
-                name: t(`attendance.statuses.${key}`),
-              }))}
-              placeholder={t('attendance.selectStatus')}
-            />
+            <fieldset disabled={Boolean(lockedRecord)} className="contents">
+              <Select
+                {...register('status')}
+                label={t('attendance.status')}
+                requiredAsterisk
+                error={errors.status?.message}
+                options={Object.entries(ATTENDANCE_STATUS).map(([key, value]) => ({
+                  id: String(value),
+                  name: t(`attendance.statuses.${key}`),
+                }))}
+                placeholder={t('attendance.selectStatus')}
+              />
+            </fieldset>
+            {lockedRecord && (
+              <p className="text-xs opacity-70 sm:col-span-2">
+                {t('attendance.statusLocked')}
+              </p>
+            )}
             <div className="sm:col-span-2">
               <label htmlFor="attendance-notes" className="mb-2 block text-sm font-medium">
                 {t('attendance.notes')}

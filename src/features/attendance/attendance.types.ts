@@ -29,6 +29,12 @@ export interface AttendanceAppointmentOption {
   classroomName: string;
   days: number[];
 }
+export interface RecordedAttendance {
+  id: string;
+  status: AttendanceStatus;
+  notes: string | null;
+  isStatusLocked: boolean;
+}
 export interface AttendanceFormValues extends AttendanceValues {
   sessionDay: string;
 }

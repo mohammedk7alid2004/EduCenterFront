@@ -895,6 +895,7 @@
     "selectAppointmentFirst": "اختر الموعد أولاً",
     "sessionDate": "تاريخ الحصة",
     "sessionDateWrongDay": "التاريخ لا يوافق يوم الحصة المختار.",
+    "statusLocked": "تم تسجيل الحضور لهذه الحصة بالفعل. الحالة مقفولة ويمكنك تعديل الملاحظات فقط.",
     "sessionDateFuture": "لا يمكن اختيار تاريخ في المستقبل.",
     "classroom": "القاعة",
     "classroomAuto": "تُحدد تلقائيًا حسب الموعد",

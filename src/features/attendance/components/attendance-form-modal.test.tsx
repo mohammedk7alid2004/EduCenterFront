@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import '@/infrastructure/i18n';
-import { recordAttendance } from '../attendance.api';
+import { fetchRecordedAttendance, recordAttendance } from '../attendance.api';
 import { AttendanceFormModal } from './attendance-form-modal';
 
 vi.mock('../attendance.api', () => ({
@@ -14,6 +14,7 @@ vi.mock('../attendance.api', () => ({
     { id: 'g1', groupName: 'G1', classroomName: 'Room A', days: [0, 2] },
     { id: 'g2', groupName: 'G2', classroomName: 'Room B', days: [1] },
   ]),
+  fetchRecordedAttendance: vi.fn().mockResolvedValue(null),
   recordAttendance: vi.fn().mockResolvedValue(undefined),
 }));
 
@@ -122,5 +123,47 @@ describe('attendance form lesson day', () => {
     await user.click(submit());
     await waitFor(() => expect(screen.getAllByText(/required/i).length).toBeGreaterThan(0));
     expect(recordAttendance).not.toHaveBeenCalled();
+  });
+
+  it('shows the server message and keeps the form open when the status is locked', async () => {
+    vi.mocked(recordAttendance).mockRejectedValueOnce(
+      new Error('Attendance is already recorded for this lesson. The status cannot be changed.'),
+    );
+    const user = userEvent.setup();
+    renderModal();
+    await pickStudentAndGroup(user, 'g1');
+    await user.selectOptions(selects()[2], '2');
+    await user.selectOptions(selects()[4], '2');
+    await user.click(submit());
+    await waitFor(() => expect(screen.getByText(/status cannot be changed/)).toBeTruthy());
+    expect(submit()).toBeTruthy();
+  });
+
+  it('locks the status and keeps the notes editable when the lesson is already recorded', async () => {
+    vi.mocked(fetchRecordedAttendance).mockResolvedValue({
+      id: 'r1',
+      status: 3,
+      notes: 'old note',
+      isStatusLocked: true,
+    });
+    const user = userEvent.setup();
+    renderModal();
+    await pickStudentAndGroup(user, 'g1');
+    await user.selectOptions(selects()[2], '2');
+    await waitFor(() => expect(selects()[4].value).toBe('3'));
+    expect(selects()[4].closest('fieldset')?.disabled).toBe(true);
+    const notes = document.querySelector('textarea') as HTMLTextAreaElement;
+    expect(notes.value).toBe('old note');
+    expect(notes.disabled).toBe(false);
+    await user.clear(notes);
+    await user.type(notes, 'new note');
+    await user.click(submit());
+    await waitFor(() => expect(recordAttendance).toHaveBeenCalled());
+    expect(vi.mocked(recordAttendance).mock.calls[0][0]).toMatchObject({
+      status: 3,
+      notes: 'new note',
+      sessionDate: '2026-11-24',
+    });
+    vi.mocked(fetchRecordedAttendance).mockResolvedValue(null);
   });
 });
