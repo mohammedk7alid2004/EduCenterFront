@@ -11,6 +11,7 @@ export interface ProfileDto {
 export interface ProfileValues {
   fullName: string;
   phoneNumber: string;
+  gender: string;
   image?: File;
 }
 export interface ChangePasswordValues {

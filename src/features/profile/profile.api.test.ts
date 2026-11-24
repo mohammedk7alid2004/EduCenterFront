@@ -14,6 +14,7 @@ describe('profile API contracts', () => {
     const values = {
       fullName: ' Name ',
       phoneNumber: ' +201012345678 ',
+      gender: 'Male',
       image,
       email: 'must-not-be-sent@example.com',
     };
@@ -25,14 +26,16 @@ describe('profile API contracts', () => {
     expect(form.get('FullName')).toBe('Name');
     expect(form.get('PhoneNumber')).toBe('+201012345678');
     expect(form.get('Image')).toBe(image);
-    expect([...form.keys()]).toEqual(['FullName', 'PhoneNumber', 'Image']);
+    expect(form.get('Gender')).toBe('Male');
+    expect([...form.keys()]).toEqual(['FullName', 'PhoneNumber', 'Gender', 'Image']);
     expect(config).toEqual({ signal });
   });
   it('does not send an absent phone or image as an empty replacement', async () => {
     vi.mocked(apiClient.put).mockResolvedValue({ data: { isSuccess: true, data: true } });
-    await updateProfile({ fullName: 'Name', phoneNumber: '' });
+    await updateProfile({ fullName: 'Name', phoneNumber: '', gender: 'Female' });
     expect([...(vi.mocked(apiClient.put).mock.calls[0][1] as FormData).keys()]).toEqual([
       'FullName',
+      'Gender',
     ]);
   });
   it('loads the authenticated profile without a user id parameter', async () => {

@@ -4,10 +4,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { Button, Icon, Input, Modal } from '@/shared/components';
+import { Button, Icon, Input, Modal, Select } from '@/shared/components';
 import { useOnline } from '@/shared/hooks';
 import { setServerErrors } from '@/shared/utils';
-import { PROFILE_IMAGE, PROFILE_PHONE_PATTERN } from '../profile.constants';
+import { PROFILE_GENDER_OPTIONS, PROFILE_IMAGE, PROFILE_PHONE_PATTERN } from '../profile.constants';
 import type { ProfileDto, ProfileValues } from '../profile.types';
 import { useUpdateProfile } from '../profile.queries';
 import { ProfileAvatar } from './profile-avatar';
@@ -35,6 +35,7 @@ export function ProfileForm({
       .trim()
       .refine((value) => !value || PROFILE_PHONE_PATTERN.test(value), t('profile.validation.phone'))
       .refine((value) => !profile.phone || Boolean(value), t('validation.required')),
+    gender: z.string().min(1, t('validation.required')),
     image: z
       .instanceof(File)
       .optional()
@@ -57,7 +58,11 @@ export function ProfileForm({
     formState: { errors },
   } = useForm<ProfileValues>({
     resolver: zodResolver(schema),
-    defaultValues: { fullName: profile.fullName, phoneNumber: profile.phone ?? '' },
+    defaultValues: {
+      fullName: profile.fullName,
+      phoneNumber: profile.phone ?? '',
+      gender: profile.gender,
+    },
   });
   const image = useWatch({ control, name: 'image' });
   useEffect(() => {
@@ -83,7 +88,11 @@ export function ProfileForm({
           if (online)
             mutation.mutate(values, {
               onSuccess: () => {
-                reset({ fullName: values.fullName.trim(), phoneNumber: values.phoneNumber.trim() });
+                reset({
+                  fullName: values.fullName.trim(),
+                  phoneNumber: values.phoneNumber.trim(),
+                  gender: values.gender,
+                });
                 if (upload.current) upload.current.value = '';
                 toast.success(t('profile.saved'));
                 onClose();
@@ -168,6 +177,23 @@ export function ProfileForm({
             readOnly
             type="email"
             helperText={t('profile.emailReadOnly')}
+          />
+          <Input
+            id="profile-role"
+            label={t('profile.role')}
+            value={profile.role}
+            readOnly
+            helperText={t('profile.roleReadOnly')}
+          />
+          <Select
+            {...register('gender')}
+            label={t('profile.gender')}
+            requiredAsterisk
+            options={PROFILE_GENDER_OPTIONS.map((option) => ({
+              id: option.id,
+              name: t(option.translationKey),
+            }))}
+            error={errors.gender?.message}
           />
         </fieldset>
         <div className="mt-8 flex justify-end">

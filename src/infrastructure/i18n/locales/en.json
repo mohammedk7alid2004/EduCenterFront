@@ -482,6 +482,13 @@
     "phone": "Phone Number",
     "email": "Email",
     "emailReadOnly": "Your email address cannot be changed here.",
+    "role": "Role",
+    "roleReadOnly": "Your role is managed by the center administrator.",
+    "gender": "Gender",
+    "genders": {
+      "male": "Male",
+      "female": "Female"
+    },
     "image": "Profile Image",
     "imageHelp": "JPG, PNG or WebP, up to 10 MB.",
     "saved": "Profile updated successfully.",

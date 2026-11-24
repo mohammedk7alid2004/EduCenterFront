@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { ROUTES } from '@/config';
 import { Button, DetailField, ErrorState, LoadingState, Icon } from '@/shared/components';
 import { useProfile } from './profile.queries';
-import { PROFILE_DIALOG } from './profile.constants';
+import { PROFILE_DIALOG, PROFILE_GENDER_OPTIONS } from './profile.constants';
 import { ProfileAvatar } from './components/profile-avatar';
 import { ProfileForm } from './components/profile-form';
 import { ChangePasswordForm } from './components/change-password-form';
@@ -16,6 +16,11 @@ export function ProfilePage(): JSX.Element {
     null,
   );
   const profile = query.data;
+  const genderOption = profile
+    ? PROFILE_GENDER_OPTIONS.find(
+        (option) => option.id.toLowerCase() === profile.gender.toLowerCase(),
+      )
+    : undefined;
   return (
     <section className="flex flex-1 flex-col gap-6 pb-6">
       <div className="flex items-center gap-4">
@@ -81,6 +86,14 @@ export function ProfilePage(): JSX.Element {
               </DetailField>
               <DetailField label={t('profile.phone')}>
                 <bdi>{profile.phone || t('common.noValue')}</bdi>
+              </DetailField>
+              <DetailField label={t('profile.role')}>
+                {profile.role || t('common.noValue')}
+              </DetailField>
+              <DetailField label={t('profile.gender')}>
+                {genderOption
+                  ? t(genderOption.translationKey)
+                  : profile.gender || t('common.noValue')}
               </DetailField>
             </dl>
           </div>

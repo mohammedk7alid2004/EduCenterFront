@@ -22,6 +22,7 @@ export async function updateProfile(values: ProfileValues, signal?: AbortSignal)
   const form = new FormData();
   form.append('FullName', values.fullName.trim());
   if (values.phoneNumber.trim()) form.append('PhoneNumber', values.phoneNumber.trim());
+  form.append('Gender', values.gender);
   if (values.image) form.append('Image', values.image);
   try {
     const { data } = await apiClient.put<ApiResult<boolean>>(

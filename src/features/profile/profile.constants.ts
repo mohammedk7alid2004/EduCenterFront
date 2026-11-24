@@ -7,3 +7,13 @@ export const PROFILE_PHONE_PATTERN = /^\+?[0-9]{8,15}$/;
 export const PASSWORD_SPECIAL_PATTERN = /[!@#$%^&*()[\]{}\-_+=~`|:;"'<>,./?\\]/;
 
 export const PROFILE_DIALOG = { edit: 'edit', password: 'password' } as const;
+
+export const PROFILE_GENDER = {
+  male: 'Male',
+  female: 'Female',
+} as const;
+
+export const PROFILE_GENDER_OPTIONS = [
+  { id: PROFILE_GENDER.male, translationKey: 'profile.genders.male' },
+  { id: PROFILE_GENDER.female, translationKey: 'profile.genders.female' },
+] as const;
