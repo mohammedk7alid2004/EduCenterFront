@@ -123,4 +123,18 @@ describe('attendance form lesson day', () => {
     await waitFor(() => expect(screen.getAllByText(/required/i).length).toBeGreaterThan(0));
     expect(recordAttendance).not.toHaveBeenCalled();
   });
+
+  it('shows the server message and keeps the form open when the status is locked', async () => {
+    vi.mocked(recordAttendance).mockRejectedValueOnce(
+      new Error('Attendance is already recorded for this lesson. The status cannot be changed.'),
+    );
+    const user = userEvent.setup();
+    renderModal();
+    await pickStudentAndGroup(user, 'g1');
+    await user.selectOptions(selects()[2], '2');
+    await user.selectOptions(selects()[4], '2');
+    await user.click(submit());
+    await waitFor(() => expect(screen.getByText(/status cannot be changed/)).toBeTruthy());
+    expect(submit()).toBeTruthy();
+  });
 });
