@@ -14,6 +14,20 @@ export function formatAppointmentTime(value: string, language: string, compact =
   }).format(date);
 }
 
+export function upcomingAppointmentDates(days: number[], count: number, from = new Date()): Date[] {
+  const selectedDays = new Set(days);
+  const limit = Math.min(Math.max(count, 1), 8);
+  const cursor = new Date(from.getFullYear(), from.getMonth(), from.getDate());
+  const dates: Date[] = [];
+
+  while (dates.length < limit) {
+    if (selectedDays.has(cursor.getDay())) dates.push(new Date(cursor));
+    cursor.setDate(cursor.getDate() + 1);
+  }
+
+  return dates;
+}
+
 export function calendarDates(date: Date, period: 'daily' | 'weekly' | 'monthly'): Date[] {
   const first = new Date(
     date.getFullYear(),

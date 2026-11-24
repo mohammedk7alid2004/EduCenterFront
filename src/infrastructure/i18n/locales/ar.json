@@ -698,6 +698,7 @@
       "title": "تصدير QR Code",
       "open": "تصدير QR للموعد {{name}}",
       "alt": "QR بيانات الموعد {{name}}",
+      "sessionDates": "تواريخ الحصص القادمة",
       "png": "تصدير بصيغة PNG",
       "pdf": "تصدير بصيغة PDF",
       "generationFailed": "تعذر إنشاء QR. حاول مرة أخرى.",

@@ -6,7 +6,11 @@ import { useOnline } from '@/shared/hooks';
 import { Button, ErrorState, Icon, LoadingState, Modal } from '@/shared/components';
 import { useAppointment } from '../appointments.queries';
 import { exportAppointmentQr, generateAppointmentQr } from '../appointments-qr.lib';
-import { localizedName, formatAppointmentTime } from '../appointments.lib';
+import {
+  localizedName,
+  formatAppointmentTime,
+  upcomingAppointmentDates,
+} from '../appointments.lib';
 import { APPOINTMENT_ITERATION, QR_EXPORT_FORMAT } from '../appointments.constants';
 import type { AppointmentDto } from '../appointments.types';
 export function AppointmentQrModal({
@@ -45,7 +49,15 @@ function QrContent({ row, onClose }: { row: AppointmentDto; onClose: () => void 
   const data = useMemo(() => {
     const subject = localizedName(row.subject, i18n.language);
     const grade = row.gradeName ? localizedName(row.gradeName, i18n.language) : row.grade;
-    const labels = [row.teacher, [subject, grade].filter(Boolean).join(' · '), row.groupName];
+    const dates = upcomingAppointmentDates(row.days, row.numberOfIterations).map((date) =>
+      new Intl.DateTimeFormat(i18n.language, {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'short',
+      }).format(date),
+    );
+    const sessionDates = dates.join(' · ');
+    const labels = [row.teacher, [subject, grade].filter(Boolean).join(' · '), sessionDates];
     const entries = [
       [t('common.id'), row.id],
       [t('appointments.fields.groupName'), row.groupName],
@@ -72,6 +84,7 @@ function QrContent({ row, onClose }: { row: AppointmentDto; onClose: () => void 
         ),
       ],
       [t('appointments.fields.numberOfIterations'), String(row.numberOfIterations)],
+      [t('appointments.qr.sessionDates'), sessionDates],
     ];
     return {
       labels,
@@ -142,6 +155,7 @@ function QrContent({ row, onClose }: { row: AppointmentDto; onClose: () => void 
             ))}
           </div>
           <p className="mt-2 text-sm text-tableHeading">{row.groupName}</p>
+          <p className="mt-1 text-center text-xs text-muted">{data.labels[2]}</p>
           {exportError && (
             <p role="alert" className="mt-4 text-sm text-danger">
               {t(exportError.message)}

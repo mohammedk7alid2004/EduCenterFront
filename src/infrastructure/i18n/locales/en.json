@@ -698,6 +698,7 @@
       "title": "Export QR Code",
       "open": "Export QR for {{name}}",
       "alt": "Appointment details QR for {{name}}",
+      "sessionDates": "Upcoming session dates",
       "png": "Export As PNG",
       "pdf": "Export As PDF",
       "generationFailed": "Could not generate the QR code. Try again.",
