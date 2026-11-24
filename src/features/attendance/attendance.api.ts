@@ -12,6 +12,7 @@ import type {
   AttendanceStudentOption,
   AttendanceAppointmentOption,
   AttendanceValues,
+  RecordedAttendance,
 } from './attendance.types';
 const endpoints = API_ENDPOINTS.attendance;
 type RawAppointmentOption = Omit<AttendanceAppointmentOption, 'days'> & {
@@ -94,6 +95,21 @@ export async function fetchAttendanceAppointmentOptions(
       ...option,
       days: (option.days ?? []).map((day) => normalizeWeekday(day)),
     }));
+  } catch (error) {
+    throw normalizeApiError(error);
+  }
+}
+export async function fetchRecordedAttendance(
+  params: { studentId: string; appointmentId: string; sessionDate: string },
+  signal?: AbortSignal,
+): Promise<RecordedAttendance | null> {
+  try {
+    const { data } = await apiClient.get<ApiResult<RecordedAttendance | null>>(
+      endpoints.recorded,
+      { signal, params },
+    );
+    assertApiSuccess(data);
+    return data.data ?? null;
   } catch (error) {
     throw normalizeApiError(error);
   }
