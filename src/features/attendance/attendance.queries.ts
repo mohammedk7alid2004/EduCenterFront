@@ -7,6 +7,7 @@ import {
   fetchAttendanceStudents,
   fetchAttendanceAppointmentOptions,
   exportAttendance,
+  fetchRecordedAttendance,
   recordAttendance,
 } from './attendance.api';
 import type {
@@ -15,6 +16,7 @@ import type {
   AttendanceStudentOption,
   AttendanceAppointmentOption,
   AttendanceValues,
+  RecordedAttendance,
 } from './attendance.types';
 export function useAttendance(
   filters: AttendanceFilters,
@@ -47,6 +49,17 @@ export function useAttendanceAppointmentOptions(studentId?: string) {
     queryKey: [...QUERY_KEYS.attendance, QUERY_KEYS.options, 'appointments', studentId],
     queryFn: ({ signal }) => fetchAttendanceAppointmentOptions(studentId!, signal),
     enabled: Boolean(studentId),
+  });
+}
+export function useRecordedAttendance(studentId: string, appointmentId: string, sessionDate: string) {
+  const ready = Boolean(studentId && appointmentId && /^\d{4}-\d{2}-\d{2}$/.test(sessionDate));
+  return useQuery<RecordedAttendance | null, ApiError>({
+    queryKey: [...QUERY_KEYS.attendance, 'recorded', studentId, appointmentId, sessionDate],
+    queryFn: ({ signal }) =>
+      fetchRecordedAttendance({ studentId, appointmentId, sessionDate }, signal),
+    enabled: ready,
+    staleTime: 0,
+    gcTime: 0,
   });
 }
 export function useRecordAttendance() {
