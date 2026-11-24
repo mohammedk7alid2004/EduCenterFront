@@ -3,9 +3,18 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
-import { Button, ErrorState, FeedbackDialog, Icon, Modal, Select } from '@/shared/components';
+import {
+  Button,
+  ErrorState,
+  FeedbackDialog,
+  Icon,
+  Input,
+  Modal,
+  Select,
+} from '@/shared/components';
 import { useOnline } from '@/shared/hooks';
-import { ATTENDANCE_STATUS, type AttendanceValues } from '../attendance.types';
+import { ATTENDANCE_STATUS, type AttendanceFormValues } from '../attendance.types';
+import { latestDateForWeekday, toIsoDate, weekdayOfIsoDate } from '../attendance.utils';
 import {
   useAttendanceAppointmentOptions,
   useAttendanceStudents,
@@ -17,26 +26,43 @@ export function AttendanceFormModal({ onClose }: { onClose: () => void }): JSX.E
   const [success, setSuccess] = useState(false);
   const students = useAttendanceStudents();
   const mutation = useRecordAttendance();
-  const schema = z.object({
-    studentId: z.string().min(1, t('validation.required')),
-    status: z.coerce
-      .number()
-      .refine(
-        (value) => Object.values(ATTENDANCE_STATUS).includes(value as 1 | 2 | 3 | 4),
-        t('validation.required'),
-      ),
-    appointmentId: z.string().min(1, t('validation.required')),
-    notes: z.string().max(2000, t('validation.maxLength', { count: 2000 })),
-  });
+  const schema = z
+    .object({
+      studentId: z.string().min(1, t('validation.required')),
+      status: z.coerce
+        .number()
+        .refine(
+          (value) => Object.values(ATTENDANCE_STATUS).includes(value as 1 | 2 | 3 | 4),
+          t('validation.required'),
+        ),
+      appointmentId: z.string().min(1, t('validation.required')),
+      sessionDay: z.string().min(1, t('validation.required')),
+      sessionDate: z
+        .string()
+        .min(1, t('validation.required'))
+        .refine((value) => value <= toIsoDate(new Date()), t('attendance.sessionDateFuture')),
+      notes: z.string().max(2000, t('validation.maxLength', { count: 2000 })),
+    })
+    .refine((values) => weekdayOfIsoDate(values.sessionDate) === Number(values.sessionDay), {
+      path: ['sessionDate'],
+      message: t('attendance.sessionDateWrongDay'),
+    });
   const {
     register,
     handleSubmit,
     setValue,
     watch,
     formState: { errors },
-  } = useForm<AttendanceValues>({
+  } = useForm<AttendanceFormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { studentId: '', appointmentId: '', status: '', notes: '' },
+    defaultValues: {
+      studentId: '',
+      appointmentId: '',
+      sessionDay: '',
+      sessionDate: '',
+      status: '',
+      notes: '',
+    },
   });
   const studentField = register('studentId');
   const selectedStudentId = watch('studentId');
@@ -45,6 +71,9 @@ export function AttendanceFormModal({ onClose }: { onClose: () => void }): JSX.E
   const selectedAppointment = appointments.data?.find(
     (appointment) => appointment.id === selectedAppointmentId,
   );
+  const appointmentField = register('appointmentId');
+  const sessionDayField = register('sessionDay');
+  const selectedSessionDay = watch('sessionDay');
   if (success)
     return (
       <FeedbackDialog
@@ -88,7 +117,10 @@ export function AttendanceFormModal({ onClose }: { onClose: () => void }): JSX.E
               {...studentField}
               onChange={(event) => {
                 studentField.onChange(event);
-                setValue('appointmentId', '', { shouldValidate: true });
+                setValue('appointmentId', '');
+                setValue('sessionDay', '');
+                setValue('sessionDay', '');
+                setValue('sessionDate', '');
               }}
               label={t('attendance.student')}
               requiredAsterisk
@@ -102,7 +134,11 @@ export function AttendanceFormModal({ onClose }: { onClose: () => void }): JSX.E
               placeholder={t(students.isPending ? 'common.loading' : 'attendance.selectStudent')}
             />
             <Select
-              {...register('appointmentId')}
+              {...appointmentField}
+              onChange={(event) => {
+                appointmentField.onChange(event);
+                setValue('sessionDate', '');
+              }}
               label={t('attendance.appointment')}
               requiredAsterisk
               error={errors.appointmentId?.message}
@@ -118,6 +154,39 @@ export function AttendanceFormModal({ onClose }: { onClose: () => void }): JSX.E
                     ? 'common.loading'
                     : 'attendance.selectAppointment',
               )}
+            />
+            <Select
+              {...sessionDayField}
+              onChange={(event) => {
+                sessionDayField.onChange(event);
+                setValue(
+                  'sessionDate',
+                  event.target.value ? latestDateForWeekday(Number(event.target.value)) : '',
+                  { shouldValidate: true },
+                );
+              }}
+              label={t('attendance.sessionDay')}
+              requiredAsterisk
+              error={errors.sessionDay?.message}
+              disabled={!selectedAppointment}
+              options={(selectedAppointment?.days ?? []).map((day) => ({
+                id: String(day),
+                name: t(`appointments.days.${day}`),
+              }))}
+              placeholder={t(
+                selectedAppointment
+                  ? 'attendance.selectSessionDay'
+                  : 'attendance.selectAppointmentFirst',
+              )}
+            />
+            <Input
+              {...register('sessionDate')}
+              type="date"
+              max={toIsoDate(new Date())}
+              label={t('attendance.sessionDate')}
+              requiredAsterisk
+              error={errors.sessionDate?.message}
+              disabled={!selectedSessionDay}
             />
             <Select
               label={t('attendance.classroom')}

@@ -14,6 +14,21 @@ import type {
   AttendanceValues,
 } from './attendance.types';
 const endpoints = API_ENDPOINTS.attendance;
+type RawAppointmentOption = Omit<AttendanceAppointmentOption, 'days'> & {
+  days?: (number | string)[];
+};
+const WEEKDAY_NAMES = [
+  'sunday',
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+  'friday',
+  'saturday',
+];
+function normalizeWeekday(day: number | string): number {
+  return typeof day === 'number' ? day : WEEKDAY_NAMES.indexOf(day.toLowerCase());
+}
 export async function fetchAttendance(
   filters: AttendanceFilters,
   signal?: AbortSignal,
@@ -70,12 +85,15 @@ export async function fetchAttendanceAppointmentOptions(
   signal?: AbortSignal,
 ): Promise<AttendanceAppointmentOption[]> {
   try {
-    const { data } = await apiClient.get<ApiResult<AttendanceAppointmentOption[]>>(
+    const { data } = await apiClient.get<ApiResult<RawAppointmentOption[]>>(
       endpoints.appointmentOptions,
       { signal, params: { studentId } },
     );
     assertApiSuccess(data);
-    return data.data;
+    return data.data.map((option) => ({
+      ...option,
+      days: (option.days ?? []).map((day) => normalizeWeekday(day)),
+    }));
   } catch (error) {
     throw normalizeApiError(error);
   }
@@ -87,7 +105,13 @@ export async function recordAttendance(
   try {
     const { data } = await apiClient.post<ApiResult<boolean>>(
       endpoints.record,
-      { ...values, status: Number(values.status) },
+      {
+        studentId: values.studentId,
+        appointmentId: values.appointmentId,
+        sessionDate: values.sessionDate,
+        status: Number(values.status),
+        notes: values.notes,
+      },
       { signal },
     );
     assertApiSuccess(data);
