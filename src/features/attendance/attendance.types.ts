@@ -23,8 +23,14 @@ export interface AttendanceStudentOption {
   name: string;
   phoneNumber: string | null;
 }
+export interface AttendanceAppointmentOption {
+  id: string;
+  groupName: string;
+  classroomName: string;
+}
 export interface AttendanceValues {
   studentId: string;
+  appointmentId: string;
   status: AttendanceStatus | '';
   notes: string;
 }

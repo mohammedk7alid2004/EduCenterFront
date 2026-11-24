@@ -10,6 +10,7 @@ import type {
   AttendanceDto,
   AttendanceFilters,
   AttendanceStudentOption,
+  AttendanceAppointmentOption,
   AttendanceValues,
 } from './attendance.types';
 const endpoints = API_ENDPOINTS.attendance;
@@ -58,6 +59,21 @@ export async function fetchAttendanceStudents(
     const { data } = await apiClient.get<ApiResult<AttendanceStudentOption[]>>(endpoints.students, {
       signal,
     });
+    assertApiSuccess(data);
+    return data.data;
+  } catch (error) {
+    throw normalizeApiError(error);
+  }
+}
+export async function fetchAttendanceAppointmentOptions(
+  studentId: string,
+  signal?: AbortSignal,
+): Promise<AttendanceAppointmentOption[]> {
+  try {
+    const { data } = await apiClient.get<ApiResult<AttendanceAppointmentOption[]>>(
+      endpoints.appointmentOptions,
+      { signal, params: { studentId } },
+    );
     assertApiSuccess(data);
     return data.data;
   } catch (error) {

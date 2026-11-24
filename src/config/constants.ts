@@ -140,6 +140,7 @@ export const API_ENDPOINTS = {
     detail: (id: string) => `/v1/Attendance/${encodeURIComponent(id)}`,
     record: '/v1/Attendance',
     students: '/v1/select-menu/GetStudents',
+    appointmentOptions: '/v1/Attendance/AppointmentOptions',
   },
 } as const;
 export const QUERY_KEYS = {

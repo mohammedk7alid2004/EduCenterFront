@@ -6,7 +6,11 @@ import { useTranslation } from 'react-i18next';
 import { Button, ErrorState, FeedbackDialog, Icon, Modal, Select } from '@/shared/components';
 import { useOnline } from '@/shared/hooks';
 import { ATTENDANCE_STATUS, type AttendanceValues } from '../attendance.types';
-import { useAttendanceStudents, useRecordAttendance } from '../attendance.queries';
+import {
+  useAttendanceAppointmentOptions,
+  useAttendanceStudents,
+  useRecordAttendance,
+} from '../attendance.queries';
 export function AttendanceFormModal({ onClose }: { onClose: () => void }): JSX.Element {
   const { t } = useTranslation();
   const online = useOnline();
@@ -18,19 +22,29 @@ export function AttendanceFormModal({ onClose }: { onClose: () => void }): JSX.E
     status: z.coerce
       .number()
       .refine(
-        (value) => Object.values(ATTENDANCE_STATUS).includes(value as 1 | 2 | 3),
+        (value) => Object.values(ATTENDANCE_STATUS).includes(value as 1 | 2 | 3 | 4),
         t('validation.required'),
       ),
+    appointmentId: z.string().min(1, t('validation.required')),
     notes: z.string().max(2000, t('validation.maxLength', { count: 2000 })),
   });
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<AttendanceValues>({
     resolver: zodResolver(schema),
-    defaultValues: { studentId: '', status: '', notes: '' },
+    defaultValues: { studentId: '', appointmentId: '', status: '', notes: '' },
   });
+  const studentField = register('studentId');
+  const selectedStudentId = watch('studentId');
+  const selectedAppointmentId = watch('appointmentId');
+  const appointments = useAttendanceAppointmentOptions(selectedStudentId);
+  const selectedAppointment = appointments.data?.find(
+    (appointment) => appointment.id === selectedAppointmentId,
+  );
   if (success)
     return (
       <FeedbackDialog
@@ -71,7 +85,11 @@ export function AttendanceFormModal({ onClose }: { onClose: () => void }): JSX.E
             className="grid grid-cols-1 gap-6 sm:grid-cols-2"
           >
             <Select
-              {...register('studentId')}
+              {...studentField}
+              onChange={(event) => {
+                studentField.onChange(event);
+                setValue('appointmentId', '', { shouldValidate: true });
+              }}
               label={t('attendance.student')}
               requiredAsterisk
               error={errors.studentId?.message}
@@ -82,6 +100,40 @@ export function AttendanceFormModal({ onClose }: { onClose: () => void }): JSX.E
                   : student.name,
               }))}
               placeholder={t(students.isPending ? 'common.loading' : 'attendance.selectStudent')}
+            />
+            <Select
+              {...register('appointmentId')}
+              label={t('attendance.appointment')}
+              requiredAsterisk
+              error={errors.appointmentId?.message}
+              disabled={!selectedStudentId || appointments.isPending}
+              options={(appointments.data ?? []).map((appointment) => ({
+                id: appointment.id,
+                name: appointment.groupName,
+              }))}
+              placeholder={t(
+                !selectedStudentId
+                  ? 'attendance.selectStudentFirst'
+                  : appointments.isPending
+                    ? 'common.loading'
+                    : 'attendance.selectAppointment',
+              )}
+            />
+            <Select
+              label={t('attendance.classroom')}
+              disabled
+              value={selectedAppointment?.classroomName ?? ''}
+              options={
+                selectedAppointment
+                  ? [
+                      {
+                        id: selectedAppointment.classroomName,
+                        name: selectedAppointment.classroomName,
+                      },
+                    ]
+                  : []
+              }
+              placeholder={t('attendance.classroomAuto')}
             />
             <Select
               {...register('status')}

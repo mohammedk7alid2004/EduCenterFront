@@ -5,12 +5,14 @@ import {
   fetchAttendance,
   fetchAttendanceItem,
   fetchAttendanceStudents,
+  fetchAttendanceAppointmentOptions,
   recordAttendance,
 } from './attendance.api';
 import type {
   AttendanceDto,
   AttendanceFilters,
   AttendanceStudentOption,
+  AttendanceAppointmentOption,
   AttendanceValues,
 } from './attendance.types';
 export function useAttendance(
@@ -37,6 +39,13 @@ export function useAttendanceStudents() {
   return useQuery<AttendanceStudentOption[], ApiError>({
     queryKey: [...QUERY_KEYS.attendance, QUERY_KEYS.options, 'students'],
     queryFn: ({ signal }) => fetchAttendanceStudents(signal),
+  });
+}
+export function useAttendanceAppointmentOptions(studentId?: string) {
+  return useQuery<AttendanceAppointmentOption[], ApiError>({
+    queryKey: [...QUERY_KEYS.attendance, QUERY_KEYS.options, 'appointments', studentId],
+    queryFn: ({ signal }) => fetchAttendanceAppointmentOptions(studentId!, signal),
+    enabled: Boolean(studentId),
   });
 }
 export function useRecordAttendance() {
