@@ -99,6 +99,11 @@ function QrContent({
         year: 'numeric',
       }).format(date);
       const dayKey = DAY_NAMES_EN[dayNumber] || `day-${dayNumber}`;
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const sessionDate = `${year}-${month}-${day}`;
+      const sessionBarcode = `EDU-SESSION:${row.id}:${sessionDate}`;
 
       const labels = [
         row.teacher,
@@ -106,32 +111,28 @@ function QrContent({
         `${dayName} (${formattedDate}) · ${timeRange}`,
       ];
 
-      const entries = [
-        [t('appointments.fields.days'), dayName],
-        [t('common.date'), formattedDate],
-        [t('common.id'), `${row.id}-day-${dayNumber}`],
-        [t('appointments.fields.groupName'), row.groupName],
-        [t('appointments.fields.teacher'), row.teacher],
-        [t('appointments.fields.subject'), subject],
-        [t('appointments.fields.classroom'), localizedName(row.classroom, i18n.language)],
-        [
-          t('appointments.fields.level'),
-          row.levelName ? localizedName(row.levelName, i18n.language) : row.level,
-        ],
-        [t('appointments.fields.grade'), grade],
-        [t('appointments.time'), timeRange],
-      ];
+      const jsonPayload = JSON.stringify({
+        barcode: sessionBarcode,
+        appointmentId: row.id,
+        date: sessionDate,
+        dayOfWeek: dayNumber,
+        startTime: row.startTime,
+        endTime: row.endTime,
+        groupName: row.groupName,
+        teacherId: row.teacherId,
+        teacherName: row.teacher,
+        subjectId: row.subjectId,
+        classroomId: row.classroomId,
+      });
 
       return {
         dayNumber,
         dayName,
         dayKey,
         formattedDate,
+        sessionBarcode,
         labels,
-        payload: entries
-          .filter(([, value]) => value)
-          .map(([label, value]) => `${label}: ${value}`)
-          .join('\n'),
+        payload: jsonPayload,
       };
     });
   }, [row, sortedDays, i18n.language, t]);
@@ -261,6 +262,9 @@ function QrContent({
           </span>
 
           <p className="mt-2 text-base font-bold text-foreground">{row.groupName}</p>
+          <span className="mt-0.5 font-mono text-xs text-muted" dir="ltr">
+            {currentItem.sessionBarcode}
+          </span>
 
           <p className="mt-1 text-center text-sm text-tableHeading">
             {row.teacher} · {localizedName(row.subject, i18n.language)}
