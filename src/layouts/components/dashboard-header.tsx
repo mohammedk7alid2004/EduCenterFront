@@ -7,6 +7,7 @@ import { useLogout } from '@/features/auth';
 import { useProfile, ProfileAvatar } from '@/features/profile';
 import { usePermission, useAuthStore } from '@/infrastructure/auth';
 import { setLanguage } from '@/infrastructure/i18n';
+import { useDesktopMode } from '@/shared/hooks';
 import { Icon } from '@/shared/components';
 export function DashboardHeader({ onMenuClick }: { onMenuClick: () => void }): JSX.Element {
   const { t, i18n } = useTranslation();
@@ -15,6 +16,7 @@ export function DashboardHeader({ onMenuClick }: { onMenuClick: () => void }): J
   const profile = useProfile();
   const user = useAuthStore((state) => state.user);
   const [profileOpen, setProfileOpen] = useState(false);
+  const { isDesktopMode, toggleDesktopMode } = useDesktopMode();
   const arabic = i18n.language.startsWith('ar');
   const can = usePermission();
   const allowedTabs = SYSTEM_TABS.filter((tab) => can(tab.read));
@@ -80,7 +82,21 @@ export function DashboardHeader({ onMenuClick }: { onMenuClick: () => void }): J
           {settingsTab ? t(`systemManagement.tabs.${settingsTab.key}`) : t(`nav.${section}`)}
         </span>
       </div>
-      <div className="flex items-center gap-4 sm:gap-6">
+      <div className="flex items-center gap-3 sm:gap-4">
+        <button
+          type="button"
+          onClick={toggleDesktopMode}
+          aria-label={isDesktopMode ? t('common.mobileSite') : t('common.desktopSite')}
+          title={isDesktopMode ? t('common.mobileSite') : t('common.desktopSite')}
+          className={`header-control flex h-10 items-center justify-center gap-2 rounded-[10px] bg-card px-3 text-xs transition hover:bg-card/80 ${
+            isDesktopMode ? 'text-primary ring-2 ring-primary/20' : 'text-foreground'
+          }`}
+        >
+          <Icon name={isDesktopMode ? 'smartphone' : 'monitor'} className="size-4 text-primary" />
+          <span className="hidden md:inline">
+            {isDesktopMode ? t('common.mobileSite') : t('common.desktopSite')}
+          </span>
+        </button>
         <button
           type="button"
           onClick={() => setLanguage(arabic ? 'en' : 'ar')}

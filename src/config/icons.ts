@@ -50,6 +50,8 @@ import {
   LogOut,
   Mail,
   Menu,
+  Monitor,
+  Smartphone,
   Pencil,
   Phone,
   Plus,
@@ -152,6 +154,8 @@ function StudentsIcon(props: ComponentProps<'svg'>) {
 }
 
 export const icons = {
+  monitor: Monitor,
+  smartphone: Smartphone,
   students: StudentsIcon,
   qrCode: QrCode,
   imageFile: Image,

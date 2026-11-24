@@ -59,6 +59,8 @@
     "hidePassword": "Hide password",
     "toggle": "Toggle",
     "notifications": "Notifications",
+    "desktopSite": "Desktop Site",
+    "mobileSite": "Mobile Site",
     "details": "Details",
     "noOptions": "No available options."
   },

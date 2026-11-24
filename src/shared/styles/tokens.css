@@ -12,6 +12,13 @@
   body {
     @apply min-h-screen bg-background font-sans antialiased;
   }
+  html.desktop-site {
+    min-width: 1200px !important;
+    overflow-x: auto !important;
+  }
+  html.desktop-site body {
+    min-width: 1200px !important;
+  }
   button,
   input,
   select,

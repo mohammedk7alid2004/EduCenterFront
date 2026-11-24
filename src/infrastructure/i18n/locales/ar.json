@@ -59,6 +59,8 @@
     "hidePassword": "إخفاء كلمة المرور",
     "toggle": "تبديل",
     "notifications": "الإشعارات",
+    "desktopSite": "موقع سطح المكتب",
+    "mobileSite": "موقع الموبايل",
     "details": "التفاصيل",
     "noOptions": "لا توجد خيارات متاحة."
   },
