@@ -1,0 +1,23 @@
+{
+  "name": "EduCenter - 3M2A",
+  "short_name": "EduCenter",
+  "description": "EduCenter Education Management System",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0F3D3A",
+  "theme_color": "#0F3D3A",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo-3m2a.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

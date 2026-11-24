@@ -19,6 +19,15 @@
   html.desktop-site body {
     min-width: 1200px !important;
   }
+  html.desktop-site aside {
+    display: flex !important;
+    position: sticky !important;
+    top: 0 !important;
+    height: 100dvh !important;
+  }
+  html.desktop-site .min-h-dvh.bg-primary {
+    display: flex !important;
+  }
   button,
   input,
   select,

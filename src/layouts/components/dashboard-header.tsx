@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ROUTES } from '@/config';
-import { SYSTEM_TABS, SYSTEM_TAB_PARAM } from '@/features/system-management';
+import { SYSTEM_TABS, SYSTEM_TAB_PARAM, useCenterBrand } from '@/features/system-management';
 import { useLogout } from '@/features/auth';
 import { useProfile, ProfileAvatar } from '@/features/profile';
 import { usePermission, useAuthStore } from '@/infrastructure/auth';
@@ -14,6 +14,8 @@ export function DashboardHeader({ onMenuClick }: { onMenuClick: () => void }): J
   const location = useLocation();
   const logout = useLogout();
   const profile = useProfile();
+  const brand = useCenterBrand();
+  const brandLogo = brand.data?.navbarLogoUrl || '/logo-3m2a.svg';
   const user = useAuthStore((state) => state.user);
   const [profileOpen, setProfileOpen] = useState(false);
   const { isDesktopMode, toggleDesktopMode } = useDesktopMode();
@@ -61,6 +63,13 @@ export function DashboardHeader({ onMenuClick }: { onMenuClick: () => void }): J
         >
           <Icon name="panel" className="size-6" />
         </button>
+        {isDesktopMode && (
+          <img
+            src={brandLogo}
+            alt={t('app.logo')}
+            className="h-6 w-auto max-w-[80px] rounded bg-primary px-1.5 py-0.5 object-contain lg:hidden"
+          />
+        )}
         <span className="hidden sm:inline">
           {t(
             settingsTab
@@ -92,7 +101,18 @@ export function DashboardHeader({ onMenuClick }: { onMenuClick: () => void }): J
             isDesktopMode ? 'text-primary ring-2 ring-primary/20' : 'text-foreground'
           }`}
         >
-          <Icon name={isDesktopMode ? 'smartphone' : 'monitor'} className="size-4 text-primary" />
+          {isDesktopMode ? (
+            <div className="flex items-center gap-1.5">
+              <img
+                src={brandLogo}
+                alt={t('app.logo')}
+                className="h-5 w-auto max-w-[64px] rounded-sm bg-primary px-1 py-0.5 object-contain"
+              />
+              <Icon name="monitor" className="size-3.5 text-primary" />
+            </div>
+          ) : (
+            <Icon name="monitor" className="size-4 text-primary" />
+          )}
           <span className="hidden md:inline">
             {isDesktopMode ? t('common.mobileSite') : t('common.desktopSite')}
           </span>
