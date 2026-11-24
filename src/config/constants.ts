@@ -93,6 +93,7 @@ export const API_ENDPOINTS = {
     update: '/v1/Classrooms/Update',
     delete: '/v1/Classrooms/Delete',
     toggleStatus: (id: string) => `/v1/Classrooms/ToggleStatus/${encodeURIComponent(id)}`,
+    export: '/v1/Classrooms/Export',
   },
   appointments: {
     getAll: '/v1/Appointments/GetAll',
@@ -101,6 +102,7 @@ export const API_ENDPOINTS = {
     update: '/v1/Appointments/Update',
     delete: '/v1/Appointments/Delete',
     setStatus: (id: string) => `/v1/Appointments/SetStatus/${encodeURIComponent(id)}`,
+    export: '/v1/Appointments/ExportExcel',
     teachers: '/v1/Appointments/GetTeachers',
     subjects: '/v1/select-menu/GetSubjects',
     classrooms: '/v1/select-menu/GetClassrooms',
@@ -117,6 +119,7 @@ export const API_ENDPOINTS = {
     update: '/v1/Subjects/Update',
     delete: '/v1/Subjects/Delete',
     toggleStatus: (id: string) => `/v1/Subjects/ToggleStatus/${id}`,
+    export: '/v1/Subjects/Export',
   },
   teachers: {
     getAll: '/v1/Teachers',
@@ -131,6 +134,7 @@ export const API_ENDPOINTS = {
     getAll: '/v1/Appointments/GetAll',
     detail: (id: string) => `/v1/Appointments/ShowOneDetails/${encodeURIComponent(id)}`,
     delete: '/v1/Appointments/Delete',
+    export: '/v1/Appointments/ExportExcel',
     connectStudents: '/v1/Appointments/ConnectStudents',
     students: '/v1/select-menu/GetStudents',
     levels: '/v1/select-menu/GetEducationLevels',

@@ -240,6 +240,7 @@
   },
   "subjects": {
     "title": "Subjects",
+    "export": "Export Excel",
     "create": "Add New Subject",
     "search": "Search subjects…",
     "table": {
@@ -504,6 +505,7 @@
   },
   "classrooms": {
     "title": "Classroom",
+    "export": "Export Excel",
     "description": "Manage your classrooms and their capacity",
     "create": "Add New Classroom",
     "viewTitle": "View Classroom",
@@ -631,6 +633,7 @@
   },
   "appointments": {
     "title": "Appointments",
+    "export": "Export Excel",
     "description": "Manage group schedules, teachers and classrooms",
     "create": "Add New Appointment",
     "edit": "Edit Appointment",
@@ -828,6 +831,7 @@
   },
   "groups": {
     "title": "Groups",
+    "export": "Export Excel",
     "description": "Manage Your Company Branches And Locations",
     "viewTitle": "View Group",
     "connectTitle": "Connect The Student To The Group",

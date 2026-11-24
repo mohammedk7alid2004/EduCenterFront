@@ -96,6 +96,33 @@ export async function setAppointmentStatus(
   }
 }
 
+export async function exportAppointments(
+  filters: AppointmentFilters,
+  signal?: AbortSignal,
+): Promise<Blob> {
+  try {
+    const { data } = await apiClient.get<Blob>(endpoints.export, {
+      responseType: 'blob',
+      signal,
+      params: {
+        Search: filters.name,
+        IsActive: filters.isActive,
+        SubjectId: filters.subjectId,
+        TeacherId: filters.teacherId,
+        ClassroomId: filters.classroomId,
+      },
+    });
+    if (data.type.includes('json')) {
+      const result: ApiResult<unknown> = JSON.parse(await data.text());
+      assertApiSuccess(result);
+      throw new Error('errors.unknown');
+    }
+    return data;
+  } catch (error) {
+    throw normalizeApiError(error);
+  }
+}
+
 export function fetchAppointmentGrades(levelId: string, signal?: AbortSignal) {
   return get<AppointmentOption[]>(endpoints.grades, signal, { parentId: levelId });
 }

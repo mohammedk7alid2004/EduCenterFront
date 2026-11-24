@@ -6,6 +6,7 @@ import {
   fetchGroups,
   fetchGroup,
   deleteGroups,
+  exportGroups,
   connectStudentsToGroup,
   fetchStudentsOption,
   fetchGroupOptions,
@@ -55,6 +56,11 @@ export function useDeleteGroups() {
       void client.invalidateQueries({ queryKey: QUERY_KEYS.groups });
       void client.invalidateQueries({ queryKey: QUERY_KEYS.appointments });
     },
+  });
+}
+export function useGroupsExport() {
+  return useMutation<Blob, ApiError, GroupFilters>({
+    mutationFn: (filters) => exportGroups(filters),
   });
 }
 

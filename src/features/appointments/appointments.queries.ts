@@ -11,6 +11,7 @@ import {
   saveAppointment,
   deleteAppointments,
   setAppointmentStatus,
+  exportAppointments,
 } from './appointments.api';
 import type { AppointmentDto, AppointmentFilters, AppointmentValues } from './appointments.types';
 import { OPTIONS_PAGE_SIZE } from './appointments.constants';
@@ -84,6 +85,11 @@ export function useSetAppointmentStatus() {
     onSuccess: () => {
       void client.invalidateQueries({ queryKey: QUERY_KEYS.appointments });
     },
+  });
+}
+export function useAppointmentsExport() {
+  return useMutation<Blob, ApiError, AppointmentFilters>({
+    mutationFn: (filters) => exportAppointments(filters),
   });
 }
 

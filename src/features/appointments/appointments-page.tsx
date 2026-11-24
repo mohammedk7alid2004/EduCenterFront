@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 import { LIST_PARAMS, PERMISSIONS } from '@/config';
 import { usePermission } from '@/infrastructure/auth';
-import { useListControls } from '@/shared/hooks';
-import { Icon, ManagementList } from '@/shared/components';
-import { useAppointments } from './appointments.queries';
+import { useListControls, useOnline } from '@/shared/hooks';
+import { Button, Icon, ManagementList } from '@/shared/components';
+import { downloadBlob } from '@/shared/utils';
+import { useAppointments, useAppointmentsExport } from './appointments.queries';
 import { APPOINTMENT_PARAMS, APPOINTMENT_VIEW } from './appointments.constants';
 import type { AppointmentDto } from './appointments.types';
 import { AppointmentsTable } from './components/appointments-table';
@@ -18,6 +20,7 @@ export function AppointmentsPage(): JSX.Element {
   const { t } = useTranslation();
   const can = usePermission();
   const controls = useListControls();
+  const online = useOnline();
   const [params, setParams] = useSearchParams();
   const calendar = params.get(APPOINTMENT_PARAMS.view) !== APPOINTMENT_VIEW.list;
   const [formOpen, setFormOpen] = useState(false);
@@ -27,15 +30,14 @@ export function AppointmentsPage(): JSX.Element {
   const subject = params.get(APPOINTMENT_PARAMS.subject) ?? '';
   const teacher = params.get(APPOINTMENT_PARAMS.teacher) ?? '';
   const classroom = params.get(APPOINTMENT_PARAMS.classroom) ?? '';
-  const query = useAppointments(
-    {
-      ...controls.filters,
-      subjectId: subject || undefined,
-      teacherId: teacher || undefined,
-      classroomId: classroom || undefined,
-    },
-    calendar,
-  );
+  const filters = {
+    ...controls.filters,
+    subjectId: subject || undefined,
+    teacherId: teacher || undefined,
+    classroomId: classroom || undefined,
+  };
+  const query = useAppointments(filters, calendar);
+  const exporter = useAppointmentsExport();
   const changeFilter = (key: 'subject' | 'teacher' | 'classroom', value: string) =>
     setParams((current) => {
       const next = new URLSearchParams(current);
@@ -88,6 +90,25 @@ export function AppointmentsPage(): JSX.Element {
         }
         searchActions={
           <>
+            {can(PERMISSIONS.appointments.export) && (
+              <Button
+                type="button"
+                variant="ghost"
+                className="h-[43px] rounded-xl border border-primary/20 bg-card text-primary"
+                disabled={!online || exporter.isPending}
+                loading={exporter.isPending}
+                onClick={() =>
+                  exporter.mutate(filters, {
+                    onSuccess: (file) => downloadBlob(file, 'Appointments.xlsx'),
+                    onError: (error) =>
+                      toast.error(t(error.message, { defaultValue: error.message })),
+                  })
+                }
+              >
+                <Icon name="download" className="size-4" />
+                {t('appointments.export')}
+              </Button>
+            )}
             <div
               role="group"
               aria-label={t('appointments.viewMode')}

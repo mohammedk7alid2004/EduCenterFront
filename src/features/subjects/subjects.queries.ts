@@ -9,6 +9,7 @@ import {
   fetchSubject,
   fetchSubjects,
   toggleSubjectStatus,
+  exportSubjects,
   updateSubject,
 } from './subjects.api';
 import type {
@@ -75,6 +76,11 @@ export function useToggleSubjectStatus() {
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: QUERY_KEYS.subjects });
     },
+  });
+}
+export function useSubjectsExport() {
+  return useMutation<Blob, ApiError, SubjectFilters>({
+    mutationFn: (filters) => exportSubjects(filters),
   });
 }
 

@@ -9,6 +9,7 @@ import {
   updateClassroom,
   deleteClassrooms,
   toggleClassroomStatus,
+  exportClassrooms,
 } from './classrooms.api';
 import type { ClassroomDto, ClassroomValues } from './classrooms.types';
 export function useClassrooms(filters: ListFilters, enabled = true) {
@@ -55,5 +56,10 @@ export function useToggleClassroomStatus() {
     onSuccess: () => {
       void client.invalidateQueries({ queryKey: QUERY_KEYS.classrooms });
     },
+  });
+}
+export function useClassroomsExport() {
+  return useMutation<Blob, ApiError, ListFilters>({
+    mutationFn: (filters) => exportClassrooms(filters),
   });
 }

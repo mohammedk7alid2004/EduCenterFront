@@ -98,3 +98,20 @@ export async function toggleClassroomStatus(id: string, signal?: AbortSignal): P
     throw normalizeApiError(error);
   }
 }
+export async function exportClassrooms(filters: ListFilters, signal?: AbortSignal): Promise<Blob> {
+  try {
+    const { data } = await apiClient.get<Blob>(API_ENDPOINTS.classrooms.export, {
+      responseType: 'blob',
+      signal,
+      params: { Name: filters.name, IsActive: filters.isActive },
+    });
+    if (data.type.includes('json')) {
+      const result: ApiResult<unknown> = JSON.parse(await data.text());
+      assertApiSuccess(result);
+      throw new Error('errors.unknown');
+    }
+    return data;
+  } catch (error) {
+    throw normalizeApiError(error);
+  }
+}

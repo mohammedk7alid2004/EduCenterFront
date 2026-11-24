@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 import { useSearchParams } from 'react-router-dom';
 import { LIST_PARAMS } from '@/config';
 import { useListControls, useOnline } from '@/shared/hooks';
-import { Icon, ManagementList, useConfirm } from '@/shared/components';
+import { Button, Icon, ManagementList, useConfirm } from '@/shared/components';
+import { downloadBlob } from '@/shared/utils';
+import { PERMISSIONS } from '@/config';
+import { usePermission } from '@/infrastructure/auth';
 import { AppointmentsCalendar } from '@/features/appointments';
-import { useGroups, useDeleteGroups } from './groups.queries';
+import { useGroups, useDeleteGroups, useGroupsExport } from './groups.queries';
 import { GROUP_FILTER_PARAMS, GROUP_VIEW } from './groups.constants';
 import type { GroupDto } from './groups.types';
 import { GroupsTable } from './components/groups-table';
@@ -16,6 +20,7 @@ import { ConnectStudentModal } from './components/connect-student-modal';
 export function GroupsPage(): JSX.Element {
   const { t } = useTranslation();
   const online = useOnline();
+  const can = usePermission();
   const controls = useListControls();
   const [params, setParams] = useSearchParams();
 
@@ -24,15 +29,14 @@ export function GroupsPage(): JSX.Element {
   const gradeId = levelId ? (params.get(GROUP_FILTER_PARAMS.grade) ?? '') : '';
   const calendar = params.get(GROUP_FILTER_PARAMS.view) === GROUP_VIEW.calendar;
 
-  const query = useGroups(
-    {
-      ...controls.filters,
-      subjectId: subjectId || undefined,
-      levelId: levelId || undefined,
-      gradeId: gradeId || undefined,
-    },
-    calendar,
-  );
+  const filters = {
+    ...controls.filters,
+    subjectId: subjectId || undefined,
+    levelId: levelId || undefined,
+    gradeId: gradeId || undefined,
+  };
+  const query = useGroups(filters, calendar);
+  const exporter = useGroupsExport();
 
   const deleteMutation = useDeleteGroups();
   const { confirm, dialog } = useConfirm();
@@ -118,33 +122,54 @@ export function GroupsPage(): JSX.Element {
           />
         }
         searchActions={
-          <div
-            role="group"
-            aria-label={t('appointments.viewMode')}
-            className="flex gap-1 rounded-xl border border-border p-1"
-          >
-            {[GROUP_VIEW.calendar, GROUP_VIEW.list].map((value) => (
-              <button
+          <>
+            {can(PERMISSIONS.appointments.export) && (
+              <Button
                 type="button"
-                key={value}
-                aria-label={t(`appointments.${value}View`)}
-                aria-pressed={calendar === (value === GROUP_VIEW.calendar)}
+                variant="ghost"
+                className="h-[43px] rounded-xl border border-primary/20 bg-card text-primary"
+                disabled={!online || exporter.isPending}
+                loading={exporter.isPending}
                 onClick={() =>
-                  setParams((current) => {
-                    const next = new URLSearchParams(current);
-                    next.set(GROUP_FILTER_PARAMS.view, value);
-                    return next;
+                  exporter.mutate(filters, {
+                    onSuccess: (file) => downloadBlob(file, 'Groups.xlsx'),
+                    onError: (error) =>
+                      toast.error(t(error.message, { defaultValue: error.message })),
                   })
                 }
-                className={`grid size-9 place-items-center rounded-lg ${calendar === (value === GROUP_VIEW.calendar) ? 'bg-primary text-card' : 'bg-subtle text-primary'}`}
               >
-                <Icon
-                  name={value === GROUP_VIEW.calendar ? 'scheduleGrid' : 'scheduleList'}
-                  className="size-5"
-                />
-              </button>
-            ))}
-          </div>
+                <Icon name="download" className="size-4" />
+                {t('groups.export')}
+              </Button>
+            )}
+            <div
+              role="group"
+              aria-label={t('appointments.viewMode')}
+              className="flex gap-1 rounded-xl border border-border p-1"
+            >
+              {[GROUP_VIEW.calendar, GROUP_VIEW.list].map((value) => (
+                <button
+                  type="button"
+                  key={value}
+                  aria-label={t(`appointments.${value}View`)}
+                  aria-pressed={calendar === (value === GROUP_VIEW.calendar)}
+                  onClick={() =>
+                    setParams((current) => {
+                      const next = new URLSearchParams(current);
+                      next.set(GROUP_FILTER_PARAMS.view, value);
+                      return next;
+                    })
+                  }
+                  className={`grid size-9 place-items-center rounded-lg ${calendar === (value === GROUP_VIEW.calendar) ? 'bg-primary text-card' : 'bg-subtle text-primary'}`}
+                >
+                  <Icon
+                    name={value === GROUP_VIEW.calendar ? 'scheduleGrid' : 'scheduleList'}
+                    className="size-5"
+                  />
+                </button>
+              ))}
+            </div>
+          </>
         }
       >
         {calendar ? (

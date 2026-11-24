@@ -106,3 +106,24 @@ export async function toggleSubjectStatus(id: string, signal?: AbortSignal): Pro
     throw normalizeApiError(error);
   }
 }
+
+export async function exportSubjects(filters: SubjectFilters, signal?: AbortSignal): Promise<Blob> {
+  try {
+    const params: Record<string, string | number | boolean> = {};
+    if (filters.name) params['Name'] = filters.name;
+    if (filters.isActive !== undefined) params['IsActive'] = filters.isActive;
+    const { data } = await apiClient.get<Blob>(API_ENDPOINTS.subjects.export, {
+      responseType: 'blob',
+      params,
+      signal,
+    });
+    if (data.type.includes('json')) {
+      const result: ApiResult<unknown> = JSON.parse(await data.text());
+      assertApiSuccess(result);
+      throw new Error('errors.unknown');
+    }
+    return data;
+  } catch (error) {
+    throw normalizeApiError(error);
+  }
+}

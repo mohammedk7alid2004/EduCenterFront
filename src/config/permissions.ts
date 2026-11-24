@@ -48,6 +48,7 @@ export const PERMISSIONS = {
     update: 'Appointments.Update',
     delete: 'Appointments.Delete',
     toggleStatus: 'Appointments.ToggleStatus',
+    export: 'Appointments.ExportData',
   },
   groups: {
     read: 'Appointments.GetAll',
@@ -63,10 +64,16 @@ export const PERMISSIONS = {
     record: 'Attendance.Record',
   },
   classrooms: {
+    read: 'Classrooms.GetAll',
+    export: 'Classrooms.ExportData',
     create: 'Classrooms.Create',
     update: 'Classrooms.Update',
     delete: 'Classrooms.Delete',
     toggleStatus: 'Classrooms.ToggleStatus',
+  },
+  subjects: {
+    read: 'Subjects.GetAll',
+    export: 'Subjects.ExportData',
   },
   roles: {
     read: 'Roles.Read',
