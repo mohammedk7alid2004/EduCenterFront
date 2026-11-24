@@ -148,6 +148,7 @@ export const API_ENDPOINTS = {
     export: '/v1/Attendance/ExportExcel',
     students: '/v1/select-menu/GetStudents',
     appointmentOptions: '/v1/Attendance/AppointmentOptions',
+    recorded: '/v1/Attendance/Recorded',
   },
 } as const;
 export const QUERY_KEYS = {
