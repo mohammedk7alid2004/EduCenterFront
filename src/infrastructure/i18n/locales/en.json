@@ -869,6 +869,7 @@
     "title": "Attendance",
     "description": "Record and review student attendance.",
     "create": "Student Attendance",
+    "export": "Export Excel",
     "recordTitle": "Student Attendance",
     "viewTitle": "View Student Attendance",
     "student": "Student",

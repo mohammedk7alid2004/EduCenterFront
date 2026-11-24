@@ -6,6 +6,7 @@ import {
   fetchAttendanceItem,
   fetchAttendanceStudents,
   fetchAttendanceAppointmentOptions,
+  exportAttendance,
   recordAttendance,
 } from './attendance.api';
 import type {
@@ -53,5 +54,10 @@ export function useRecordAttendance() {
   return useMutation<void, ApiError, AttendanceValues>({
     mutationFn: (values) => recordAttendance(values),
     onSuccess: () => void client.invalidateQueries({ queryKey: QUERY_KEYS.attendance }),
+  });
+}
+export function useAttendanceExport() {
+  return useMutation<Blob, ApiError, AttendanceFilters>({
+    mutationFn: (filters) => exportAttendance(filters),
   });
 }

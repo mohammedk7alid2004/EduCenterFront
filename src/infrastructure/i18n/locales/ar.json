@@ -869,6 +869,7 @@
     "title": "الحضور",
     "description": "تسجيل ومراجعة حضور الطلاب.",
     "create": "تسجيل حضور طالب",
+    "export": "تصدير Excel",
     "recordTitle": "تسجيل حضور طالب",
     "viewTitle": "عرض حضور الطالب",
     "student": "الطالب",

@@ -139,6 +139,7 @@ export const API_ENDPOINTS = {
     getAll: '/v1/Attendance',
     detail: (id: string) => `/v1/Attendance/${encodeURIComponent(id)}`,
     record: '/v1/Attendance',
+    export: '/v1/Attendance/ExportExcel',
     students: '/v1/select-menu/GetStudents',
     appointmentOptions: '/v1/Attendance/AppointmentOptions',
   },

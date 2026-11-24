@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
+import { toast } from 'sonner';
 import { LIST_PARAMS, PERMISSIONS } from '@/config';
 import { usePermission } from '@/infrastructure/auth';
-import { ManagementList } from '@/shared/components';
-import { useListControls } from '@/shared/hooks';
-import { useAttendance } from './attendance.queries';
+import { Button, Icon, ManagementList } from '@/shared/components';
+import { useListControls, useOnline } from '@/shared/hooks';
+import { downloadBlob } from '@/shared/utils';
+import { useAttendance, useAttendanceExport } from './attendance.queries';
 import { ATTENDANCE_FILTER_PARAMS, ATTENDANCE_FILTER_STATUSES } from './attendance.constants';
 import type { AttendanceDto, AttendanceStatus } from './attendance.types';
 import { AttendanceFormModal } from './components/attendance-form-modal';
@@ -16,6 +18,7 @@ export function AttendancePage(): JSX.Element {
   const { t } = useTranslation();
   const controls = useListControls();
   const can = usePermission();
+  const online = useOnline();
   const [params, setParams] = useSearchParams();
   const statusValue = params.get(ATTENDANCE_FILTER_PARAMS.status) ?? '';
   const groupName = params.get(ATTENDANCE_FILTER_PARAMS.groupName) ?? '';
@@ -26,12 +29,14 @@ export function AttendancePage(): JSX.Element {
   )
     ? (selectedStatus as AttendanceStatus)
     : undefined;
-  const query = useAttendance({
+  const filters = {
     ...controls.filters,
     status,
     groupName: groupName || undefined,
     attendanceDate: attendanceDate || undefined,
-  });
+  };
+  const query = useAttendance(filters);
+  const exporter = useAttendanceExport();
   const [formOpen, setFormOpen] = useState(false);
   const [viewing, setViewing] = useState<AttendanceDto | null>(null);
 
@@ -78,6 +83,27 @@ export function AttendancePage(): JSX.Element {
             onChange={changeFilter}
             onClear={clearFilters}
           />
+        }
+        searchActions={
+          can(PERMISSIONS.attendance.read) ? (
+            <Button
+              type="button"
+              variant="ghost"
+              className="h-[43px] rounded-xl border border-primary/20 bg-card text-primary"
+              disabled={!online || exporter.isPending}
+              loading={exporter.isPending}
+              onClick={() =>
+                exporter.mutate(filters, {
+                  onSuccess: (file) => downloadBlob(file, 'StudentAttendance.xlsx'),
+                  onError: (error) =>
+                    toast.error(t(error.message, { defaultValue: error.message })),
+                })
+              }
+            >
+              <Icon name="download" className="size-4" />
+              {t('attendance.export')}
+            </Button>
+          ) : undefined
         }
       >
         <AttendanceTable
