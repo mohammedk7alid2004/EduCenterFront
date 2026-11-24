@@ -13,11 +13,11 @@ export function AttendanceStatusBadge({ status }: { status: AttendanceStatus }):
     },
     [ATTENDANCE_STATUS.excused]: {
       key: 'excused',
-      tone: 'border-danger bg-danger/10 text-danger',
+      tone: 'border-info bg-info/10 text-info',
     },
     [ATTENDANCE_STATUS.absent]: {
       key: 'absent',
-      tone: 'border-info bg-info/10 text-info',
+      tone: 'border-danger bg-danger/10 text-danger',
     },
   } as const;
   const { key, tone } = statusConfig[status];

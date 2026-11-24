@@ -48,64 +48,59 @@ export function DashboardAttendanceSummary(): JSX.Element {
         </Link>
       </div>
 
-      {/* Progress Breakdown Bar */}
-      <div className="mt-5 rounded-2xl border border-border/80 bg-subtle/50 p-4">
-        <div className="flex items-center justify-between text-xs font-medium">
-          <span className="text-muted">{t('pages.dashboard.statsOverview')}</span>
-          <span className="font-bold text-success">
-            {presentPercent}% {t('pages.dashboard.presentRate')}
-          </span>
+      {/* Simple Attendance Stats */}
+      <div className="mt-5 space-y-3">
+        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+          <div className="rounded-2xl border border-success/20 bg-success/5 p-3 text-center">
+            <p className="text-xl font-bold text-success">{presentCount}</p>
+            <p className="mt-0.5 text-xs font-medium text-tableHeading">
+              {t('attendance.statuses.present')}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-warning/20 bg-warning/5 p-3 text-center">
+            <p className="text-xl font-bold text-warning">{lateCount}</p>
+            <p className="mt-0.5 text-xs font-medium text-tableHeading">
+              {t('pages.dashboard.lateRate')}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-info/20 bg-info/5 p-3 text-center">
+            <p className="text-xl font-bold text-info">{excusedCount}</p>
+            <p className="mt-0.5 text-xs font-medium text-tableHeading">
+              {t('pages.dashboard.excusedRate')}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-danger/20 bg-danger/5 p-3 text-center">
+            <p className="text-xl font-bold text-danger">{absentCount}</p>
+            <p className="mt-0.5 text-xs font-medium text-tableHeading">
+              {t('pages.dashboard.absentRate')}
+            </p>
+          </div>
         </div>
 
-        {/* Segmented Progress */}
-        <div className="mt-2.5 flex h-3 w-full overflow-hidden rounded-full bg-border/40">
-          {totalCount > 0 ? (
-            <>
-              <div
-                style={{ width: `${presentPercent}%` }}
-                className="bg-success transition-all duration-500"
-                title={`${t('pages.dashboard.presentRate')}: ${presentPercent}%`}
-              />
-              <div
-                style={{ width: `${latePercent}%` }}
-                className="bg-warning transition-all duration-500"
-                title={`${t('pages.dashboard.lateRate')}: ${latePercent}%`}
-              />
-              <div
-                style={{ width: `${excusedPercent}%` }}
-                className="bg-danger transition-all duration-500"
-                title={`${t('pages.dashboard.excusedRate')}: ${excusedPercent}%`}
-              />
-              <div
-                style={{ width: `${absentPercent}%` }}
-                className="bg-info transition-all duration-500"
-                title={`${t('pages.dashboard.absentRate')}: ${absentPercent}%`}
-              />
-            </>
-          ) : (
-            <div className="w-full bg-muted/20" />
-          )}
-        </div>
-
-        {/* Breakdown Pills */}
-        <div className="mt-3 grid grid-cols-2 gap-2 text-center text-xs sm:grid-cols-4">
-          <div className="rounded-xl bg-success/10 p-2 text-success">
-            <p className="font-bold text-sm">{presentCount}</p>
-            <p className="text-[11px] font-medium">{t('pages.dashboard.presentRate')}</p>
+        {totalCount > 0 && (
+          <div className="flex h-2 w-full overflow-hidden rounded-full bg-border/40">
+            <div
+              style={{ width: `${presentPercent}%` }}
+              className="bg-success transition-all duration-500"
+              title={`${t('attendance.statuses.present')}: ${presentPercent}%`}
+            />
+            <div
+              style={{ width: `${latePercent}%` }}
+              className="bg-warning transition-all duration-500"
+              title={`${t('pages.dashboard.lateRate')}: ${latePercent}%`}
+            />
+            <div
+              style={{ width: `${excusedPercent}%` }}
+              className="bg-info transition-all duration-500"
+              title={`${t('pages.dashboard.excusedRate')}: ${excusedPercent}%`}
+            />
+            <div
+              style={{ width: `${absentPercent}%` }}
+              className="bg-danger transition-all duration-500"
+              title={`${t('pages.dashboard.absentRate')}: ${absentPercent}%`}
+            />
           </div>
-          <div className="rounded-xl bg-warning/10 p-2 text-warning">
-            <p className="font-bold text-sm">{lateCount}</p>
-            <p className="text-[11px] font-medium">{t('pages.dashboard.lateRate')}</p>
-          </div>
-          <div className="rounded-xl bg-danger/10 p-2 text-danger">
-            <p className="font-bold text-sm">{excusedCount}</p>
-            <p className="text-[11px] font-medium">{t('pages.dashboard.excusedRate')}</p>
-          </div>
-          <div className="rounded-xl bg-info/10 p-2 text-info">
-            <p className="font-bold text-sm">{absentCount}</p>
-            <p className="text-[11px] font-medium">{t('pages.dashboard.absentRate')}</p>
-          </div>
-        </div>
+        )}
       </div>
 
       {/* Recent Check-ins */}

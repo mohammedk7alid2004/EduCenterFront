@@ -11,8 +11,8 @@ type ChartStatus = keyof typeof ATTENDANCE_STATUS;
 const chartSeries: { key: ChartStatus; color: string }[] = [
   { key: 'present', color: 'bg-success' },
   { key: 'late', color: 'bg-warning' },
-  { key: 'excused', color: 'bg-danger' },
-  { key: 'absent', color: 'bg-info' },
+  { key: 'excused', color: 'bg-info' },
+  { key: 'absent', color: 'bg-danger' },
 ];
 
 function dateKey(date: Date): string {
