@@ -920,7 +920,12 @@
       "title": "Student Attendance Report",
       "generatedAt": "Generated",
       "page": "Page",
-      "noRecords": "No attendance records match the selected filters."
+      "noRecords": "No attendance records match the selected filters.",
+      "records": "Attendance records",
+      "groups": "Groups",
+      "period": "Period",
+      "allDates": "All dates",
+      "multipleGroups": "groups"
     }
   }
 }

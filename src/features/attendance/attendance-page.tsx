@@ -80,6 +80,11 @@ export function AttendancePage(): JSX.Element {
           group: t('attendance.group'),
           status: t('attendance.status'),
           date: t('attendance.date'),
+          records: t('attendance.pdf.records'),
+          groups: t('attendance.pdf.groups'),
+          period: t('attendance.pdf.period'),
+          allDates: t('attendance.pdf.allDates'),
+          multipleGroups: t('attendance.pdf.multipleGroups'),
           statuses: {
             1: t('attendance.statuses.present'),
             2: t('attendance.statuses.late'),
