@@ -57,7 +57,7 @@ export function AppointmentCalendarEvent<T extends CalendarAppointment>({
         <div className="flex min-w-0 shrink-0 items-center justify-between gap-1">
           <span className="flex min-w-0 items-center gap-1 font-semibold">
             <Icon name="bookOpen" className={minimal ? 'size-3 shrink-0' : 'size-4 shrink-0'} />
-            <span className="truncate">{localizedName(row.subject, i18n.language)}</span>
+            <span className="truncate">{row.groupName}</span>
           </span>
           {canView && (
             <button
@@ -81,7 +81,11 @@ export function AppointmentCalendarEvent<T extends CalendarAppointment>({
             </bdi>
           </span>
         )}
-        {!compact && <span className="mt-1 shrink-0 truncate text-[10px]">{row.groupName}</span>}
+        {!compact && (
+          <span className="mt-1 shrink-0 truncate text-[10px]">
+            {localizedName(row.subject, i18n.language)}
+          </span>
+        )}
         {!minimal && (
           <span
             className={`mt-auto shrink-0 truncate ${compact ? 'pt-1 text-[10px]' : 'pt-2 text-[11px]'}`}
