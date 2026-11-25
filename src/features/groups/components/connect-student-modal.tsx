@@ -1,4 +1,4 @@
-import { useState, useId } from 'react';
+import { useState, useId, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { Button, ErrorState, FeedbackDialog, Icon, LoadingState, Modal } from '@/shared/components';
@@ -25,8 +25,10 @@ export function ConnectStudentModal({
   const [initialized, setInitialized] = useState(false);
   const [search, setSearch] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [enrolledOpen, setEnrolledOpen] = useState(false);
   const [success, setSuccess] = useState(false);
   const inputId = useId();
+  const enrolledRef = useRef<HTMLDivElement>(null);
 
   const debouncedSearch = useDebouncedValue(search, 300);
 
@@ -50,6 +52,18 @@ export function ConnectStudentModal({
     }
     setInitialized(true);
   }
+
+  // Close enrolled popover on outside click
+  useEffect(() => {
+    if (!enrolledOpen) return;
+    function handleClick(e: MouseEvent) {
+      if (enrolledRef.current && !enrolledRef.current.contains(e.target as Node)) {
+        setEnrolledOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [enrolledOpen]);
 
   function handleSelectStudent(student: StudentOption) {
     if (selectedStudents.some((s) => s.id === student.id)) return;
@@ -140,11 +154,55 @@ export function ConnectStudentModal({
                 {t('groups.personCount', { count: group.maxCapacity })}
               </span>
             </div>
-            <div>
+            <div className="relative" ref={enrolledRef}>
               <span className="block text-xs text-muted">{t('groups.noOfStudents')}</span>
-              <span className="inline-flex items-center rounded-lg border border-success bg-success/10 px-2.5 py-0.5 text-xs font-semibold text-success">
-                {selectedStudents.length}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center rounded-lg border border-success bg-success/10 px-2.5 py-0.5 text-xs font-semibold text-success">
+                  {selectedStudents.length}
+                </span>
+                {selectedStudents.length > 0 && (
+                  <button
+                    type="button"
+                    aria-label={t('groups.enrolledStudents')}
+                    title={t('groups.enrolledStudents')}
+                    onClick={() => setEnrolledOpen((o) => !o)}
+                    className="grid size-7 place-items-center rounded-lg text-muted transition hover:bg-subtle hover:text-primary"
+                  >
+                    <Icon name="menu" className="size-4" />
+                  </button>
+                )}
+              </div>
+              {/* Enrolled students popover */}
+              {enrolledOpen && selectedStudents.length > 0 && (
+                <div className="absolute start-0 top-full z-50 mt-2 max-h-64 w-72 overflow-y-auto rounded-xl border border-muted/40 bg-card p-2 shadow-lg">
+                  <p className="mb-2 px-2 text-xs font-semibold text-muted">
+                    {t('groups.enrolledStudents')} ({selectedStudents.length})
+                  </p>
+                  {selectedStudents.map((student) => (
+                    <div
+                      key={student.id}
+                      className="flex items-center justify-between gap-2 rounded-lg px-2 py-1.5 text-sm text-foreground hover:bg-subtle"
+                    >
+                      <span className="min-w-0 truncate">
+                        {student.name}
+                        {student.phoneNumber ? (
+                          <span className="ms-1 text-xs text-muted">
+                            (<bdi>{student.phoneNumber}</bdi>)
+                          </span>
+                        ) : null}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveStudent(student.id)}
+                        className="grid size-6 shrink-0 place-items-center rounded-full text-muted transition hover:bg-danger/10 hover:text-danger"
+                        aria-label={t('common.delete')}
+                      >
+                        <Icon name="close" className="size-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
             <div className="sm:col-span-2">
               <span className="block text-xs text-muted">{t('groups.status')}</span>
@@ -158,29 +216,9 @@ export function ConnectStudentModal({
               {t('groups.student')} <span className="text-danger">*</span>
             </label>
 
-            {/* Chips Container */}
+            {/* Search input */}
             <div className="min-h-12 w-full rounded-xl border border-muted/60 bg-card p-2 transition focus-within:border-primary">
-              <div className="flex flex-wrap items-center gap-2">
-                {selectedStudents.map((student) => (
-                  <span
-                    key={student.id}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-muted/40 bg-secondary/80 px-3 py-1 text-xs font-medium text-foreground"
-                  >
-                    <span>
-                      {student.name}
-                      {student.phoneNumber ? ` - ${student.phoneNumber}` : ''}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveStudent(student.id)}
-                      className="rounded-full p-0.5 hover:bg-muted/30 hover:text-danger"
-                      aria-label={t('common.delete')}
-                    >
-                      <Icon name="close" className="size-3" />
-                    </button>
-                  </span>
-                ))}
-
+              <div className="flex items-center gap-2">
                 {/* Search input inline */}
                 <div className="relative min-w-[200px] flex-1">
                   <input
@@ -192,11 +230,7 @@ export function ConnectStudentModal({
                       setDropdownOpen(true);
                     }}
                     onFocus={() => setDropdownOpen(true)}
-                    placeholder={
-                      selectedStudents.length === 0
-                        ? t('groups.searchStudents')
-                        : t('groups.selectStudents')
-                    }
+                    placeholder={t('groups.searchStudents')}
                     className="w-full bg-transparent px-2 py-1 text-sm outline-none placeholder:text-muted"
                   />
                 </div>

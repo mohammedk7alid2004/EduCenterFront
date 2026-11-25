@@ -862,6 +862,8 @@
     "personCount": "{{count}} Person",
     "capacityReached": "Maximum capacity reached ({{max}} Person)",
     "noStudentsSelected": "No students selected yet",
+    "enrolledStudents": "Enrolled Students",
+    "noEnrolledStudents": "No enrolled students",
     "delete": {
       "title": "Delete Group",
       "description": "Are you sure you want to delete this group?",

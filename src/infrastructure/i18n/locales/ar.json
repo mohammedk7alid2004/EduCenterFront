@@ -862,6 +862,8 @@
     "personCount": "{{count}} شخص",
     "capacityReached": "تم الوصول للحد الأقصى للسعة ({{max}} شخص)",
     "noStudentsSelected": "لم يتم اختيار أي طالب بعد",
+    "enrolledStudents": "الطلاب المسجلين",
+    "noEnrolledStudents": "لا يوجد طلاب مسجلين",
     "delete": {
       "title": "حذف المجموعة",
       "description": "هل أنت متأكد من رغبتك في حذف هذه المجموعة؟",
