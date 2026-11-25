@@ -240,7 +240,9 @@
   },
   "subjects": {
     "title": "المواد الدراسية",
-    "export": "تصدير Excel",
+    "export": "تصدير",
+    "exportExcel": "تصدير Excel",
+    "exportPdf": "تصدير PDF",
     "create": "إضافة مادة جديدة",
     "search": "البحث في المواد…",
     "table": {
@@ -912,6 +914,12 @@
     "notes": "ملاحظات",
     "notesPlaceholder": "أدخل ملاحظات...",
     "statuses": { "present": "حاضر", "late": "متأخر", "excused": "بعذر", "absent": "غائب" },
-    "feedback": { "recorded": "تم تسجيل الحضور بنجاح." }
+    "feedback": { "recorded": "تم تسجيل الحضور بنجاح." },
+    "pdf": {
+      "title": "تقرير حضور الطلاب",
+      "generatedAt": "تاريخ التصدير",
+      "page": "صفحة",
+      "noRecords": "لا توجد سجلات حضور مطابقة للفلاتر المختارة."
+    }
   }
 }

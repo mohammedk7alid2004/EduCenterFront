@@ -3,6 +3,7 @@ import { QUERY_KEYS } from '@/config';
 import type { ApiError, PaginatedResult } from '@/infrastructure/api';
 import {
   fetchAttendance,
+  fetchAllAttendanceForExport,
   fetchAttendanceItem,
   fetchAttendanceStudents,
   fetchAttendanceAppointmentOptions,
@@ -51,7 +52,11 @@ export function useAttendanceAppointmentOptions(studentId?: string) {
     enabled: Boolean(studentId),
   });
 }
-export function useRecordedAttendance(studentId: string, appointmentId: string, sessionDate: string) {
+export function useRecordedAttendance(
+  studentId: string,
+  appointmentId: string,
+  sessionDate: string,
+) {
   const ready = Boolean(studentId && appointmentId && /^\d{4}-\d{2}-\d{2}$/.test(sessionDate));
   return useQuery<RecordedAttendance | null, ApiError>({
     queryKey: [...QUERY_KEYS.attendance, 'recorded', studentId, appointmentId, sessionDate],
@@ -72,5 +77,11 @@ export function useRecordAttendance() {
 export function useAttendanceExport() {
   return useMutation<Blob, ApiError, AttendanceFilters>({
     mutationFn: (filters) => exportAttendance(filters),
+  });
+}
+
+export function useAttendancePdfExport() {
+  return useMutation<AttendanceDto[], ApiError, AttendanceFilters>({
+    mutationFn: (filters) => fetchAllAttendanceForExport(filters),
   });
 }

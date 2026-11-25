@@ -54,6 +54,24 @@ export async function fetchAttendance(
     throw normalizeApiError(error);
   }
 }
+
+export async function fetchAllAttendanceForExport(
+  filters: AttendanceFilters,
+  signal?: AbortSignal,
+): Promise<AttendanceDto[]> {
+  const rows: AttendanceDto[] = [];
+  let pageNumber = 1;
+  let totalPages = 1;
+
+  do {
+    const page = await fetchAttendance({ ...filters, pageNumber, pageSize: 100 }, signal);
+    rows.push(...page.items);
+    totalPages = page.totalPages;
+    pageNumber += 1;
+  } while (pageNumber <= totalPages);
+
+  return rows;
+}
 export async function fetchAttendanceItem(
   id: string,
   signal?: AbortSignal,
@@ -104,10 +122,10 @@ export async function fetchRecordedAttendance(
   signal?: AbortSignal,
 ): Promise<RecordedAttendance | null> {
   try {
-    const { data } = await apiClient.get<ApiResult<RecordedAttendance | null>>(
-      endpoints.recorded,
-      { signal, params },
-    );
+    const { data } = await apiClient.get<ApiResult<RecordedAttendance | null>>(endpoints.recorded, {
+      signal,
+      params,
+    });
     assertApiSuccess(data);
     return data.data ?? null;
   } catch (error) {

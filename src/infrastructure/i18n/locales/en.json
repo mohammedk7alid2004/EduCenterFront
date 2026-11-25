@@ -240,7 +240,9 @@
   },
   "subjects": {
     "title": "Subjects",
-    "export": "Export Excel",
+    "export": "Export",
+    "exportExcel": "Export Excel",
+    "exportPdf": "Export PDF",
     "create": "Add New Subject",
     "search": "Search subjects…",
     "table": {
@@ -912,6 +914,12 @@
     "notes": "Notes",
     "notesPlaceholder": "Enter Notes...",
     "statuses": { "present": "Present", "late": "Late", "excused": "Excused", "absent": "Absent" },
-    "feedback": { "recorded": "Your attendance has been successfully recorded." }
+    "feedback": { "recorded": "Your attendance has been successfully recorded." },
+    "pdf": {
+      "title": "Student Attendance Report",
+      "generatedAt": "Generated",
+      "page": "Page",
+      "noRecords": "No attendance records match the selected filters."
+    }
   }
 }

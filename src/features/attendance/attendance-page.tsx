@@ -7,7 +7,8 @@ import { usePermission } from '@/infrastructure/auth';
 import { Button, Icon, ManagementList } from '@/shared/components';
 import { useListControls, useOnline } from '@/shared/hooks';
 import { downloadBlob } from '@/shared/utils';
-import { useAttendance, useAttendanceExport } from './attendance.queries';
+import { exportAttendancePdf } from './attendance-pdf.lib';
+import { useAttendance, useAttendanceExport, useAttendancePdfExport } from './attendance.queries';
 import { ATTENDANCE_FILTER_PARAMS, ATTENDANCE_FILTER_STATUSES } from './attendance.constants';
 import type { AttendanceDto, AttendanceStatus } from './attendance.types';
 import { AttendanceFormModal } from './components/attendance-form-modal';
@@ -15,7 +16,7 @@ import { AttendanceFilters } from './components/attendance-filters';
 import { AttendanceTable } from './components/attendance-table';
 import { ViewAttendanceModal } from './components/view-attendance-modal';
 export function AttendancePage(): JSX.Element {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const controls = useListControls();
   const can = usePermission();
   const online = useOnline();
@@ -37,8 +38,10 @@ export function AttendancePage(): JSX.Element {
   };
   const query = useAttendance(filters);
   const exporter = useAttendanceExport();
+  const pdfExporter = useAttendancePdfExport();
   const [formOpen, setFormOpen] = useState(false);
   const [viewing, setViewing] = useState<AttendanceDto | null>(null);
+  const [exportOpen, setExportOpen] = useState(false);
 
   function changeFilter(key: 'status' | 'groupName' | 'date', value: string): void {
     const param = ATTENDANCE_FILTER_PARAMS[key];
@@ -58,6 +61,40 @@ export function AttendancePage(): JSX.Element {
       next.delete(LIST_PARAMS.page);
       return next;
     });
+  }
+
+  async function handlePdfExport(): Promise<void> {
+    try {
+      const rows = await pdfExporter.mutateAsync(filters);
+      await exportAttendancePdf({
+        rows,
+        language: i18n.language,
+        labels: {
+          title: t('attendance.pdf.title'),
+          generatedAt: t('attendance.pdf.generatedAt'),
+          page: t('attendance.pdf.page'),
+          noRecords: t('attendance.pdf.noRecords'),
+          fullName: t('attendance.fullName'),
+          phoneNumber: t('attendance.phoneNumber'),
+          email: t('attendance.email'),
+          group: t('attendance.group'),
+          status: t('attendance.status'),
+          date: t('attendance.date'),
+          statuses: {
+            1: t('attendance.statuses.present'),
+            2: t('attendance.statuses.late'),
+            3: t('attendance.statuses.excused'),
+            4: t('attendance.statuses.absent'),
+          },
+        },
+      });
+      setExportOpen(false);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'errors.unknown';
+      toast.error(t(message, { defaultValue: message }));
+    } finally {
+      setExportOpen(false);
+    }
   }
   return (
     <>
@@ -86,23 +123,55 @@ export function AttendancePage(): JSX.Element {
         }
         searchActions={
           can(PERMISSIONS.attendance.read) ? (
-            <Button
-              type="button"
-              variant="ghost"
-              className="h-[43px] rounded-xl border border-primary/20 bg-card text-primary"
-              disabled={!online || exporter.isPending}
-              loading={exporter.isPending}
-              onClick={() =>
-                exporter.mutate(filters, {
-                  onSuccess: (file) => downloadBlob(file, 'StudentAttendance.xlsx'),
-                  onError: (error) =>
-                    toast.error(t(error.message, { defaultValue: error.message })),
-                })
-              }
-            >
-              <Icon name="download" className="size-4" />
-              {t('attendance.export')}
-            </Button>
+            <div className="relative">
+              <Button
+                type="button"
+                variant="ghost"
+                className="h-[43px] rounded-xl border border-primary/20 bg-card text-primary"
+                disabled={!online || exporter.isPending || pdfExporter.isPending}
+                loading={exporter.isPending || pdfExporter.isPending}
+                aria-expanded={exportOpen}
+                onClick={() => setExportOpen((open) => !open)}
+              >
+                <Icon name="download" className="size-4" />
+                {t('attendance.export')}
+                <Icon name="chevronDown" className="size-4" />
+              </Button>
+              {exportOpen && (
+                <div
+                  role="menu"
+                  className="absolute end-0 z-20 mt-2 w-44 overflow-hidden rounded-xl border border-border bg-card p-1 shadow-lg"
+                >
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-foreground transition hover:bg-primary/10"
+                    onClick={() =>
+                      exporter.mutate(filters, {
+                        onSuccess: (file) => {
+                          downloadBlob(file, 'StudentAttendance.xlsx');
+                          setExportOpen(false);
+                        },
+                        onError: (error) =>
+                          toast.error(t(error.message, { defaultValue: error.message })),
+                      })
+                    }
+                  >
+                    <Icon name="download" className="size-4 text-success" />
+                    {t('attendance.exportExcel')}
+                  </button>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-foreground transition hover:bg-primary/10"
+                    onClick={() => void handlePdfExport()}
+                  >
+                    <Icon name="pdfFile" className="size-4 text-danger" />
+                    {t('attendance.exportPdf')}
+                  </button>
+                </div>
+              )}
+            </div>
           ) : undefined
         }
       >
