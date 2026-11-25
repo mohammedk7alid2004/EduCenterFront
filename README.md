@@ -1,5 +1,5 @@
 # EduCenter frontend foundation
-
+ 
 React 18 + Vite + TypeScript foundation organized by feature. It supplies architecture and cross-cutting concerns; business flows are deliberately not implemented yet.
 
 ## Run
