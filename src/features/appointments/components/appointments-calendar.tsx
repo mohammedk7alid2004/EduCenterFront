@@ -4,6 +4,7 @@ import { PERMISSIONS } from '@/config';
 import { usePermission } from '@/infrastructure/auth';
 import { EmptyState, Icon } from '@/shared/components';
 import {
+  appointmentEndMinutes,
   calendarDates,
   formatAppointmentTime,
   layoutAppointments,
@@ -59,7 +60,12 @@ export function AppointmentsCalendar<T extends CalendarAppointment>({
     ? Math.floor(Math.min(...rows.map((row) => timeMinutes(row.startTime))) / 60)
     : 8;
   const lastHour = rows.length
-    ? Math.min(24, Math.ceil(Math.max(...rows.map((row) => timeMinutes(row.endTime))) / 60))
+    ? Math.min(
+        24,
+        Math.ceil(
+          Math.max(...rows.map((row) => appointmentEndMinutes(row.startTime, row.endTime))) / 60,
+        ),
+      )
     : 18;
   const hours = Array.from({ length: lastHour - firstHour + 1 }, (_, i) => firstHour + i);
   const label = new Intl.DateTimeFormat(
@@ -277,7 +283,9 @@ export function AppointmentsCalendar<T extends CalendarAppointment>({
                             2,
                           height: Math.max(
                             28,
-                            ((timeMinutes(row.endTime) - timeMinutes(row.startTime)) / 60) *
+                            ((appointmentEndMinutes(row.startTime, row.endTime) -
+                              timeMinutes(row.startTime)) /
+                              60) *
                               CALENDAR_HOUR_HEIGHT -
                               4,
                           ),

@@ -1,3 +1,4 @@
+import { MINUTES_PER_DAY } from './appointments.constants';
 import type { LocalizedName } from './appointments.types';
 export function localizedName(value: LocalizedName, language: string): string {
   return value[language.startsWith('ar') ? 'ar' : 'en'] || value.en || value.ar || '';
@@ -5,6 +6,14 @@ export function localizedName(value: LocalizedName, language: string): string {
 export function timeMinutes(value: string): number {
   const [hours, minutes] = value.split(':').map(Number);
   return hours * 60 + minutes;
+}
+export function appointmentEndMinutes(startTime: string, endTime: string): number {
+  const start = timeMinutes(startTime);
+  let end = timeMinutes(endTime);
+  if (end <= start) {
+    end += MINUTES_PER_DAY;
+  }
+  return end;
 }
 export function formatAppointmentTime(value: string, language: string, compact = false): string {
   const date = new Date(2000, 0, 1, Math.floor(timeMinutes(value) / 60), timeMinutes(value) % 60);
@@ -109,7 +118,7 @@ export function layoutAppointments<T extends { id: string; startTime: string; en
   };
   for (const row of sorted) {
     const start = timeMinutes(row.startTime);
-    const end = timeMinutes(row.endTime);
+    const end = appointmentEndMinutes(row.startTime, row.endTime);
     if (start >= groupEnd) flush();
     let lane = ends.findIndex((value) => value <= start);
     if (lane < 0) lane = ends.length;

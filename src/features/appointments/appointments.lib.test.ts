@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   appointmentCycleStartDate,
   appointmentDayDate,
+  appointmentEndMinutes,
   appointmentLectureCount,
   calendarDates,
   layoutAppointments,
@@ -65,5 +66,11 @@ describe('appointment calendar', () => {
     expect(tuesdayDate.getDay()).toBe(2);
     expect(saturdayDate.getDate()).toBe(21);
     expect(tuesdayDate.getDate()).toBe(24);
+  });
+  it('handles midnight and daytime session end minutes correctly', () => {
+    expect(appointmentEndMinutes('10:00', '12:00')).toBe(720);
+    expect(appointmentEndMinutes('22:15', '00:00')).toBe(1440);
+    expect(appointmentEndMinutes('22:15', '00:00') - timeMinutes('22:15')).toBe(105);
+    expect(appointmentEndMinutes('23:00', '00:30') - timeMinutes('23:00')).toBe(90);
   });
 });

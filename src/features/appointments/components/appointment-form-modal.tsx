@@ -23,7 +23,7 @@ import {
 } from '../appointments.queries';
 import { APPOINTMENT_ITERATION, APPOINTMENT_STATUS } from '../appointments.constants';
 import type { AppointmentDto, AppointmentValues } from '../appointments.types';
-import { localizedName, timeMinutes } from '../appointments.lib';
+import { appointmentEndMinutes, localizedName, timeMinutes } from '../appointments.lib';
 import { AppointmentSelect } from './appointment-select';
 import { AppointmentDaysSelect } from './appointment-days-select';
 import { AppointmentTimeField } from './appointment-time-field';
@@ -91,10 +91,18 @@ function AppointmentForm({
           t('validation.required'),
         ),
     })
-    .refine((values) => timeMinutes(values.endTime) > timeMinutes(values.startTime), {
-      path: ['endTime'],
-      message: t('appointments.validation.time'),
-    })
+    .refine(
+      (values) => {
+        const start = timeMinutes(values.startTime);
+        const end = appointmentEndMinutes(values.startTime, values.endTime);
+        const duration = end - start;
+        return duration > 0 && duration <= 12 * 60;
+      },
+      {
+        path: ['endTime'],
+        message: t('appointments.validation.time'),
+      },
+    )
     .superRefine((values, context) => {
       const capacity = classrooms.data?.find(
         (option) => option.id === values.classroomId,
