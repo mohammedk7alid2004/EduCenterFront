@@ -345,6 +345,7 @@
     "viewTitle": "View Permission",
     "permissions": "Permissions",
     "availablePermissions": "Available Permissions",
+    "selectGroupPermissions": "Select all permissions in {{group}}",
     "form": {
       "name": "Role Name",
       "namePlaceholder": "Enter Role Name",

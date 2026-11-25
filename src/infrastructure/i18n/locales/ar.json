@@ -345,6 +345,7 @@
     "viewTitle": "عرض الصلاحيات",
     "permissions": "الصلاحيات",
     "availablePermissions": "الصلاحيات المتاحة",
+    "selectGroupPermissions": "تحديد كل صلاحيات قسم {{group}}",
     "form": {
       "name": "اسم الدور",
       "namePlaceholder": "أدخل اسم الدور",

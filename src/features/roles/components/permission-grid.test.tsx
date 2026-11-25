@@ -58,4 +58,30 @@ describe('permission grants', () => {
     await userEvent.click(screen.getByRole('switch', { name: 'permissionActions.GetAll' }));
     expect(changed).not.toHaveBeenCalled();
   });
+
+  it('grants and revokes every permission in a section from its checkbox', async () => {
+    const changed = vi.fn();
+    function Harness() {
+      const [selected, setSelected] = useState<string[]>([]);
+      return (
+        <PermissionGrid
+          permissions={permissions}
+          selected={selected}
+          onChange={(ids) => {
+            setSelected(ids);
+            changed(ids);
+          }}
+        />
+      );
+    }
+    render(<Harness />);
+    const sectionCheckbox = screen.getByRole('checkbox', {
+      name: 'roleManagement.selectGroupPermissions',
+    });
+    await userEvent.click(sectionCheckbox);
+    expect(changed).toHaveBeenLastCalledWith(['read-id', 'create-id', 'delete-id']);
+    expect(sectionCheckbox).toHaveAttribute('aria-checked', 'true');
+    await userEvent.click(sectionCheckbox);
+    expect(changed).toHaveBeenLastCalledWith([]);
+  });
 });
