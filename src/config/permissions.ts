@@ -22,6 +22,9 @@ export function hasPermission(roles: readonly Role[], permission: string): boole
 }
 
 export const PERMISSIONS = {
+  dashboard: {
+    read: 'Statistics.GetDashboard',
+  },
   students: {
     read: 'Students.GetAll',
     detail: 'Students.GetById',
@@ -89,6 +92,16 @@ export const PERMISSIONS = {
     delete: 'SubAdminEmployee.Delete',
     toggleStatus: 'SubAdminEmployee.ToggleStatus',
   },
+  systemManagement: {
+    privacy: 'PrivacyPolicy.View',
+    registration: 'StudentRegistration.View',
+    terms: 'TermsAndConditions.View',
+    social: 'SocialMediaLinks.View',
+    faq: 'FAQ.ViewAll',
+    payment: 'PaymentPolicy.View',
+    help: 'Help.View',
+    center: 'CenterSettings.View',
+  },
 } as const;
 export const RESERVED_ROLE_NAMES = ['superadmin', 'customer', 'user'] as const;
 export function isReservedRole(name: string): boolean {
@@ -104,4 +117,39 @@ export function canUsePermission(
       user.permissions?.includes('*') ||
       user.permissions?.includes(permission)),
   );
+}
+import { ROUTES } from './constants';
+
+const SYSTEM_MANAGEMENT_READ_PERMISSIONS = Object.values(PERMISSIONS.systemManagement);
+
+const DEFAULT_ROUTE_ACCESS = [
+  { route: ROUTES.dashboard, permissions: [PERMISSIONS.dashboard.read] },
+  { route: ROUTES.appointments, permissions: [PERMISSIONS.appointments.read] },
+  { route: ROUTES.teachers, permissions: [PERMISSIONS.teachers.read] },
+  { route: ROUTES.groups, permissions: [PERMISSIONS.groups.read] },
+  { route: ROUTES.subjects, permissions: [PERMISSIONS.subjects.read] },
+  { route: ROUTES.classrooms, permissions: [PERMISSIONS.classrooms.read] },
+  { route: ROUTES.students, permissions: [PERMISSIONS.students.read] },
+  { route: ROUTES.attendance, permissions: [PERMISSIONS.attendance.read] },
+  { route: ROUTES.roles, permissions: [PERMISSIONS.roles.read] },
+  { route: ROUTES.employees, permissions: [PERMISSIONS.employees.read] },
+  { route: ROUTES.contactUs, permissions: [PERMISSIONS.contactUs.read] },
+  { route: ROUTES.systemManagement, permissions: SYSTEM_MANAGEMENT_READ_PERMISSIONS },
+] as const;
+
+export function getDefaultAuthorizedRoute(
+  user: { roles: readonly Role[]; permissions?: readonly string[] } | null,
+): string {
+  return (
+    DEFAULT_ROUTE_ACCESS.find((entry) =>
+      entry.permissions.some((permission) => canUsePermission(user, permission)),
+    )?.route ?? ROUTES.profile
+  );
+}
+
+export function canAccessAnyPermission(
+  user: { roles: readonly Role[]; permissions?: readonly string[] } | null,
+  permissions: readonly string[],
+): boolean {
+  return permissions.some((permission) => canUsePermission(user, permission));
 }

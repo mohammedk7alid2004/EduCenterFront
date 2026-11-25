@@ -25,6 +25,12 @@ export function DashboardSidebar({
     ROUTES.subjects,
     ROUTES.classrooms,
   ].some((route) => location.pathname.startsWith(route));
+  const canSchedule =
+    can(PERMISSIONS.appointments.read) ||
+    can(PERMISSIONS.teachers.read) ||
+    can(PERMISSIONS.groups.read) ||
+    can(PERMISSIONS.subjects.read) ||
+    can(PERMISSIONS.classrooms.read);
   const activeGroup = isSystem ? SIDEBAR_GROUP.system : isSchedule ? SIDEBAR_GROUP.schedule : null;
   const [openGroup, setOpenGroup] = useState<string | null>(activeGroup);
   useEffect(() => {
@@ -71,57 +77,67 @@ export function DashboardSidebar({
           aria-label={t('common.mainNavigation')}
           className="space-y-[7px] px-[21px] pb-8 text-base"
         >
-          <NavLink
-            to={ROUTES.dashboard}
-            onClick={handleNavigation}
-            className={({ isActive }) =>
-              `flex h-12 items-center gap-3 rounded-xl px-2 ${isActive ? 'bg-card text-primary' : 'text-card hover:bg-card/5'}`
-            }
-          >
-            <Icon name="home" className="size-5" />
-            {t('nav.dashboard')}
-          </NavLink>
-          <SidebarSection
-            title={t('nav.schedule')}
-            icon="schedule"
-            expanded={openGroup === SIDEBAR_GROUP.schedule}
-            onToggle={() => toggleSection(SIDEBAR_GROUP.schedule)}
-          >
-            {can(PERMISSIONS.appointments.read) && (
-              <SidebarLink
-                route={ROUTES.appointments}
-                icon="clock"
-                label={t('nav.appointments')}
-                onClick={onClose}
-              />
-            )}
-            <SidebarLink
-              route={ROUTES.teachers}
-              icon="teacher"
-              label={t('nav.teachers')}
-              onClick={onClose}
-            />
-            {can(PERMISSIONS.groups.read) && (
-              <SidebarLink
-                route={ROUTES.groups}
-                icon="users"
-                label={t('nav.groups')}
-                onClick={onClose}
-              />
-            )}
-            <SidebarLink
-              route={ROUTES.subjects}
-              icon="graduationCap"
-              label={t('nav.subjects')}
-              onClick={onClose}
-            />
-            <SidebarLink
-              route={ROUTES.classrooms}
-              icon="classroom"
-              label={t('nav.classrooms')}
-              onClick={onClose}
-            />
-          </SidebarSection>
+          {can(PERMISSIONS.dashboard.read) && (
+            <NavLink
+              to={ROUTES.dashboard}
+              onClick={handleNavigation}
+              className={({ isActive }) =>
+                `flex h-12 items-center gap-3 rounded-xl px-2 ${isActive ? 'bg-card text-primary' : 'text-card hover:bg-card/5'}`
+              }
+            >
+              <Icon name="home" className="size-5" />
+              {t('nav.dashboard')}
+            </NavLink>
+          )}
+          {canSchedule && (
+            <SidebarSection
+              title={t('nav.schedule')}
+              icon="schedule"
+              expanded={openGroup === SIDEBAR_GROUP.schedule}
+              onToggle={() => toggleSection(SIDEBAR_GROUP.schedule)}
+            >
+              {can(PERMISSIONS.appointments.read) && (
+                <SidebarLink
+                  route={ROUTES.appointments}
+                  icon="clock"
+                  label={t('nav.appointments')}
+                  onClick={onClose}
+                />
+              )}
+              {can(PERMISSIONS.teachers.read) && (
+                <SidebarLink
+                  route={ROUTES.teachers}
+                  icon="teacher"
+                  label={t('nav.teachers')}
+                  onClick={onClose}
+                />
+              )}
+              {can(PERMISSIONS.groups.read) && (
+                <SidebarLink
+                  route={ROUTES.groups}
+                  icon="users"
+                  label={t('nav.groups')}
+                  onClick={onClose}
+                />
+              )}
+              {can(PERMISSIONS.subjects.read) && (
+                <SidebarLink
+                  route={ROUTES.subjects}
+                  icon="graduationCap"
+                  label={t('nav.subjects')}
+                  onClick={onClose}
+                />
+              )}
+              {can(PERMISSIONS.classrooms.read) && (
+                <SidebarLink
+                  route={ROUTES.classrooms}
+                  icon="classroom"
+                  label={t('nav.classrooms')}
+                  onClick={onClose}
+                />
+              )}
+            </SidebarSection>
+          )}
           {can(PERMISSIONS.students.read) && (
             <NavLink
               to={ROUTES.students}

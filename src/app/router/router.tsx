@@ -1,5 +1,6 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { PERMISSIONS, ROUTES } from '@/config';
+import { SYSTEM_TABS } from '@/features/system-management';
 import { LoginPage, PasswordRecoveryPage } from '@/features/auth';
 import { AppLayout } from '@/layouts/app-layout';
 import { RouteErrorBoundary } from '../error-boundary';
@@ -104,13 +105,29 @@ export const router = createBrowserRouter([
       },
       {
         path: ROUTES.systemManagement,
-        lazy: async () => ({
-          Component: (await import('@/features/system-management')).SystemManagementPage,
-        }),
+        lazy: async () => {
+          const { SystemManagementPage } = await import('@/features/system-management');
+          return {
+            Component: () => (
+              <ProtectedRoute anyPermissions={SYSTEM_TABS.map((tab) => tab.read)}>
+                <SystemManagementPage />
+              </ProtectedRoute>
+            ),
+          };
+        },
       },
       {
         path: ROUTES.classrooms,
-        lazy: async () => ({ Component: (await import('@/features/classrooms')).ClassroomsPage }),
+        lazy: async () => {
+          const { ClassroomsPage } = await import('@/features/classrooms');
+          return {
+            Component: () => (
+              <ProtectedRoute permission={PERMISSIONS.classrooms.read}>
+                <ClassroomsPage />
+              </ProtectedRoute>
+            ),
+          };
+        },
       },
       {
         path: ROUTES.profile,
@@ -145,15 +162,42 @@ export const router = createBrowserRouter([
 
       {
         path: ROUTES.dashboard,
-        lazy: async () => ({ Component: (await import('@/features/dashboard')).DashboardPage }),
+        lazy: async () => {
+          const { DashboardPage } = await import('@/features/dashboard');
+          return {
+            Component: () => (
+              <ProtectedRoute permission={PERMISSIONS.dashboard.read}>
+                <DashboardPage />
+              </ProtectedRoute>
+            ),
+          };
+        },
       },
       {
         path: ROUTES.subjects,
-        lazy: async () => ({ Component: (await import('@/features/subjects')).SubjectsPage }),
+        lazy: async () => {
+          const { SubjectsPage } = await import('@/features/subjects');
+          return {
+            Component: () => (
+              <ProtectedRoute permission={PERMISSIONS.subjects.read}>
+                <SubjectsPage />
+              </ProtectedRoute>
+            ),
+          };
+        },
       },
       {
         path: ROUTES.teachers,
-        lazy: async () => ({ Component: (await import('@/features/teachers')).TeachersPage }),
+        lazy: async () => {
+          const { TeachersPage } = await import('@/features/teachers');
+          return {
+            Component: () => (
+              <ProtectedRoute permission={PERMISSIONS.teachers.read}>
+                <TeachersPage />
+              </ProtectedRoute>
+            ),
+          };
+        },
       },
     ],
   },

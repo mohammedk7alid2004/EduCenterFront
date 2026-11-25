@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ROUTES, STORAGE_KEYS } from '@/config';
+import { getDefaultAuthorizedRoute, ROUTES, STORAGE_KEYS } from '@/config';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '@/infrastructure/auth';
 import { useLogin } from './hooks';
@@ -44,7 +44,7 @@ export function LoginPage(): JSX.Element {
       setSession(result.accessToken, result.refreshToken, result.user, rememberMe);
       const destination =
         (location.state as { from?: { pathname: string } } | null)?.from?.pathname ||
-        ROUTES.dashboard;
+        getDefaultAuthorizedRoute(result.user);
       navigate(destination, { replace: true });
     }, 1300);
     return () => window.clearTimeout(timer);
