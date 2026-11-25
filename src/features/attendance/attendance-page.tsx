@@ -76,7 +76,6 @@ export function AttendancePage(): JSX.Element {
           noRecords: t('attendance.pdf.noRecords'),
           fullName: t('attendance.fullName'),
           phoneNumber: t('attendance.phoneNumber'),
-          email: t('attendance.email'),
           group: t('attendance.group'),
           status: t('attendance.status'),
           date: t('attendance.date'),

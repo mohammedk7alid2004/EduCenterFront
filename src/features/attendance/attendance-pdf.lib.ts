@@ -9,7 +9,6 @@ type PdfLabels = {
   noRecords: string;
   fullName: string;
   phoneNumber: string;
-  email: string;
   group: string;
   status: string;
   date: string;
@@ -21,14 +20,15 @@ type PdfLabels = {
   statuses: Record<AttendanceStatus, string>;
 };
 
-const PAGE_WIDTH = 1120;
-const PAGE_HEIGHT = 790;
-const PAGE_MARGIN = 52;
-const HEADER_HEIGHT = 118;
-const TABLE_HEADER_HEIGHT = 38;
-const ROW_HEIGHT = 48;
-const FIRST_PAGE_ROWS = 6;
-const FOLLOWING_PAGE_ROWS = 10;
+// A4 in points. Keeping the drawing surface in the same unit makes printed output predictable.
+const PAGE_WIDTH = 595;
+const PAGE_HEIGHT = 842;
+const PAGE_MARGIN = 36;
+const HEADER_HEIGHT = 86;
+const TABLE_HEADER_HEIGHT = 32;
+const ROW_HEIGHT = 34;
+const FIRST_PAGE_ROWS = 12;
+const FOLLOWING_PAGE_ROWS = 18;
 
 function color(name: keyof typeof theme.light): string {
   return `rgb(${theme.light[name]})`;
@@ -81,8 +81,8 @@ function drawCell(
 ): void {
   drawText(
     context,
-    trimText(context, value, width - 18),
-    x + (align === 'right' ? width - 9 : 9),
+    trimText(context, value, width - 12),
+    x + (align === 'right' ? width - 6 : 6),
     y,
     align,
   );
@@ -90,7 +90,7 @@ function drawCell(
 
 function formatDate(date: string, language: string): string {
   return new Intl.DateTimeFormat(language.startsWith('ar') ? 'ar-EG' : 'en-GB', {
-    dateStyle: 'medium',
+    dateStyle: 'short',
   }).format(new Date(`${date}T00:00:00`));
 }
 
@@ -104,11 +104,9 @@ function getStatusColor(status: AttendanceStatus): keyof typeof theme.light {
 function getPeriod(rows: AttendanceDto[], language: string, allDates: string): string {
   if (rows.length === 0) return allDates;
   const dates = rows.map((row) => row.attendanceDate).sort();
-  const first = dates[0];
-  const last = dates[dates.length - 1];
-  return first === last
-    ? formatDate(first, language)
-    : `${formatDate(first, language)} - ${formatDate(last, language)}`;
+  return dates[0] === dates[dates.length - 1]
+    ? formatDate(dates[0], language)
+    : `${formatDate(dates[0], language)} - ${formatDate(dates[dates.length - 1], language)}`;
 }
 
 async function loadBrandLogo(): Promise<HTMLImageElement | null> {
@@ -122,7 +120,7 @@ async function loadBrandLogo(): Promise<HTMLImageElement | null> {
   }
 }
 
-function drawBrandHeader(
+function drawHeader(
   context: CanvasRenderingContext2D,
   labels: PdfLabels,
   generatedDate: string,
@@ -131,24 +129,20 @@ function drawBrandHeader(
   context.fillStyle = color('primary');
   context.fillRect(0, 0, PAGE_WIDTH, HEADER_HEIGHT);
   context.fillStyle = color('accent');
-  context.fillRect(0, HEADER_HEIGHT - 7, PAGE_WIDTH, 7);
+  context.fillRect(0, HEADER_HEIGHT - 5, PAGE_WIDTH, 5);
   if (logo) {
-    context.drawImage(logo, PAGE_MARGIN, 30, 120, 42);
+    context.drawImage(logo, PAGE_MARGIN, 27, 96, 34);
   } else {
     context.fillStyle = color('card');
-    context.font = '800 32px Cairo, Arial, sans-serif';
-    drawText(context, '3M2A', PAGE_MARGIN, 57, 'left');
-    context.fillStyle = color('accent');
-    context.beginPath();
-    context.arc(PAGE_MARGIN + 102, 31, 6, 0, Math.PI * 2);
-    context.fill();
+    context.font = '800 25px Cairo, Arial, sans-serif';
+    drawText(context, '3M2A', PAGE_MARGIN, 51, 'left');
   }
   context.fillStyle = translucent('card', 0.78);
-  context.font = '13px Cairo, Arial, sans-serif';
-  drawText(context, labels.generatedAt, PAGE_WIDTH - PAGE_MARGIN, 42, 'right');
+  context.font = '10px Cairo, Arial, sans-serif';
+  drawText(context, labels.generatedAt, PAGE_WIDTH - PAGE_MARGIN, 33, 'right');
   context.fillStyle = color('card');
-  context.font = '700 17px Cairo, Arial, sans-serif';
-  drawText(context, generatedDate, PAGE_WIDTH - PAGE_MARGIN, 67, 'right');
+  context.font = '700 12px Cairo, Arial, sans-serif';
+  drawText(context, generatedDate, PAGE_WIDTH - PAGE_MARGIN, 53, 'right');
 }
 
 function drawInfoCard(
@@ -159,7 +153,7 @@ function drawInfoCard(
   generatedDate: string,
 ): number {
   const rightToLeft = language.startsWith('ar');
-  const y = 184;
+  const y = 143;
   const width = PAGE_WIDTH - PAGE_MARGIN * 2;
   const groups = [...new Set(rows.map((row) => row.groupName).filter(Boolean))] as string[];
   const groupSummary =
@@ -174,28 +168,26 @@ function drawInfoCard(
     { label: labels.groups, value: groupSummary },
     { label: labels.period, value: getPeriod(rows, language, labels.allDates) },
   ];
-
   context.fillStyle = color('subtle');
-  roundedRect(context, PAGE_MARGIN, y, width, 86, 14);
+  roundedRect(context, PAGE_MARGIN, y, width, 80, 10);
   context.strokeStyle = color('border');
-  context.strokeRect(PAGE_MARGIN, y, width, 86);
-  context.font = '12px Cairo, Arial, sans-serif';
+  context.strokeRect(PAGE_MARGIN, y, width, 80);
   entries.forEach((entry, index) => {
     const column = index % 2;
     const row = Math.floor(index / 2);
     const blockWidth = width / 2;
     const x = rightToLeft
-      ? PAGE_MARGIN + width - column * blockWidth - 24
-      : PAGE_MARGIN + column * blockWidth + 24;
+      ? PAGE_MARGIN + width - column * blockWidth - 18
+      : PAGE_MARGIN + column * blockWidth + 18;
     const align: CanvasTextAlign = rightToLeft ? 'right' : 'left';
     context.fillStyle = color('muted');
-    drawText(context, entry.label, x, y + 26 + row * 38, align);
+    context.font = '9px Cairo, Arial, sans-serif';
+    drawText(context, entry.label, x, y + 20 + row * 34, align);
     context.fillStyle = color('foreground');
-    context.font = '700 14px Cairo, Arial, sans-serif';
-    drawText(context, trimText(context, entry.value, blockWidth - 48), x, y + 45 + row * 38, align);
-    context.font = '12px Cairo, Arial, sans-serif';
+    context.font = '700 11px Cairo, Arial, sans-serif';
+    drawText(context, trimText(context, entry.value, blockWidth - 36), x, y + 34 + row * 34, align);
   });
-  return y + 108;
+  return y + 96;
 }
 
 function drawSummary(
@@ -212,28 +204,28 @@ function drawSummary(
     ATTENDANCE_STATUS.excused,
     ATTENDANCE_STATUS.absent,
   ];
-  const gap = 14;
+  const gap = 9;
   const cardWidth = (PAGE_WIDTH - PAGE_MARGIN * 2 - gap * 3) / 4;
   statuses.forEach((status, index) => {
     const visualIndex = rightToLeft ? 3 - index : index;
     const x = PAGE_MARGIN + visualIndex * (cardWidth + gap);
     const tone = getStatusColor(status);
     context.fillStyle = translucent(tone, status === ATTENDANCE_STATUS.present ? 0.13 : 0.1);
-    roundedRect(context, x, y, cardWidth, 78, 14);
+    roundedRect(context, x, y, cardWidth, 62, 10);
     context.fillStyle = color(tone);
-    context.font = '800 26px Cairo, Arial, sans-serif';
+    context.font = '800 19px Cairo, Arial, sans-serif';
     drawText(
       context,
       String(rows.filter((row) => row.status === status).length),
       x + cardWidth / 2,
-      y + 36,
+      y + 29,
       'center',
     );
     context.fillStyle = color('tableHeading');
-    context.font = '13px Cairo, Arial, sans-serif';
-    drawText(context, labels.statuses[status], x + cardWidth / 2, y + 61, 'center');
+    context.font = '10px Cairo, Arial, sans-serif';
+    drawText(context, labels.statuses[status], x + cardWidth / 2, y + 48, 'center');
   });
-  return y + 110;
+  return y + 82;
 }
 
 function drawStatusChip(
@@ -246,10 +238,10 @@ function drawStatusChip(
 ): void {
   const tone = getStatusColor(status);
   context.fillStyle = translucent(tone, 0.14);
-  roundedRect(context, x + (width - 76) / 2, y - 18, 76, 25, 13);
+  roundedRect(context, x + (width - 58) / 2, y - 14, 58, 20, 10);
   context.fillStyle = color(tone);
-  context.font = '700 12px Cairo, Arial, sans-serif';
-  drawText(context, trimText(context, label, 66), x + width / 2, y, 'center');
+  context.font = '700 9px Cairo, Arial, sans-serif';
+  drawText(context, trimText(context, label, 50), x + width / 2, y, 'center');
 }
 
 function drawTable(
@@ -260,61 +252,44 @@ function drawTable(
   y: number,
 ): void {
   const rightToLeft = language.startsWith('ar');
+  const logicalColumns = [
+    {
+      label: labels.date,
+      width: 88,
+      value: (row: AttendanceDto) => formatDate(row.attendanceDate, language),
+    },
+    { label: labels.fullName, width: 118, value: (row: AttendanceDto) => row.fullName },
+    { label: labels.group, width: 105, value: (row: AttendanceDto) => row.groupName ?? '—' },
+    { label: labels.status, width: 82, value: (row: AttendanceDto) => labels.statuses[row.status] },
+    {
+      label: labels.phoneNumber,
+      width: 130,
+      value: (row: AttendanceDto) => row.phoneNumber ?? '—',
+    },
+  ];
   const columns = rightToLeft
-    ? [
-        {
-          label: labels.date,
-          width: 128,
-          value: (row: AttendanceDto) => formatDate(row.attendanceDate, language),
-        },
-        { label: labels.fullName, width: 184, value: (row: AttendanceDto) => row.fullName },
-        { label: labels.group, width: 160, value: (row: AttendanceDto) => row.groupName ?? '—' },
-        {
-          label: labels.phoneNumber,
-          width: 132,
-          value: (row: AttendanceDto) => row.phoneNumber ?? '—',
-        },
-        { label: labels.email, width: 266, value: (row: AttendanceDto) => row.email ?? '—' },
-        {
-          label: labels.status,
-          width: 166,
-          value: (row: AttendanceDto) => labels.statuses[row.status],
-        },
-      ].reverse()
+    ? [...logicalColumns].reverse()
     : [
-        { label: labels.fullName, width: 184, value: (row: AttendanceDto) => row.fullName },
-        {
-          label: labels.phoneNumber,
-          width: 132,
-          value: (row: AttendanceDto) => row.phoneNumber ?? '—',
-        },
-        { label: labels.email, width: 266, value: (row: AttendanceDto) => row.email ?? '—' },
-        { label: labels.group, width: 160, value: (row: AttendanceDto) => row.groupName ?? '—' },
-        {
-          label: labels.status,
-          width: 166,
-          value: (row: AttendanceDto) => labels.statuses[row.status],
-        },
-        {
-          label: labels.date,
-          width: 128,
-          value: (row: AttendanceDto) => formatDate(row.attendanceDate, language),
-        },
+        logicalColumns[1],
+        logicalColumns[2],
+        logicalColumns[4],
+        logicalColumns[3],
+        logicalColumns[0],
       ];
   const tableWidth = columns.reduce((total, column) => total + column.width, 0);
   context.fillStyle = color('table');
-  roundedRect(context, PAGE_MARGIN, y, tableWidth, TABLE_HEADER_HEIGHT, 10);
+  roundedRect(context, PAGE_MARGIN, y, tableWidth, TABLE_HEADER_HEIGHT, 8);
   context.fillStyle = color('tableHeading');
-  context.font = '700 12px Cairo, Arial, sans-serif';
+  context.font = '700 9px Cairo, Arial, sans-serif';
   let currentX = PAGE_MARGIN;
   for (const column of columns) {
-    drawCell(context, column.label, currentX, y + 25, column.width, rightToLeft ? 'right' : 'left');
+    drawCell(context, column.label, currentX, y + 21, column.width, rightToLeft ? 'right' : 'left');
     currentX += column.width;
   }
   if (rows.length === 0) {
     context.fillStyle = color('muted');
-    context.font = '15px Cairo, Arial, sans-serif';
-    drawText(context, labels.noRecords, PAGE_WIDTH / 2, y + 84, 'center');
+    context.font = '12px Cairo, Arial, sans-serif';
+    drawText(context, labels.noRecords, PAGE_WIDTH / 2, y + 66, 'center');
     return;
   }
   rows.forEach((row, index) => {
@@ -327,17 +302,17 @@ function drawTable(
     context.lineTo(PAGE_MARGIN + tableWidth, rowY + ROW_HEIGHT);
     context.stroke();
     context.fillStyle = color('foreground');
-    context.font = '13px Cairo, Arial, sans-serif';
+    context.font = '10px Cairo, Arial, sans-serif';
     let cellX = PAGE_MARGIN;
     for (const column of columns) {
       if (column.label === labels.status) {
-        drawStatusChip(context, column.value(row), row.status, cellX, rowY + 31, column.width);
+        drawStatusChip(context, column.value(row), row.status, cellX, rowY + 22, column.width);
       } else {
         drawCell(
           context,
           column.value(row),
           cellX,
-          rowY + 31,
+          rowY + 22,
           column.width,
           rightToLeft ? 'right' : 'left',
         );
@@ -345,6 +320,29 @@ function drawTable(
       cellX += column.width;
     }
   });
+}
+
+function drawFooter(
+  context: CanvasRenderingContext2D,
+  labels: PdfLabels,
+  pageIndex: number,
+  totalPages: number,
+): void {
+  context.strokeStyle = color('border');
+  context.beginPath();
+  context.moveTo(PAGE_MARGIN, PAGE_HEIGHT - 36);
+  context.lineTo(PAGE_WIDTH - PAGE_MARGIN, PAGE_HEIGHT - 36);
+  context.stroke();
+  context.fillStyle = color('muted');
+  context.font = '9px Cairo, Arial, sans-serif';
+  drawText(context, '3M2A', PAGE_MARGIN, PAGE_HEIGHT - 18, 'left');
+  drawText(
+    context,
+    `${labels.page} ${pageIndex + 1} / ${totalPages}`,
+    PAGE_WIDTH - PAGE_MARGIN,
+    PAGE_HEIGHT - 18,
+    'right',
+  );
 }
 
 export async function exportAttendancePdf({
@@ -357,12 +355,7 @@ export async function exportAttendancePdf({
   labels: PdfLabels;
 }): Promise<void> {
   const { jsPDF } = await import('jspdf');
-  const pdf = new jsPDF({
-    unit: 'px',
-    format: [PAGE_WIDTH, PAGE_HEIGHT],
-    orientation: 'landscape',
-    compress: true,
-  });
+  const pdf = new jsPDF({ unit: 'pt', format: 'a4', orientation: 'portrait', compress: true });
   const generatedDate = new Intl.DateTimeFormat(language.startsWith('ar') ? 'ar-EG' : 'en-GB', {
     dateStyle: 'medium',
   }).format(new Date());
@@ -370,17 +363,19 @@ export async function exportAttendancePdf({
   const firstPage = rows.slice(0, FIRST_PAGE_ROWS);
   const remainingRows = rows.slice(FIRST_PAGE_ROWS);
   const totalPages = Math.max(1, 1 + Math.ceil(remainingRows.length / FOLLOWING_PAGE_ROWS));
+
   for (let pageIndex = 0; pageIndex < totalPages; pageIndex += 1) {
-    if (pageIndex > 0) pdf.addPage([PAGE_WIDTH, PAGE_HEIGHT], 'landscape');
+    if (pageIndex > 0) pdf.addPage('a4', 'portrait');
     const canvas = document.createElement('canvas');
     canvas.width = PAGE_WIDTH * 2;
     canvas.height = PAGE_HEIGHT * 2;
     const context = canvas.getContext('2d');
     if (!context) throw new Error('errors.unknown');
     context.scale(2, 2);
+    context.direction = language.startsWith('ar') ? 'rtl' : 'ltr';
     context.fillStyle = color('card');
     context.fillRect(0, 0, PAGE_WIDTH, PAGE_HEIGHT);
-    drawBrandHeader(context, labels, generatedDate, logo);
+    drawHeader(context, labels, generatedDate, logo);
     const pageRows =
       pageIndex === 0
         ? firstPage
@@ -388,15 +383,15 @@ export async function exportAttendancePdf({
             (pageIndex - 1) * FOLLOWING_PAGE_ROWS,
             pageIndex * FOLLOWING_PAGE_ROWS,
           );
-    let tableY = 158;
+    let tableY = 130;
     if (pageIndex === 0) {
       context.fillStyle = color('primary');
-      context.font = '800 27px Cairo, Arial, sans-serif';
+      context.font = '800 22px Cairo, Arial, sans-serif';
       drawText(
         context,
         labels.title,
         language.startsWith('ar') ? PAGE_WIDTH - PAGE_MARGIN : PAGE_MARGIN,
-        157,
+        121,
         language.startsWith('ar') ? 'right' : 'left',
       );
       tableY = drawSummary(
@@ -408,21 +403,7 @@ export async function exportAttendancePdf({
       );
     }
     drawTable(context, language, labels, pageRows, tableY);
-    context.fillStyle = color('muted');
-    context.strokeStyle = color('border');
-    context.beginPath();
-    context.moveTo(PAGE_MARGIN, PAGE_HEIGHT - 46);
-    context.lineTo(PAGE_WIDTH - PAGE_MARGIN, PAGE_HEIGHT - 46);
-    context.stroke();
-    context.font = '12px Cairo, Arial, sans-serif';
-    drawText(context, '3M2A', PAGE_MARGIN, PAGE_HEIGHT - 24, 'left');
-    drawText(
-      context,
-      `${labels.page} ${pageIndex + 1} / ${totalPages}`,
-      PAGE_WIDTH - PAGE_MARGIN,
-      PAGE_HEIGHT - 24,
-      'right',
-    );
+    drawFooter(context, labels, pageIndex, totalPages);
     pdf.addImage(canvas, 'PNG', 0, 0, PAGE_WIDTH, PAGE_HEIGHT);
   }
   downloadBlob(pdf.output('blob'), 'StudentAttendance.pdf');
