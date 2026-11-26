@@ -813,6 +813,21 @@
   "students": {
     "title": "Students",
     "export": "Export Excel",
+    "template": "Download Template",
+    "import": "Import Excel",
+    "file": "Excel File",
+    "importHint": "Download the template, fill in the student details, then upload an Excel file. Maximum file size: 10 MB.",
+    "invalidFile": "Choose a non-empty .xlsx or .xls file up to 10 MB.",
+    "imported": "Processed {{total}} rows: {{uploaded}} imported, {{skipped}} skipped.",
+    "skippedRows": "Skipped Rows",
+    "row": "Row {{count}}",
+    "separator": ", ",
+    "skipReasons": {
+      "1": "Already exists in the database",
+      "2": "Duplicate in the file",
+      "3": "Missing unique identifier",
+      "4": "Invalid row data"
+    },
     "description": "Manage student profiles, education levels and grades.",
     "create": "Add New Student",
     "studentName": "Student Name",

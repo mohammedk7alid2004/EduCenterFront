@@ -32,6 +32,8 @@ export const PERMISSIONS = {
     update: 'Students.Update',
     delete: 'Students.Delete',
     toggleStatus: 'Students.ToggleStatus',
+    template: 'Students.GetTemplateExcelFile',
+    import: 'Students.ImportExcelFile',
   },
   teachers: {
     read: 'Teachers.GetAll',

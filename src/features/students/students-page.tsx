@@ -7,13 +7,14 @@ import { usePermission } from '@/infrastructure/auth';
 import { useListControls, useOnline } from '@/shared/hooks';
 import { Button, Icon, ManagementList } from '@/shared/components';
 import { downloadBlob } from '@/shared/utils';
-import { useStudents, useStudentsExport } from './students.queries';
-import { STUDENT_FILTER_PARAMS, STUDENT_GENDER } from './students.constants';
+import { useStudents, useStudentsExport, useStudentTemplate } from './students.queries';
+import { STUDENT_FILE_NAMES, STUDENT_FILTER_PARAMS, STUDENT_GENDER } from './students.constants';
 import type { StudentDto } from './students.types';
 import { StudentFilters } from './components/student-filters';
 import { StudentsTable } from './components/students-table';
 import { StudentFormModal } from './components/student-form-modal';
 import { ViewStudentModal } from './components/view-student-modal';
+import { ImportStudentsModal } from './components/import-students-modal';
 export function StudentsPage(): JSX.Element {
   const { t } = useTranslation();
   const controls = useListControls();
@@ -33,9 +34,11 @@ export function StudentsPage(): JSX.Element {
   };
   const query = useStudents(filters);
   const exporter = useStudentsExport();
+  const template = useStudentTemplate();
   const can = usePermission();
   const [editing, setEditing] = useState<StudentDto | null>(null);
   const [formOpen, setFormOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
   const [viewing, setViewing] = useState<StudentDto | null>(null);
   function changeFilter(key: keyof typeof STUDENT_FILTER_PARAMS, value: string) {
     setParams((current) => {
@@ -83,24 +86,60 @@ export function StudentsPage(): JSX.Element {
           />
         }
         searchActions={
-          can(PERMISSIONS.students.read) ? (
-            <Button
-              type="button"
-              variant="ghost"
-              className="h-[43px] rounded-xl border border-primary/20 bg-card text-primary"
-              disabled={!online || exporter.isPending}
-              loading={exporter.isPending}
-              onClick={() =>
-                exporter.mutate(filters, {
-                  onSuccess: (file) => downloadBlob(file, 'Students.xlsx'),
-                  onError: (error) =>
-                    toast.error(t(error.message, { defaultValue: error.message })),
-                })
-              }
-            >
-              <Icon name="download" className="size-4" />
-              {t('students.export')}
-            </Button>
+          can(PERMISSIONS.students.read) ||
+          can(PERMISSIONS.students.template) ||
+          can(PERMISSIONS.students.import) ? (
+            <div className="flex flex-wrap items-center gap-2">
+              {can(PERMISSIONS.students.read) && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="h-[43px] rounded-xl border border-primary/20 bg-card text-primary"
+                  disabled={!online || exporter.isPending}
+                  loading={exporter.isPending}
+                  onClick={() =>
+                    exporter.mutate(filters, {
+                      onSuccess: (file) => downloadBlob(file, STUDENT_FILE_NAMES.export),
+                      onError: (error) =>
+                        toast.error(t(error.message, { defaultValue: error.message })),
+                    })
+                  }
+                >
+                  <Icon name="download" className="size-4" />
+                  {t('students.export')}
+                </Button>
+              )}
+              {can(PERMISSIONS.students.template) && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="h-[43px] rounded-xl border border-primary/20 bg-card text-primary"
+                  disabled={!online || template.isPending}
+                  loading={template.isPending}
+                  onClick={() =>
+                    template.mutate(undefined, {
+                      onSuccess: (file) => downloadBlob(file, STUDENT_FILE_NAMES.template),
+                      onError: (error) =>
+                        toast.error(t(error.message, { defaultValue: error.message })),
+                    })
+                  }
+                >
+                  <Icon name="download" className="size-4" />
+                  {t('students.template')}
+                </Button>
+              )}
+              {can(PERMISSIONS.students.import) && (
+                <Button
+                  type="button"
+                  className="h-[43px] rounded-xl"
+                  disabled={!online}
+                  onClick={() => setImportOpen(true)}
+                >
+                  <Icon name="upload" className="size-4" />
+                  {t('students.import')}
+                </Button>
+              )}
+            </div>
           ) : undefined
         }
       >
@@ -115,6 +154,7 @@ export function StudentsPage(): JSX.Element {
         />
       </ManagementList>
       {formOpen && <StudentFormModal student={editing} onClose={() => setFormOpen(false)} />}
+      {importOpen && <ImportStudentsModal onClose={() => setImportOpen(false)} />}
       {viewing && <ViewStudentModal id={viewing.id} onClose={() => setViewing(null)} />}
     </>
   );

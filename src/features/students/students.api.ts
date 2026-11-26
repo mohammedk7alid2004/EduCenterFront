@@ -6,7 +6,13 @@ import {
   type ApiResult,
   type PaginatedResult,
 } from '@/infrastructure/api';
-import type { StudentDto, StudentValues, StudentFilters, StudentOption } from './students.types';
+import type {
+  StudentDto,
+  StudentValues,
+  StudentFilters,
+  StudentOption,
+  StudentImportResult,
+} from './students.types';
 const endpoints = API_ENDPOINTS.students;
 export async function fetchStudents(
   filters: StudentFilters,
@@ -116,6 +122,40 @@ export async function exportStudents(filters: StudentFilters, signal?: AbortSign
       throw new Error('errors.unknown');
     }
     return data;
+  } catch (error) {
+    throw normalizeApiError(error);
+  }
+}
+export async function fetchStudentTemplate(signal?: AbortSignal): Promise<Blob> {
+  try {
+    const { data } = await apiClient.get<Blob>(endpoints.template, {
+      responseType: 'blob',
+      signal,
+    });
+    if (data.type.includes('json')) {
+      const result: ApiResult<unknown> = JSON.parse(await data.text());
+      assertApiSuccess(result);
+      throw new Error('errors.unknown');
+    }
+    return data;
+  } catch (error) {
+    throw normalizeApiError(error);
+  }
+}
+export async function importStudents(
+  file: File,
+  signal?: AbortSignal,
+): Promise<StudentImportResult> {
+  const payload = new FormData();
+  payload.append('file', file);
+  try {
+    const { data } = await apiClient.post<ApiResult<StudentImportResult>>(
+      endpoints.import,
+      payload,
+      { signal },
+    );
+    assertApiSuccess(data);
+    return data.data;
   } catch (error) {
     throw normalizeApiError(error);
   }

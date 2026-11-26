@@ -46,3 +46,10 @@ export interface StudentOption {
   id: string;
   name: StudentLocalizedName;
 }
+export interface StudentImportResult {
+  totalRows: number;
+  uploadedCount: number;
+  skippedCount: number;
+  skippedRows: number[];
+  skippedDetails: { rowNumber: number; reason: number; message?: string | null }[];
+}

@@ -48,6 +48,8 @@ export const API_ENDPOINTS = {
     delete: '/v1/Students',
     toggleStatus: (id: string) => `/v1/Students/toggle-status/${encodeURIComponent(id)}`,
     export: '/v1/Students/ExportExcel',
+    template: '/v1/Students/Template',
+    import: '/v1/Students/ImportExcelFile',
     levels: '/v1/select-menu/GetEducationLevels',
     grades: '/v1/select-menu/GetEducationGrades',
   },

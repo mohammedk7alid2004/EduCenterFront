@@ -9,3 +9,12 @@ export const STUDENT_VALIDATION = {
   phone: /^(\+?20)?01[0125][0-9]{8}$|^\+9(66|71|65|74|73|68)[0-9]{7,9}$/,
   password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$/,
 } as const;
+export const STUDENT_FILE_NAMES = {
+  export: 'Students.xlsx',
+  template: 'StudentsImportTemplate.xlsx',
+} as const;
+export const STUDENT_IMPORT = {
+  extensions: ['.xlsx', '.xls'],
+  maxBytes: 10 * 1024 * 1024,
+  accept: '.xlsx,.xls',
+} as const;

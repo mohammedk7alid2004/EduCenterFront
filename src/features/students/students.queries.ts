@@ -10,8 +10,16 @@ import {
   toggleStudentStatus,
   fetchStudentEducation,
   exportStudents,
+  fetchStudentTemplate,
+  importStudents,
 } from './students.api';
-import type { StudentDto, StudentFilters, StudentValues, StudentOption } from './students.types';
+import type {
+  StudentDto,
+  StudentFilters,
+  StudentValues,
+  StudentOption,
+  StudentImportResult,
+} from './students.types';
 export function useStudents(filters: StudentFilters, enabled = true) {
   const { i18n } = useTranslation();
   return useQuery<PaginatedResult<StudentDto>, ApiError>({
@@ -66,5 +74,19 @@ export function useToggleStudentStatus() {
 export function useStudentsExport() {
   return useMutation<Blob, ApiError, StudentFilters>({
     mutationFn: (filters) => exportStudents(filters),
+  });
+}
+export function useStudentTemplate() {
+  return useMutation<Blob, ApiError, void>({
+    mutationFn: () => fetchStudentTemplate(),
+  });
+}
+export function useImportStudents() {
+  const client = useQueryClient();
+  return useMutation<StudentImportResult, ApiError, File>({
+    mutationFn: (file) => importStudents(file),
+    onSuccess: () => {
+      void client.invalidateQueries({ queryKey: QUERY_KEYS.students });
+    },
   });
 }
