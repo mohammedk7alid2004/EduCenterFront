@@ -54,7 +54,7 @@ export function DashboardSidebar({
         />
       )}
       <aside
-        className={`${open ? 'flex' : 'hidden'} fixed inset-y-0 start-0 z-40 w-[265px] shrink-0 flex-col overflow-y-auto bg-primary text-card lg:sticky lg:top-0 lg:flex lg:h-dvh`}
+        className={`${open ? 'flex' : 'hidden'} sidebar-scroll fixed inset-y-0 start-0 z-40 w-[265px] shrink-0 flex-col overflow-y-auto bg-primary text-card lg:sticky lg:top-0 lg:flex lg:h-dvh`}
       >
         <div className="flex h-[125px] shrink-0 items-start justify-center pt-6">
           <img

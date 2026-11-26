@@ -135,7 +135,7 @@ export function ManagementList(props: ManagementListProps): JSX.Element {
           {t('errors.network')}
         </p>
       )}
-      <div className="flex-1" aria-busy={props.loading || props.fetching}>
+      <div className="min-w-0 flex-1" aria-busy={props.loading || props.fetching}>
         {props.loading ? (
           <LoadingState />
         ) : props.error ? (

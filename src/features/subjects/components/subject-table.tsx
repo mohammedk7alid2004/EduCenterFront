@@ -43,10 +43,10 @@ export function SubjectTable({
     },
     {
       id: 'notes',
-      headerClassName: 'w-72',
+      headerClassName: 'min-w-44',
       header: t('subjects.table.note'),
       cell: (row) => (
-        <span className="block max-w-80 truncate">
+        <span className="block max-w-56 truncate">
           {row.note[lang] || row.note.en || row.note.ar || t('common.noValue')}
         </span>
       ),

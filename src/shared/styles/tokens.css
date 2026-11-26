@@ -5,6 +5,28 @@
 @layer base {
   * {
     @apply border-border;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--color-primary) / 0.28) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  }
+  *::-webkit-scrollbar-track {
+    background: rgb(var(--color-border) / 0.18);
+    border-radius: 9999px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background-color: rgb(var(--color-primary) / 0.28);
+    border-radius: 9999px;
+    border: 1px solid transparent;
+    background-clip: padding-box;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(var(--color-primary) / 0.5);
+  }
+  *::-webkit-scrollbar-corner {
+    background: transparent;
   }
   html {
     @apply bg-background text-foreground;
@@ -27,6 +49,11 @@
   }
   html.desktop-site .min-h-dvh.bg-primary {
     display: flex !important;
+    height: 100dvh !important;
+    overflow: hidden !important;
+  }
+  html.desktop-site main {
+    overflow-y: auto !important;
   }
   button,
   input,
@@ -245,6 +272,18 @@
 @layer components {
   .header-control {
     box-shadow: 0 4px 16px rgb(var(--color-overlay) / 0.08);
+  }
+  .sidebar-scroll {
+    scrollbar-color: rgb(var(--color-card) / 0.28) transparent;
+  }
+  .sidebar-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .sidebar-scroll::-webkit-scrollbar-thumb {
+    background-color: rgb(var(--color-card) / 0.25);
+  }
+  .sidebar-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(var(--color-card) / 0.45);
   }
   .dashboard-header::after {
     content: '';

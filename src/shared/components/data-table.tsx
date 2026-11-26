@@ -53,9 +53,9 @@ export function DataTable<T extends { id: string }>({
           )}
         </div>
       )}
-      <div className="overflow-x-auto rounded-t-[14px] border-x border-b border-border [container-type:inline-size]">
-        <table className="w-full min-w-[980px] table-auto border-collapse whitespace-nowrap text-start text-sm">
-          <thead className="bg-table text-tableHeading">
+      <div className="overflow-auto rounded-t-[14px] border border-border lg:max-h-[calc(100dvh-23rem)] [container-type:inline-size]">
+        <table className="w-full min-w-full table-auto border-collapse whitespace-nowrap text-start text-sm">
+          <thead className="sticky top-0 z-10 bg-table text-tableHeading shadow-[inset_0_-1px_0_rgb(var(--color-border))]">
             <tr>
               {renderExpanded && (
                 <th className="w-12">

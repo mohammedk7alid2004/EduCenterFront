@@ -55,7 +55,7 @@ export function DashboardHeader({ onMenuClick }: { onMenuClick: () => void }): J
                           ? 'notifications'
                           : 'dashboard';
   return (
-    <header className="dashboard-header relative flex min-h-[77px] flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
+    <header className="dashboard-header relative z-20 flex min-h-[77px] shrink-0 flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
       <div className="flex min-w-0 items-center gap-2 text-sm">
         <button
           type="button"
