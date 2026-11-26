@@ -450,6 +450,8 @@
     "record": "Record",
     "Resend": "Resend",
     "resend": "Resend",
+    "SendEmail": "Send Email",
+    "sendEmail": "Send Email",
     "ConnectStudents": "Connect Students",
     "SetStatus": "Set Status",
     "View": "View",
@@ -783,6 +785,28 @@
       "phone": "Phone",
       "subject": "Subject",
       "message": "Message"
+    },
+    "reply": {
+      "action": "Send Email",
+      "title": "Contact With {{name}}",
+      "editEmail": "Edit Email",
+      "emailPlaceholder": "Enter Email Address",
+      "subjectPlaceholder": "Enter Your Subject",
+      "messagePlaceholder": "Enter Message...",
+      "uploadFile": "Upload File",
+      "dragDrop": "Drag & Drop File Here",
+      "dragDropHint": "PNG, JPG, WebP, PDF, Word, Excel or ZIP (max 10 MB)",
+      "send": "Send",
+      "validation": {
+        "email": "Please enter a valid email address.",
+        "subjectMax": "Subject must not exceed {{max}} characters.",
+        "messageMax": "Message must not exceed {{max}} characters.",
+        "fileType": "Unsupported file type.",
+        "fileSize": "Attachment size must not exceed 10 MB."
+      },
+      "feedback": {
+        "sent": "Email sent successfully."
+      }
     }
   },
   "students": {

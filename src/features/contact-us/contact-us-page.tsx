@@ -8,11 +8,14 @@ import { ViewContactModal } from './components/view-contact-modal';
 import { ContactTools } from './components/contact-tools';
 import { ContactFilters } from './components/contact-filters';
 import { ImportContactModal } from './components/import-contact-modal';
+import { SendContactEmailModal } from './components/send-contact-email-modal';
+import type { ContactMessage } from './contact-us.types';
 export function ContactUsPage(): JSX.Element {
   const { t } = useTranslation();
   const state = useContactControls();
   const query = useContacts(state.filters);
   const [viewing, setViewing] = useState<string | null>(null);
+  const [replying, setReplying] = useState<ContactMessage | null>(null);
   const [importOpen, setImportOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   return (
@@ -53,9 +56,11 @@ export function ContactUsPage(): JSX.Element {
           rows={query.data?.items ?? []}
           startIndex={(state.controls.page - 1) * state.controls.pageSize}
           onView={setViewing}
+          onReply={setReplying}
         />
       </ManagementList>
       {viewing && <ViewContactModal id={viewing} onClose={() => setViewing(null)} />}
+      {replying && <SendContactEmailModal contact={replying} onClose={() => setReplying(null)} />}
       {importOpen && <ImportContactModal onClose={() => setImportOpen(false)} />}
     </>
   );

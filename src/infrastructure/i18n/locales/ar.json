@@ -450,6 +450,8 @@
     "record": "تسجيل",
     "Resend": "إعادة إرسال",
     "resend": "إعادة إرسال",
+    "SendEmail": "إرسال بريد إلكتروني",
+    "sendEmail": "إرسال بريد إلكتروني",
     "ConnectStudents": "ربط الطلاب",
     "SetStatus": "تغيير الحالة",
     "View": "عرض",
@@ -783,6 +785,28 @@
       "phone": "رقم الهاتف",
       "subject": "الموضوع",
       "message": "الرسالة"
+    },
+    "reply": {
+      "action": "إرسال بريد إلكتروني",
+      "title": "التواصل مع {{name}}",
+      "editEmail": "تعديل البريد الإلكتروني",
+      "emailPlaceholder": "أدخل البريد الإلكتروني",
+      "subjectPlaceholder": "أدخل الموضوع",
+      "messagePlaceholder": "أدخل الرسالة...",
+      "uploadFile": "رفع ملف",
+      "dragDrop": "اسحب وأفلت الملف هنا",
+      "dragDropHint": "PNG, JPG, WebP, PDF, Word, Excel أو ZIP (بحد أقصى ١٠ ميجابايت)",
+      "send": "إرسال",
+      "validation": {
+        "email": "يرجى إدخال بريد إلكتروني صحيح.",
+        "subjectMax": "يجب ألا يتجاوز الموضوع {{max}} حرف.",
+        "messageMax": "يجب ألا تتجاوز الرسالة {{max}} حرف.",
+        "fileType": "صيغة الملف غير مدعومة.",
+        "fileSize": "حجم المرفق يجب ألا يتجاوز 10 ميجابايت."
+      },
+      "feedback": {
+        "sent": "تم إرسال البريد الإلكتروني بنجاح."
+      }
     }
   },
   "students": {

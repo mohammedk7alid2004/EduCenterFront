@@ -6,7 +6,12 @@ import {
   type ApiResult,
   type PaginatedResult,
 } from '@/infrastructure/api';
-import type { ContactFilters, ContactMessage, ContactImportResult } from './contact-us.types';
+import type {
+  ContactFilters,
+  ContactMessage,
+  ContactImportResult,
+  SendContactEmailValues,
+} from './contact-us.types';
 const endpoints = API_ENDPOINTS.contactUs;
 function params(filters: ContactFilters) {
   return {
@@ -90,6 +95,25 @@ export async function importContacts(
     );
     assertApiSuccess(data);
     return data.data;
+  } catch (error) {
+    throw normalizeApiError(error);
+  }
+}
+export async function sendContactEmail(
+  values: SendContactEmailValues,
+  signal?: AbortSignal,
+): Promise<void> {
+  const payload = new FormData();
+  payload.append('email', values.email);
+  payload.append('subject', values.subject);
+  payload.append('message', values.message);
+  if (values.file) payload.append('file', values.file);
+  try {
+    const { data } = await apiClient.post<ApiResult<boolean>>(endpoints.sendEmail, payload, {
+      signal,
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    assertApiSuccess(data);
   } catch (error) {
     throw normalizeApiError(error);
   }

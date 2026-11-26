@@ -8,8 +8,14 @@ import {
   deleteContacts,
   fetchContactFile,
   importContacts,
+  sendContactEmail,
 } from './contact-us.api';
-import type { ContactFilters, ContactMessage, ContactImportResult } from './contact-us.types';
+import type {
+  ContactFilters,
+  ContactMessage,
+  ContactImportResult,
+  SendContactEmailValues,
+} from './contact-us.types';
 export function useContacts(filters: ContactFilters) {
   const { i18n } = useTranslation();
   return useQuery<PaginatedResult<ContactMessage>, ApiError>({
@@ -45,5 +51,10 @@ export function useImportContacts() {
     onSuccess: () => {
       void client.invalidateQueries({ queryKey: QUERY_KEYS.contactUs });
     },
+  });
+}
+export function useSendContactEmail() {
+  return useMutation<void, ApiError, SendContactEmailValues>({
+    mutationFn: (values) => sendContactEmail(values),
   });
 }

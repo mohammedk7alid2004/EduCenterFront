@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { PERMISSIONS } from '@/config';
 import { usePermission } from '@/infrastructure/auth';
 import { useOnline } from '@/shared/hooks';
-import { DataTable, RowActions, useConfirm, type Column } from '@/shared/components';
+import { DataTable, Icon, RowActions, useConfirm, type Column } from '@/shared/components';
 import { useDeleteContacts } from '../contact-us.queries';
 import { contactDate } from '../contact-us.lib';
 import type { ContactMessage } from '../contact-us.types';
@@ -10,10 +10,12 @@ export function ContactTable({
   rows,
   startIndex,
   onView,
+  onReply,
 }: {
   rows: ContactMessage[];
   startIndex?: number;
   onView: (id: string) => void;
+  onReply: (row: ContactMessage) => void;
 }): JSX.Element {
   const { t, i18n } = useTranslation();
   const can = usePermission();
@@ -118,7 +120,7 @@ export function ContactTable({
     {
       id: 'actions',
       header: t('common.actions'),
-      headerClassName: 'min-w-28',
+      headerClassName: 'min-w-36',
       cell: (row) => (
         <RowActions
           onView={() => onView(row.id)}
@@ -128,6 +130,20 @@ export function ContactTable({
           canView={can(PERMISSIONS.contactUs.detail)}
           canEdit={false}
           canDelete={can(PERMISSIONS.contactUs.delete)}
+          extraAction={
+            can(PERMISSIONS.contactUs.sendEmail) ? (
+              <button
+                type="button"
+                onClick={() => onReply(row)}
+                disabled={!online || remove.isPending}
+                aria-label={t('contactUs.reply.action')}
+                title={t('contactUs.reply.action')}
+                className="grid size-[38px] place-items-center rounded-lg bg-iconSurface text-primary transition hover:bg-primary/15 disabled:opacity-50"
+              >
+                <Icon name="mail" className="size-5" />
+              </button>
+            ) : undefined
+          }
         />
       ),
     },

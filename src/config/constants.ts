@@ -58,6 +58,7 @@ export const API_ENDPOINTS = {
     export: '/v1/ContactUs/Export',
     template: '/v1/ContactUs/Template',
     import: '/v1/ContactUs/ImportExcelFile',
+    sendEmail: '/v1/ContactUs/SendEmail',
   },
   auth: {
     login: '/Auth/dashboard/login',

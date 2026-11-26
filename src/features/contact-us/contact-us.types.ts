@@ -22,3 +22,9 @@ export interface ContactImportResult {
   skippedRows: number[];
   skippedDetails: { rowNumber: number; reason: number; message?: string | null }[];
 }
+export interface SendContactEmailValues {
+  email: string;
+  subject: string;
+  message: string;
+  file: File | null;
+}

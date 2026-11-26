@@ -13,3 +13,22 @@ export const CONTACT_IMPORT = {
   maxBytes: 10 * 1024 * 1024,
   accept: '.xlsx,.xls',
 } as const;
+export const CONTACT_EMAIL_VALIDATION = {
+  subjectMax: 300,
+  messageMax: 4000,
+  maxBytes: 10 * 1024 * 1024,
+  extensions: [
+    '.png',
+    '.jpg',
+    '.jpeg',
+    '.webp',
+    '.pdf',
+    '.doc',
+    '.docx',
+    '.txt',
+    '.xlsx',
+    '.xls',
+    '.zip',
+  ],
+  accept: '.png,.jpg,.jpeg,.webp,.pdf,.doc,.docx,.txt,.xlsx,.xls,.zip',
+} as const;

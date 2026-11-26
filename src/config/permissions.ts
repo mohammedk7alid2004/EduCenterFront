@@ -43,6 +43,7 @@ export const PERMISSIONS = {
     export: 'ContactUs.ExportExcelFile',
     template: 'ContactUs.GetTemplateExcelFile',
     import: 'ContactUs.ImportExcelFile',
+    sendEmail: 'ContactUs.SendEmail',
   },
   appointments: {
     read: 'Appointments.GetAll',
