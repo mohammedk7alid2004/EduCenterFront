@@ -119,11 +119,21 @@ function NotificationForm({
     },
   });
 
+  const groupId = watch('groupId');
   const levelId = watch('levelId');
 
   const groups = useNotificationGroups();
   const levels = useNotificationLevels();
   const grades = useNotificationGrades(levelId || undefined);
+
+  const selectedGroup = groupId ? groups.data?.find((g) => g.id === groupId) : undefined;
+  const hasGroup = Boolean(groupId);
+
+  useEffect(() => {
+    if (!groupId || !selectedGroup) return;
+    setValue('levelId', selectedGroup.levelId ?? '', { shouldValidate: false });
+    setValue('gradeId', selectedGroup.gradeId ?? '', { shouldValidate: false });
+  }, [groupId, selectedGroup, levels.data, grades.data, setValue]);
 
   const createMutation = useCreateNotification();
   const updateMutation = useUpdateNotification(notification?.id ?? '');
@@ -164,7 +174,12 @@ function NotificationForm({
         onSubmit={handleSubmit((values) => {
           if (online && !optionError)
             mutation.mutate(
-              { ...values, removeImage: removeImage && !values.image },
+              {
+                ...values,
+                levelId: selectedGroup?.levelId ?? values.levelId,
+                gradeId: selectedGroup?.gradeId ?? values.gradeId,
+                removeImage: removeImage && !values.image,
+              },
               {
                 onSuccess: () => setSuccess(true),
                 onError: (error) => setServerErrors(error, setError, {}),
@@ -218,7 +233,18 @@ function NotificationForm({
           />
           <div className="sm:col-span-2">
             <Select
-              {...register('groupId')}
+              {...register('groupId', {
+                onChange: (event) => {
+                  const nextId = event.target.value;
+                  const match = groups.data?.find((g) => g.id === nextId);
+                  setValue('levelId', nextId && match?.levelId ? match.levelId : '', {
+                    shouldValidate: false,
+                  });
+                  setValue('gradeId', nextId && match?.gradeId ? match.gradeId : '', {
+                    shouldValidate: false,
+                  });
+                },
+              })}
               label={t('notifications.fields.group')}
               error={errors.groupId?.message}
               options={(groups.data ?? []).map((g) => ({ id: g.id, name: g.name }))}
@@ -241,7 +267,7 @@ function NotificationForm({
             placeholder={t(
               levels.isPending ? 'common.loading' : 'notifications.form.levelPlaceholder',
             )}
-            disabled={levels.isPending || Boolean(levels.error)}
+            disabled={hasGroup || levels.isPending || Boolean(levels.error)}
           />
           <Select
             {...register('gradeId')}
@@ -258,7 +284,7 @@ function NotificationForm({
                   ? 'common.loading'
                   : 'notifications.form.gradePlaceholder',
             )}
-            disabled={!levelId || grades.isPending || Boolean(grades.error)}
+            disabled={hasGroup || !levelId || grades.isPending || Boolean(grades.error)}
           />
           <div className="sm:col-span-2">
             <label htmlFor={messageId} className="mb-1 block text-sm font-medium text-foreground">

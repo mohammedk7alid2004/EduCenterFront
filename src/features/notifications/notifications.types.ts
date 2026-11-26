@@ -41,6 +41,8 @@ export interface NotificationFilters extends ListFilters {
 export interface NotificationGroupOption {
   id: string;
   name: string;
+  levelId?: string | null;
+  gradeId?: string | null;
 }
 
 export interface NotificationSelectOption {
