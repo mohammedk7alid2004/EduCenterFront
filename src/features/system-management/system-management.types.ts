@@ -29,6 +29,8 @@ export interface SocialSettings {
   locations: CenterLocation[];
 }
 export interface CenterSettings {
+  lateMinutes: number;
+  absentMinutes: number;
   centerNameAr: string | null;
   centerNameEn: string | null;
   workingHoursAr: string | null;
@@ -43,6 +45,8 @@ export interface CenterSettings {
   updatedAt: string | null;
 }
 export interface CenterValues {
+  lateMinutes: number;
+  absentMinutes: number;
   centerNameAr: string;
   centerNameEn: string;
   workingHoursAr: string;

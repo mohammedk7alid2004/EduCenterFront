@@ -33,6 +33,8 @@ export function CenterEditor({
     formState: { errors },
   } = useForm<CenterValues>({
     defaultValues: {
+      lateMinutes: settings?.lateMinutes ?? 15,
+      absentMinutes: settings?.absentMinutes ?? 30,
       centerNameAr: settings?.centerNameAr ?? '',
       centerNameEn: settings?.centerNameEn ?? '',
       workingHoursAr: settings?.workingHoursAr ?? '',
@@ -72,6 +74,10 @@ export function CenterEditor({
         onSubmit={handleSubmit((form) => {
           if (phone.trim()) {
             addPhone();
+            return;
+          }
+          if (form.lateMinutes > form.absentMinutes) {
+            setError('lateMinutes', { message: t('systemManagement.lateExceedsAbsent') });
             return;
           }
           const invalidLocation = form.locations.findIndex(
@@ -188,6 +194,38 @@ export function CenterEditor({
                 {errors.othersPhoneNumbers.message}
               </p>
             )}
+          </div>
+        </div>
+        <div>
+          <h3 className="mb-1 text-sm font-semibold">{t('systemManagement.attendanceSection')}</h3>
+          <p className="mb-4 text-xs text-muted">{t('systemManagement.attendanceTimingHint')}</p>
+          <div className="grid gap-x-4 gap-y-6 sm:grid-cols-2">
+            <Input
+              {...register('lateMinutes', {
+                setValueAs: (value) => (value === '' ? Number.NaN : Number(value)),
+                validate: (value) =>
+                  (Number.isInteger(value) && value >= 1 && value <= 240) ||
+                  t('systemManagement.invalidMinutes'),
+              })}
+              type="number"
+              min={1}
+              max={240}
+              label={t('systemManagement.lateMinutes')}
+              error={errors.lateMinutes?.message}
+            />
+            <Input
+              {...register('absentMinutes', {
+                setValueAs: (value) => (value === '' ? Number.NaN : Number(value)),
+                validate: (value) =>
+                  (Number.isInteger(value) && value >= 1 && value <= 240) ||
+                  t('systemManagement.invalidMinutes'),
+              })}
+              type="number"
+              min={1}
+              max={240}
+              label={t('systemManagement.absentMinutes')}
+              error={errors.absentMinutes?.message}
+            />
           </div>
         </div>
         <div className="space-y-4">

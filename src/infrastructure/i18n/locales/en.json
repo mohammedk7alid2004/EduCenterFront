@@ -608,6 +608,13 @@
     "emptyPolicyAction": "Click Update to write the policy content.",
     "identitySection": "Basic Center Information",
     "phonesSection": "Phone Numbers & Contact",
+    "attendanceSection": "Attendance Timing",
+    "lateMinutes": "Late After",
+    "absentMinutes": "Absent After",
+    "minutesValue": "{{count}} minutes",
+    "attendanceTimingHint": "Registration opens 30 minutes before the session starts. A student scanned after the late time is marked Late, and after the absent time is marked Absent.",
+    "invalidMinutes": "Enter a whole number between 1 and 240",
+    "lateExceedsAbsent": "The late time cannot be longer than the absent time.",
     "locationsSection": "Center Branches & Locations",
     "logosSection": "Official Brand Logos",
     "tabs": {

@@ -46,6 +46,8 @@ export function centerFormData(values: CenterValues): FormData {
     'mainPhoneNumber',
   ] as const)
     form.append(key, values[key]);
+  form.append('LateMinutes', String(values.lateMinutes));
+  form.append('AbsentMinutes', String(values.absentMinutes));
   values.othersPhoneNumbers.forEach((phone, index) =>
     form.append(`OthersPhoneNumbers[${index}]`, phone),
   );
