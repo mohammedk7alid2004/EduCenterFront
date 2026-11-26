@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { usePermission } from '@/infrastructure/auth';
+import { usePermission } from '@/shared/hooks';
 import { useOnline } from '@/shared/hooks';
 import { setServerErrors } from '@/shared/utils';
 import { Button, ErrorState, FeedbackDialog, Icon, LoadingState, Modal } from '@/shared/components';
-import type { SystemTab } from '../system-management.constants';
-import type { ContentDto, ContentValues } from '../system-management.types';
-import { useSaveSettings, useSettings } from '../system-management.queries';
+import type { SystemTab } from '../constants';
+import type { ContentDto, ContentValues } from '../types';
+import { useSettings } from '../queries';
+import { useSaveSettings } from '../commands';
 import { SettingsForm, TextArea } from './settings-form';
 export function ContentPanel({ tab }: { tab: SystemTab }): JSX.Element {
   const { t, i18n } = useTranslation();

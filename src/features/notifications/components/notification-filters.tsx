@@ -1,12 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { Button, ErrorState, Select } from '@/shared/components';
-import { NOTIFICATION_TYPE } from '../notifications.constants';
-import { notificationLocalizedName } from '../notifications.lib';
-import {
-  useNotificationGroups,
-  useNotificationLevels,
-  useNotificationGrades,
-} from '../notifications.queries';
+import { NOTIFICATION_TYPE } from '../constants';
+import { notificationLocalizedName } from '../utils';
+import { useNotificationGroups, useNotificationLevels, useNotificationGrades } from '../queries';
 
 export function NotificationFilters({
   type,

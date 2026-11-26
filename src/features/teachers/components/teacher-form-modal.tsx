@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import { Button, FeedbackDialog, Icon, Input, Modal, StatusSwitch } from '@/shared/components';
 import { useOnline } from '@/shared/hooks';
 import { setServerErrors } from '@/shared/utils';
-import type { ApiError } from '@/infrastructure/api';
-import type { TeacherDto } from '../teachers.types';
-import { useCreateTeacher, useUpdateTeacher } from '../teachers.queries';
+import type { ApiError } from '@/shared/api';
+import { createTeacherSchema, type TeacherFormValues as Values } from '../schemas';
+import type { TeacherDto } from '../types';
+import { useCreateTeacher, useUpdateTeacher } from '../commands';
 import { TeacherSubjectsPicker } from './teacher-subjects-picker';
 
 export function TeacherFormModal({
@@ -23,41 +23,7 @@ export function TeacherFormModal({
   const online = useOnline();
   const [success, setSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const schema = z.object({
-    fullName: z
-      .string()
-      .trim()
-      .min(1, t('validation.required'))
-      .max(50, t('validation.maxLength', { count: 50 })),
-    email: z
-      .string()
-      .trim()
-      .min(1, t('validation.required'))
-      .email(t('auth.validation.emailInvalid'))
-      .max(150, t('validation.maxLength', { count: 150 })),
-    phoneNumber: z
-      .string()
-      .trim()
-      .min(1, t('validation.required'))
-      .max(20, t('validation.maxLength', { count: 20 }))
-      .regex(/^\+?[0-9\s\-()]+$/, t('validation.phone')),
-    password: z
-      .string()
-      .refine(
-        (value) =>
-          (isEdit && !value) ||
-          (value.length >= 8 &&
-            /[A-Z]/.test(value) &&
-            /[a-z]/.test(value) &&
-            /[0-9]/.test(value) &&
-            /[\W_]/.test(value)),
-        t('auth.recovery.validation.passwordStrength'),
-      ),
-    subjectIds: z.array(z.string()).min(1, t('validation.subjects')),
-    notes: z.string(),
-    isActive: z.boolean(),
-  });
-  type Values = z.infer<typeof schema>;
+  const schema = createTeacherSchema(t, isEdit);
   const {
     register,
     handleSubmit,

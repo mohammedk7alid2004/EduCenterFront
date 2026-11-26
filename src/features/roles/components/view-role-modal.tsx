@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Modal, DetailField, LoadingState, ErrorState } from '@/shared/components';
-import { usePermissionCatalog, useRole } from '../roles.queries';
+import { usePermissionCatalog, useRole } from '../queries';
 import { PermissionGrid } from './permission-grid';
 export function ViewRoleModal({ id, onClose }: { id: string; onClose: () => void }): JSX.Element {
   const { t } = useTranslation();

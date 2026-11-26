@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { DetailField, ErrorState, LoadingState, Modal, StatusBadge } from '@/shared/components';
-import { useEmployee } from '../employees.queries';
+import { useEmployee } from '../queries';
 export function ViewEmployeeModal({
   id,
   onClose,

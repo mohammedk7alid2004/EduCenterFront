@@ -13,10 +13,8 @@ vi.mock('@/shared/hooks', () => ({
   useOnline: () => true,
 }));
 
-vi.mock('../notifications.queries', () => ({
+vi.mock('../queries', () => ({
   useNotification: () => ({ data: undefined, isPending: false, error: null }),
-  useCreateNotification: () => ({ mutate, isPending: false, error: null }),
-  useUpdateNotification: () => ({ mutate, isPending: false, error: null }),
   useNotificationGroups: () => ({
     data: [{ id: 'g-1', name: 'Physics 3rd', levelId: 'l-1', gradeId: 'gr-1' }],
     isPending: false,
@@ -32,6 +30,11 @@ vi.mock('../notifications.queries', () => ({
     isPending: false,
     error: null,
   }),
+}));
+
+vi.mock('../commands', () => ({
+  useCreateNotification: () => ({ mutate, isPending: false, error: null }),
+  useUpdateNotification: () => ({ mutate, isPending: false, error: null }),
 }));
 
 describe('NotificationFormModal group selection', () => {

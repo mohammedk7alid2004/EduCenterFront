@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { usePermission } from '@/infrastructure/auth';
+import { usePermission } from '@/shared/hooks';
 import { useOnline } from '@/shared/hooks';
 import { setServerErrors } from '@/shared/utils';
 import {
@@ -14,9 +14,10 @@ import {
   LoadingState,
   Modal,
 } from '@/shared/components';
-import { SOCIAL_ICONS, SOCIAL_PLATFORMS, type SystemTab } from '../system-management.constants';
-import type { SocialLink, SocialSettings } from '../system-management.types';
-import { useSaveSettings, useSettings } from '../system-management.queries';
+import { SOCIAL_ICONS, SOCIAL_PLATFORMS, type SystemTab } from '../constants';
+import type { SocialLink, SocialSettings } from '../types';
+import { useSettings } from '../queries';
+import { useSaveSettings } from '../commands';
 import { SettingsForm } from './settings-form';
 export function SocialPanel({ tab }: { tab: SystemTab }): JSX.Element {
   const { t } = useTranslation();

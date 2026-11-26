@@ -1,4 +1,12 @@
-export { SubjectsPage } from './subjects-page';
+export { useSubjects, useSubject, useSubjectOptions } from './queries';
+export {
+  useCreateSubject,
+  useUpdateSubject,
+  useDeleteSubjects,
+  useToggleSubjectStatus,
+  useSubjectsExport,
+  useSaveSubject,
+} from './commands';
 export type {
   SubjectDto,
   SubjectDetail,
@@ -8,14 +16,7 @@ export type {
   DeleteSubjectsPayload,
   PaginatedList,
   ApiResult,
-} from './subjects.types';
-export {
-  useSubjects,
-  useSubject,
-  useCreateSubject,
-  useUpdateSubject,
-  useDeleteSubjects,
-  useToggleSubjectStatus,
-} from './subjects.queries';
-
-export { useSubjectOptions } from './subjects.queries';
+} from './types';
+export { SubjectTable } from './components/subject-table';
+export { SubjectFormModal } from './components/subject-form-modal';
+export { ViewSubjectModal } from './components/view-subject-modal';

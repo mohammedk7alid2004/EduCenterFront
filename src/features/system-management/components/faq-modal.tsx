@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { usePermission } from '@/infrastructure/auth';
+import { usePermission } from '@/shared/hooks';
 import { useOnline } from '@/shared/hooks';
 import { setServerErrors } from '@/shared/utils';
 import {
@@ -13,9 +13,10 @@ import {
   Modal,
   StatusSwitch,
 } from '@/shared/components';
-import { FAQ_ENDPOINTS, FAQ_PERMISSIONS, SETTINGS_DIALOG } from '../system-management.constants';
-import { useSaveFaq, useSettings } from '../system-management.queries';
-import type { FaqDto, FaqValues } from '../system-management.types';
+import { FAQ_ENDPOINTS, FAQ_PERMISSIONS, SETTINGS_DIALOG } from '../constants';
+import { useSettings } from '../queries';
+import { useSaveFaq } from '../commands';
+import type { FaqDto, FaqValues } from '../types';
 import { ContentLanguage } from './content-panel';
 import { SettingsForm, TextArea } from './settings-form';
 export function FaqModal({

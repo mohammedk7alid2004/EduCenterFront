@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { PERMISSIONS } from '@/config';
-import { usePermission } from '@/infrastructure/auth';
+import { PERMISSIONS } from '@/app/config';
+import { usePermission } from '@/shared/hooks';
 import { EmptyState, Icon } from '@/shared/components';
 import {
   appointmentEndMinutes,
@@ -10,8 +10,8 @@ import {
   layoutAppointments,
   localizedName,
   timeMinutes,
-} from '../appointments.lib';
-import { CALENDAR_HOUR_HEIGHT, CALENDAR_PERIOD, WEEK_DAYS } from '../appointments.constants';
+} from '../utils';
+import { CALENDAR_HOUR_HEIGHT, CALENDAR_PERIOD, WEEK_DAYS } from '../constants';
 import { AppointmentCalendarEvent, type CalendarAppointment } from './appointment-calendar-event';
 const eventColors = [
   'bg-calendarTeal text-qrPaper',

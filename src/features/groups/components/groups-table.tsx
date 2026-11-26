@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { PERMISSIONS } from '@/config';
-import { usePermission } from '@/infrastructure/auth';
+import { PERMISSIONS } from '@/app/config';
+import { usePermission } from '@/shared/hooks';
 import { DataTable, Icon, type Column } from '@/shared/components';
-import { groupLocalizedName } from '../groups.lib';
-import type { GroupDto } from '../groups.types';
+import { groupLocalizedName } from '../utils';
+import type { GroupDto } from '../types';
 import { GroupStatusBadge } from './group-status-badge';
 
 export function GroupsTable({

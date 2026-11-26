@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ROUTES } from '@/config';
+import { ROUTES } from '@/shared/constants';
 import { Icon } from '@/shared/components';
-import { useAppointments } from '@/features/appointments/appointments.queries';
-import { formatAppointmentTime, localizedName } from '@/features/appointments/appointments.lib';
+import { useAppointments, formatAppointmentTime, localizedName } from '@/features/appointments';
 
 export function DashboardUpcomingAppointments(): JSX.Element {
   const { t, i18n } = useTranslation();

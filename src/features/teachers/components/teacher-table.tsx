@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { DataTable, StatusSwitch, useConfirm, type Column } from '@/shared/components';
 import { useOnline } from '@/shared/hooks';
 import { toast } from 'sonner';
-import type { TeacherDto } from '../teachers.types';
-import { useDeleteTeachers, useToggleTeacherStatus } from '../teachers.queries';
+import type { TeacherDto } from '../types';
+import { useDeleteTeachers, useToggleTeacherStatus } from '../commands';
 import { TeacherRowActions } from './teacher-row-actions';
 export function TeacherTable({
   rows,

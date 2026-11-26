@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { Button, Select } from '@/shared/components';
-import { useGroups } from '@/features/groups/groups.queries';
-import { ATTENDANCE_FILTER_STATUSES } from '../attendance.constants';
-import { ATTENDANCE_STATUS } from '../attendance.types';
+import { useGroups } from '@/features/groups';
+import { ATTENDANCE_FILTER_STATUSES } from '../constants';
+import { ATTENDANCE_STATUS } from '../types';
 
 type FilterKey = 'status' | 'groupName' | 'date';
 

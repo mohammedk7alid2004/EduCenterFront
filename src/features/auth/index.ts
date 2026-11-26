@@ -1,12 +1,20 @@
-export { LoginPage } from './login-page';
-export { PasswordRecoveryPage } from './password-recovery-page';
-export { useLogin, useLogout } from './hooks';
-export { useRequestPasswordReset, useResetPassword, useVerifyResetOtp } from './hooks';
+export {
+  useLogin,
+  useLogout,
+  useRequestPasswordReset,
+  useResetPassword,
+  useVerifyResetOtp,
+} from './commands';
 export type { LoginCredentials, LoginResult } from './types';
 export type {
   PasswordResetRequest,
+  PasswordRecoveryStep,
   ResetPasswordRequest,
   VerifyResetOtpRequest,
-} from './password-recovery.types';
-
+} from './types';
 export { AuthLogo } from './components/auth-logo';
+export { AuthShell } from './components/auth-shell';
+export { LoginForm } from './components/login-form';
+export { LoginSuccessModal } from './components/login-success-modal';
+export { PasswordRecoveryCard } from './components/password-recovery-card';
+export { SplashScreen } from './components/splash-screen';

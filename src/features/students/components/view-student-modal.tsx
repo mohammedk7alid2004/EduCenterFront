@@ -8,9 +8,9 @@ import {
   Modal,
   StatusBadge,
 } from '@/shared/components';
-import { useStudent } from '../students.queries';
-import { studentLocalizedName } from '../students.lib';
-import { STUDENT_GENDER_NAMES } from '../students.constants';
+import { useStudent } from '../queries';
+import { studentLocalizedName } from '../utils';
+import { STUDENT_GENDER_NAMES } from '../constants';
 export function ViewStudentModal({
   id,
   onClose,

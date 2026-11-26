@@ -1,13 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { PERMISSIONS } from '@/config';
-import { usePermission } from '@/infrastructure/auth';
+import { PERMISSIONS } from '@/app/config';
+import { usePermission } from '@/shared/hooks';
 import { useOnline } from '@/shared/hooks';
 import { Button, Icon } from '@/shared/components';
-import { useContactFile } from '../contact-us.queries';
-import { CONTACT_FILE_ACTION, CONTACT_FILE_NAMES } from '../contact-us.constants';
-import { downloadContactFile } from '../contact-us.lib';
-import type { ContactFilters } from '../contact-us.types';
+import { useContactFile } from '../commands';
+import { CONTACT_FILE_ACTION, CONTACT_FILE_NAMES } from '../constants';
+import { downloadContactFile } from '../utils';
+import type { ContactFilters } from '../types';
 export function ContactTools({
   filters,
   onImport,

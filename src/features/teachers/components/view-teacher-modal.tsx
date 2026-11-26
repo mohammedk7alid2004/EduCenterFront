@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { DetailField, Modal, StatusBadge } from '@/shared/components';
-import type { TeacherDto } from '../teachers.types';
+import type { TeacherDto } from '../types';
 export function ViewTeacherModal({
   teacher,
   onClose,

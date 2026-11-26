@@ -1,8 +1,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAttendance } from '@/features/attendance/attendance.queries';
-import { ATTENDANCE_STATUS, type AttendanceStatus } from '@/features/attendance/attendance.types';
-import { DASHBOARD_ATTENDANCE_REFRESH_INTERVAL_MS } from '../dashboard.constants';
+import { useAttendance, ATTENDANCE_STATUS, type AttendanceStatus } from '@/features/attendance';
+import { DASHBOARD_ATTENDANCE_REFRESH_INTERVAL_MS } from '../constants';
 
 const DASHBOARD_CHART_DAYS = 7;
 

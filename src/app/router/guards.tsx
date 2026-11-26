@@ -1,13 +1,13 @@
 import type { PropsWithChildren } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
+import { ROUTES } from '@/shared/constants';
 import {
-  ROUTES,
   canAccessAnyPermission,
   canUsePermission,
   getDefaultAuthorizedRoute,
   type Role,
-} from '@/config';
-import { useAuthStore } from '@/infrastructure/auth';
+} from '@/app/config';
+import { useAuthStore } from '@/shared/hooks';
 export function ProtectedRoute({
   children,
   roles,

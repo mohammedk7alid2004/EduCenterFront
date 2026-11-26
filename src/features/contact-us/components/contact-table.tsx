@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next';
-import { PERMISSIONS } from '@/config';
-import { usePermission } from '@/infrastructure/auth';
+import { PERMISSIONS } from '@/app/config';
+import { usePermission } from '@/shared/hooks';
 import { useOnline } from '@/shared/hooks';
 import { DataTable, Icon, RowActions, useConfirm, type Column } from '@/shared/components';
-import { useDeleteContacts } from '../contact-us.queries';
-import { contactDate } from '../contact-us.lib';
-import type { ContactMessage } from '../contact-us.types';
+import { useDeleteContacts } from '../commands';
+import { contactDate } from '../utils';
+import type { ContactMessage } from '../types';
 export function ContactTable({
   rows,
   startIndex,

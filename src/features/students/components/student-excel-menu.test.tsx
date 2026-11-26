@@ -10,15 +10,12 @@ vi.mock('react-i18next', async () => ({
   useTranslation: () => ({ t: (key: string) => key }),
 }));
 
-vi.mock('@/infrastructure/auth', () => ({
-  usePermission: () => () => true,
-}));
-
 vi.mock('@/shared/hooks', () => ({
+  usePermission: () => () => true,
   useOnline: () => true,
 }));
 
-vi.mock('../students.queries', () => ({
+vi.mock('../commands', () => ({
   useStudentsExport: () => ({ mutate: exportMutate, isPending: false }),
   useStudentTemplate: () => ({ mutate: templateMutate, isPending: false }),
 }));

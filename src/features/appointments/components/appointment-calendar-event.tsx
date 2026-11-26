@@ -1,11 +1,11 @@
 import type { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
-import { PERMISSIONS } from '@/config';
-import { usePermission } from '@/infrastructure/auth';
+import { PERMISSIONS } from '@/app/config';
+import { usePermission } from '@/shared/hooks';
 import { Icon } from '@/shared/components';
-import { localizedName, formatAppointmentTime } from '../appointments.lib';
-import { APPOINTMENT_STATUS } from '../appointments.constants';
-import type { LocalizedName } from '../appointments.types';
+import { localizedName, formatAppointmentTime } from '../utils';
+import { APPOINTMENT_STATUS } from '../constants';
+import type { LocalizedName } from '../types';
 
 export interface CalendarAppointment {
   id: string;

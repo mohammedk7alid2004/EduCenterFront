@@ -1,6 +1,6 @@
 import { forwardRef, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { ApiError } from '@/infrastructure/api';
+import type { ApiError } from '@/shared/api';
 import { useOnline } from '@/shared/hooks';
 import { Button, Icon } from '@/shared/components';
 export function SettingsForm({

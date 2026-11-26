@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useOnline } from '@/shared/hooks';
 import { setServerErrors } from '@/shared/utils';
 import { Button, Icon, Modal } from '@/shared/components';
-import { CONTACT_IMPORT } from '../contact-us.constants';
-import { useImportContacts } from '../contact-us.queries';
+import { CONTACT_IMPORT } from '../constants';
+import { useImportContacts } from '../commands';
 export function ImportContactModal({ onClose }: { onClose: () => void }): JSX.Element {
   const { t } = useTranslation();
   const online = useOnline();

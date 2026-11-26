@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { DetailField, ErrorState, LoadingState, Modal } from '@/shared/components';
-import { useAttendanceItem } from '../attendance.queries';
+import { useAttendanceItem } from '../queries';
 import { AttendanceStatusBadge } from './attendance-status-badge';
 export function ViewAttendanceModal({
   id,

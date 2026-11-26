@@ -1,6 +1,6 @@
 import { RowActions } from '@/shared/components';
 import { useOnline } from '@/shared/hooks';
-import type { TeacherDto } from '../teachers.types';
+import type { TeacherDto } from '../types';
 export function TeacherRowActions({
   teacher,
   onEdit,

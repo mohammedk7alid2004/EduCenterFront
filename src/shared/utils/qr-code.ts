@@ -1,4 +1,4 @@
-import { theme } from '@/config';
+import { theme } from '@/app/config';
 import { downloadBlob } from './download';
 
 export const QR_CODE_CONFIG = {

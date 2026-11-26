@@ -1,39 +1,19 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import { Button, Icon, Modal } from '@/shared/components';
 import { useOnline } from '@/shared/hooks';
 import { setServerErrors } from '@/shared/utils';
-import { PASSWORD_SPECIAL_PATTERN } from '../profile.constants';
-import { useChangePassword } from '../profile.queries';
-import type { ChangePasswordValues } from '../profile.types';
+import { useChangePassword } from '../commands';
+import { createChangePasswordSchema } from '../schemas';
+import type { ChangePasswordValues } from '../types';
 import { PasswordField } from './password-field';
 
 export function ChangePasswordForm({ onClose }: { onClose: () => void }): JSX.Element {
   const { t } = useTranslation();
   const online = useOnline();
   const mutation = useChangePassword();
-  const schema = z
-    .object({
-      currentPassword: z.string().min(1, t('validation.required')),
-      newPassword: z
-        .string()
-        .refine(
-          (value) =>
-            value.length >= 8 &&
-            /[A-Z]/.test(value) &&
-            /[a-z]/.test(value) &&
-            /[0-9]/.test(value) &&
-            PASSWORD_SPECIAL_PATTERN.test(value),
-          t('auth.recovery.validation.passwordStrength'),
-        ),
-      confirmPassword: z.string().min(1, t('validation.required')),
-    })
-    .refine((value) => value.newPassword === value.confirmPassword, {
-      path: ['confirmPassword'],
-      message: t('profile.validation.passwordMatch'),
-    });
+  const schema = createChangePasswordSchema(t);
   const {
     register,
     handleSubmit,

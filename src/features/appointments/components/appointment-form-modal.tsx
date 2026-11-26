@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
@@ -19,11 +18,12 @@ import {
   useAppointmentOptions,
   useAppointmentTeachers,
   useAppointmentGrades,
-  useSaveAppointment,
-} from '../appointments.queries';
-import { APPOINTMENT_ITERATION, APPOINTMENT_STATUS } from '../appointments.constants';
-import type { AppointmentDto, AppointmentValues } from '../appointments.types';
-import { appointmentEndMinutes, localizedName, timeMinutes } from '../appointments.lib';
+} from '../queries';
+import { useSaveAppointment } from '../commands';
+import { APPOINTMENT_ITERATION, APPOINTMENT_STATUS } from '../constants';
+import type { AppointmentDto, AppointmentValues } from '../types';
+import { localizedName } from '../utils';
+import { createAppointmentSchema } from '../schemas';
 import { AppointmentSelect } from './appointment-select';
 import { AppointmentDaysSelect } from './appointment-days-select';
 import { AppointmentTimeField } from './appointment-time-field';
@@ -59,61 +59,10 @@ function AppointmentForm({
   const online = useOnline();
   const [success, setSuccess] = useState(false);
   const classrooms = useAppointmentOptions('classrooms');
-  const required = z.string().trim().min(1, t('validation.required'));
-  const positive = z
-    .number({ invalid_type_error: t('appointments.validation.positive') })
-    .int(t('appointments.validation.positive'))
-    .min(1, t('appointments.validation.positive'));
-  const schema = z
-    .object({
-      groupName: required,
-      subjectId: required,
-      teacherId: required,
-      classroomId: required,
-      levelId: required,
-      gradeId: required,
-      startTime: z.string().regex(/^\d{2}:\d{2}$/, t('validation.required')),
-      endTime: z.string().regex(/^\d{2}:\d{2}$/, t('validation.required')),
-      days: z.array(z.number().int().min(0).max(6)).min(1, t('appointments.validation.days')),
-      iteration: z
-        .number()
-        .refine(
-          (value) => Object.values(APPOINTMENT_ITERATION).some((item) => item === value),
-          t('validation.required'),
-        ),
-      numberOfIterations: positive,
-      maxCapacity: positive,
-      notes: z.string(),
-      status: z
-        .number()
-        .refine(
-          (value) => Object.values(APPOINTMENT_STATUS).some((item) => item === value),
-          t('validation.required'),
-        ),
-    })
-    .refine(
-      (values) => {
-        const start = timeMinutes(values.startTime);
-        const end = appointmentEndMinutes(values.startTime, values.endTime);
-        const duration = end - start;
-        return duration > 0 && duration <= 12 * 60;
-      },
-      {
-        path: ['endTime'],
-        message: t('appointments.validation.time'),
-      },
-    )
-    .superRefine((values, context) => {
-      const capacity = classrooms.data?.find(
-        (option) => option.id === values.classroomId,
-      )?.capacity;
-      if (typeof capacity !== 'number' || values.maxCapacity > capacity)
-        context.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['maxCapacity'],
-          message: t('appointments.validation.capacity', { count: capacity ?? 0 }),
-        });
-    });
+  const schema = createAppointmentSchema(
+    t,
+    (classroomId) => classrooms.data?.find((option) => option.id === classroomId)?.capacity,
+  );
   const {
     register,
     control,

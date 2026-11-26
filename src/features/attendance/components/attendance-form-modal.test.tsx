@@ -2,11 +2,12 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import '@/infrastructure/i18n';
-import { fetchRecordedAttendance, recordAttendance } from '../attendance.api';
+import '@/app/config';
+import { fetchRecordedAttendance } from '../queries/attendance.queries.api';
+import { recordAttendance } from '../commands/attendance.commands.api';
 import { AttendanceFormModal } from './attendance-form-modal';
 
-vi.mock('../attendance.api', () => ({
+vi.mock('../queries/attendance.queries.api', () => ({
   fetchAttendanceStudents: vi
     .fn()
     .mockResolvedValue([{ id: 's1', name: 'Student One', phoneNumber: null }]),
@@ -15,6 +16,8 @@ vi.mock('../attendance.api', () => ({
     { id: 'g2', groupName: 'G2', classroomName: 'Room B', days: [1] },
   ]),
   fetchRecordedAttendance: vi.fn().mockResolvedValue(null),
+}));
+vi.mock('../commands/attendance.commands.api', () => ({
   recordAttendance: vi.fn().mockResolvedValue(undefined),
 }));
 

@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { PERMISSIONS, ROUTES, type IconName } from '@/config';
+import { ROUTES } from '@/shared/constants';
+import { PERMISSIONS, type IconName } from '@/app/config';
 import { SYSTEM_TABS } from '@/features/system-management';
-import { usePermission } from '@/infrastructure/auth';
+import { usePermission } from '@/shared/hooks';
 import { Icon } from '@/shared/components';
 
 interface SectionItem {

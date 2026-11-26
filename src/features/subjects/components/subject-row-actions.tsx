@@ -1,6 +1,6 @@
 import { RowActions } from '@/shared/components';
 import { useOnline } from '@/shared/hooks';
-import type { SubjectDto } from '../subjects.types';
+import type { SubjectDto } from '../types';
 export function SubjectRowActions({
   subject,
   onEdit,

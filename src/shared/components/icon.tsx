@@ -1,5 +1,5 @@
 import type { ComponentProps } from 'react';
-import { icons, type IconName } from '@/config';
+import { icons, type IconName } from '@/app/config';
 interface IconProps extends ComponentProps<'svg'> {
   name: IconName;
 }

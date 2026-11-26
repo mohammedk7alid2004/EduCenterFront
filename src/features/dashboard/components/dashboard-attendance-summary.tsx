@@ -1,11 +1,9 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ROUTES } from '@/config';
+import { ROUTES } from '@/shared/constants';
 import { Icon } from '@/shared/components';
-import { useAttendance } from '@/features/attendance/attendance.queries';
-import { ATTENDANCE_STATUS } from '@/features/attendance/attendance.types';
-import { AttendanceStatusBadge } from '@/features/attendance/components/attendance-status-badge';
-import { DASHBOARD_ATTENDANCE_REFRESH_INTERVAL_MS } from '../dashboard.constants';
+import { useAttendance, ATTENDANCE_STATUS, AttendanceStatusBadge } from '@/features/attendance';
+import { DASHBOARD_ATTENDANCE_REFRESH_INTERVAL_MS } from '../constants';
 
 export function DashboardAttendanceSummary(): JSX.Element {
   const { t } = useTranslation();

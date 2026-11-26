@@ -1,8 +1,8 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { PAGE_SIZES, ROUTES, STATUS_FILTER } from '@/config';
-import type { ApiError } from '@/infrastructure/api';
+import { PAGE_SIZES, ROUTES, STATUS_FILTER } from '@/shared/constants';
+import type { ApiError } from '@/shared/api';
 import { useOnline } from '@/shared/hooks';
 import { type useListControls } from '@/shared/hooks';
 import { Button } from './button';

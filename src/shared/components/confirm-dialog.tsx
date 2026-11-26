@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { IconName } from '@/config';
-import { ApiError } from '@/infrastructure/api';
+import type { IconName } from '@/app/config';
+import { ApiError } from '@/shared/api';
 import { useOnline } from '@/shared/hooks';
 import { Button } from './button';
 import { Icon } from './icon';

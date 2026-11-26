@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { ATTENDANCE_STATUS, type AttendanceStatus } from '../attendance.types';
+import { ATTENDANCE_STATUS, type AttendanceStatus } from '../types';
 export function AttendanceStatusBadge({ status }: { status: AttendanceStatus }): JSX.Element {
   const { t } = useTranslation();
   const statusConfig = {

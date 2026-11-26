@@ -1,15 +1,16 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { PERMISSIONS, ROUTES, type IconName } from '@/config';
-import { usePermission } from '@/infrastructure/auth';
+import { ROUTES } from '@/shared/constants';
+import { PERMISSIONS, type IconName } from '@/app/config';
+import { usePermission } from '@/shared/hooks';
 import { Icon } from '@/shared/components';
-import { useStudents } from '@/features/students/students.queries';
-import { useTeachers } from '@/features/teachers/teachers.queries';
-import { useGroups } from '@/features/groups/groups.queries';
-import { useAppointments } from '@/features/appointments/appointments.queries';
-import { useAttendance } from '@/features/attendance/attendance.queries';
-import { useClassrooms } from '@/features/classrooms/classrooms.queries';
-import { DASHBOARD_ATTENDANCE_REFRESH_INTERVAL_MS } from '../dashboard.constants';
+import { useStudents } from '@/features/students';
+import { useTeachers } from '@/features/teachers';
+import { useGroups } from '@/features/groups';
+import { useAppointments } from '@/features/appointments';
+import { useAttendance } from '@/features/attendance';
+import { useClassrooms } from '@/features/classrooms';
+import { DASHBOARD_ATTENDANCE_REFRESH_INTERVAL_MS } from '../constants';
 
 interface StatCardProps {
   title: string;

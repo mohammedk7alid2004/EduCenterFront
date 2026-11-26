@@ -1,8 +1,8 @@
 # 🏛️ EduCenter Frontend Architecture Guide
 
-## نمط المعمارية: Feature-Based Vertical Slice Architecture
+## نمط المعمارية: Feature-Based Architecture (Commands / Queries / Pages)
 
-تعتمد هذه المعمارية على تقسيم المشروع حسب **الوظائف (Features)** بدلاً من التقسيم الأفقي التقليدي، مما يجعل الكود سهل الصيانة، سريع التوسع، وخالياً من التشابك بين الشاشات.
+تعتمد هذه المعمارية على تقسيم المشروع حسب **الميزات (Features)** مع فصل طبقة التطبيق (`app/`)، والصفحات (`pages/`)، والعناصر المشتركة (`shared/`)، وفصل عمليات القراءة (`queries/`) عن عمليات الكتابة (`commands/`) وملفات التحقق (`schemas/`) والأنواع (`types/`) داخل كل ميزة.
 
 ---
 
@@ -10,104 +10,54 @@
 
 ```
 src/
-├── app/                  # 1. طبقة التطبيق والتوجيه
-│   ├── providers/        # مزودات React Query والـ Toasts
-│   ├── router/           # إعدادات React Router والـ Route Guards
-│   ├── app.tsx           # المكون الرئيسي للـ Shell
-│   └── error-boundary.tsx# معالج الأخطاء العام
+├── app/                      # 1. طبقة التطبيق والتكوين العام
+│   ├── providers/            # مزودات React Query والـ Toasts
+│   ├── router/               # إعدادات React Router والـ Route Guards
+│   ├── layouts/              # التخطيطات العامة (Sidebar, Header, AppLayout)
+│   ├── config/               # الألوان (theme)، الأيقونات (icons)، الصلاحيات (permissions)، i18n
+│   ├── app.tsx               # المكون الرئيسي للـ Shell
+│   └── error-boundary.tsx    # معالج الأخطاء العام
 │
-├── config/               # 2. الإعدادات والثوابت (Single Source of Truth)
-│   ├── constants.ts      # الثوابت (Endpoints, Routes, Storage Keys)
-│   ├── theme.ts          # ألوان الهوية الرسمية (Deep Forest, Golden Hour, Sand)
-│   ├── icons.ts          # سجل الأيقونات المركزي (Lucide Registry)
-│   └── permissions.ts    # الصلاحيات والأدوار (RBAC)
+├── features/                 # 2. الميزات المستقلة (Features)
+│   └── [feature_name]/
+│       ├── commands/         # دوال الكتابة (API + useMutation hooks)
+│       ├── queries/          # دوال القراءة (API + useQuery hooks)
+│       ├── components/       # مكونات الواجهة الخاصة بالميزة
+│       ├── schemas/          # مخططات التحقق بـ Zod
+│       ├── types/            # أنواع TypeScript الخاصة بالميزة
+│       ├── constants/        # (اختياري) ثوابت الميزة
+│       ├── utils/            # (اختياري) دوال مساعدة خاصة بالميزة
+│       └── index.ts          # المخرج العام الوحيد للميزة
 │
-├── infrastructure/       # 3. البنية التحتية والخدمات الأساسية
-│   ├── api/              # عميل Axios مع الـ Interceptors وتجديد الـ Token
-│   ├── auth/             # مخزن الـ Auth بالـ Zustand والـ Persistence
-│   └── i18n/             # إعدادات اللغات (عربي / إنجليزي) ودعم RTL
+├── shared/                   # 3. العناصر المشتركة عبر التطبيق
+│   ├── api/                  # عميل Axios والـ Interceptors ومعالجة ApiError
+│   ├── components/           # مكونات UI قابلة لإعادة الاستخدام (Button, Input, Modal, DataTable, Icon)
+│   ├── hooks/                # Hooks عامة (useAuthStore, usePermission, useOnline, useListControls...)
+│   ├── utils/                # دوال مساعدة عامة (forms, download, qr-code)
+│   ├── types/                # الأنواع المشتركة (ApiResult, PaginatedResult, ListFilters, AuthUser)
+│   └── constants/            # الثوابت العامة (ROUTES, API_ENDPOINTS, QUERY_KEYS, STORAGE_KEYS)
 │
-├── features/             # 4. الميزات المستقلة (Features / Vertical Slices)
-│   ├── auth/             # ميزة تسجيل الدخول
-│   │   ├── components/   # مكونات خاصة بالميزة (Form, Hero, Logo, Modals)
-│   │   ├── api.ts        # دوال الـ API النقية للميزة
-│   │   ├── hooks.ts      # React Query Hooks للميزة
-│   │   ├── types.ts      # أنواع TypeScript الخاصة بالميزة
-│   │   ├── login-page.tsx# شاشة الدخول الرئيسية
-│   │   └── index.ts      # المخرج العام الوحيد للميزة
-│   │
-│   ├── dashboard/        # ميزة لوحة التحكم
-│   └── [feature_name]/   # أي ميزة جديدة (الطلاب، المجموعات، الحصص، الحسابات...)
-│
-├── layouts/              # 5. التخطيطات العامة (Sidebar, Header, Layout)
-│
-├── shared/               # 6. العناصر والمكونات المشتركة
-│   ├── components/       # مكونات UI قابلة للاستخدام في أي مكان (Button, Input, Modal, DataTable, Icon)
-│   ├── hooks/            # Hooks مساعدة عامة (useDebounce, useUrlState, useOnline)
-│   ├── utils/            # دوال مساعدة عامة (forms, download)
-│   └── styles/           # ملفات Tailwind CSS وأنماط التصميم
-│
-└── assets/               # 7. الملفات الثابتة (صور، خطوط، SVGs)
+├── pages/                    # 4. صفحات المسارات (Thin Route Pages)
+├── assets/                   # 5. الملفات الثابتة وأنماط CSS (styles/tokens.css)
+├── locales/                  # 6. ملفات الترجمة (ar.json, en.json)
+└── main.tsx                  # نقطة دخول التطبيق
 ```
 
 ---
 
-## ⚡ كيف تضيف أي ميزة جديدة (Feature) في 4 خطوات بسيطة؟
+## ⚡ كيف تضيف أي ميزة جديدة (Feature)؟
 
-عند إضافة شاشة جديدة (مثال: ميزة الطلاب `students`):
+عند إضافة شاشة جديدة (مثال: `products`):
 
-### 1. أنشئ مجلد الميزة: `src/features/students/`
-
-- **`types.ts`**: عرّف الأنواع والبيانات:
-  ```ts
-  export interface Student {
-    id: string;
-    fullName: string;
-    grade: string;
-  }
-  ```
-- **`api.ts`**: دوال الاتصال بالباك إند:
-  ```ts
-  import { apiClient } from '@/infrastructure/api';
-  import type { Student } from './types';
-
-  export async function getStudents(signal?: AbortSignal): Promise<Student[]> {
-    const { data } = await apiClient.get<Student[]>('/Students', { signal });
-    return data;
-  }
-  ```
-- **`hooks.ts`**: استدعاء React Query:
-  ```ts
-  import { useQuery } from '@tanstack/react-query';
-  import { getStudents } from './api';
-
-  export function useStudents() {
-    return useQuery({
-      queryKey: ['students'],
-      queryFn: ({ signal }) => getStudents(signal),
-    });
-  }
-  ```
-
-### 2. ابنِ مكونات الشاشة
-
-- ضع المكونات الصغيرة في `src/features/students/components/`.
-- اجمع الصفحة في `students-page.tsx`.
-
-### 3. صدّر الصفحة في `index.ts`
-
-```ts
-// src/features/students/index.ts
-export { StudentsPage } from './students-page';
-```
-
-### 4. سجّل المسار في الراوتر
-
-في `src/app/router/router.tsx`:
-
-```tsx
-{ path: '/students', element: <StudentsPage /> }
-```
+1. **أنشئ مجلد الميزة `src/features/products/`**:
+   - `types/`: تعريف الأنواع والواجهات.
+   - `schemas/`: تعريف Zod validation schemas.
+   - `queries/`: دوال الـ GET النقية (`*.queries.api.ts`) و React Query hooks (`*.queries.ts`).
+   - `commands/`: دوال الـ POST/PUT/PATCH/DELETE (`*.commands.api.ts`) و mutation hooks (`*.commands.ts`).
+   - `components/`: مكونات الشاشة (الجدول، الفلاتر، المودال...).
+   - `index.ts`: تصدير الأعضاء العامة فقط.
+2. **أنشئ الصفحة في `src/pages/products-page.tsx`** وصدّرها من `src/pages/index.ts`.
+3. **سجّل المسار في `src/app/router/router.tsx`** عبر lazy import من `@/pages/products-page`.
 
 ---
 
@@ -115,7 +65,7 @@ export { StudentsPage } from './students-page';
 
 1. **Feature Boundaries**: كل ميزة تملك ملفاتها بالكامل ولا يتم استيراد أي ملف داخلي من خارج الميزة إلا عبر `index.ts`.
 2. **Strict TypeScript**: بدون `any` وبدون Magic Strings.
-3. **No Direct Axios in UI**: كل طلبات السيرفر تمر عبر `api.ts` و `hooks.ts`.
-4. **Icons via Registry**: تسجل الأيقونة في `src/config/icons.ts` وتستعمل عبر `<Icon name="..." />`.
-5. **Semantic Theme**: الألوان تأتي من التوكنز فقط (`bg-primary`, `text-accent`...).
-6. **Full RTL & i18n**: كل النصوص من ملفات الترجمة واستعمال اتجاهات منطقية دائماً (`ms-`, `me-`, `ps-`, `pe-`, `start-`, `end-`).
+3. **No Direct Axios in UI**: كل طلبات السيرفر تمر عبر `commands/` و `queries/`.
+4. **Icons via Registry**: تسجل الأيقونة في `src/app/config/icons.ts` وتستعمل عبر `<Icon name="..." />`.
+5. **Semantic Theme**: الألوان تأتي من التوكنز فقط (`src/app/config/theme.ts`).
+6. **Full RTL & i18n**: كل النصوص من `src/locales/` واستعمال اتجاهات منطقية دائماً (`ms-`, `me-`, `ps-`, `pe-`, `start-`, `end-`).

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { DetailField, ErrorState, LoadingState, Modal } from '@/shared/components';
-import { useGroup } from '../groups.queries';
-import { groupLocalizedName } from '../groups.lib';
+import { useGroup } from '../queries';
+import { groupLocalizedName } from '../utils';
 import { GroupStatusBadge } from './group-status-badge';
 
 export function ViewGroupModal({ id, onClose }: { id: string; onClose: () => void }): JSX.Element {

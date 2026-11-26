@@ -1,5 +1,5 @@
 import { useSearchParams } from 'react-router-dom';
-import { LIST_PARAMS, PAGE_SIZES, STATUS_FILTER } from '@/config';
+import { LIST_PARAMS, PAGE_SIZES, STATUS_FILTER } from '@/shared/constants';
 import { useDebouncedValue } from './use-debounced-value';
 
 export function useListControls() {

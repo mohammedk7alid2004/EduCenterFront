@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Button, ErrorState } from '@/shared/components';
-import { useAppointmentOptions, useAppointmentTeachers } from '../appointments.queries';
-import { localizedName } from '../appointments.lib';
+import { useAppointmentOptions, useAppointmentTeachers } from '../queries';
+import { localizedName } from '../utils';
 import { AppointmentSelect } from './appointment-select';
 export function AppointmentFilters({
   subject,

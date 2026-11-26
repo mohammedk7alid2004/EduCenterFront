@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ApiError } from '@/infrastructure/api';
+import { ApiError } from '@/shared/api';
 import { useCenterBrand } from '@/features/system-management';
 import { useOnline } from '@/shared/hooks';
 import { exportQrCard, generateQrDataUrl, QR_EXPORT_FORMAT } from '@/shared/utils';
 import { Button, ErrorState, Icon, LoadingState, Modal, StatusBadge } from '@/shared/components';
-import { useStudent } from '../students.queries';
-import { studentLocalizedName } from '../students.lib';
-import { STUDENT_GENDER_NAMES, STUDENT_QR } from '../students.constants';
-import type { StudentDto } from '../students.types';
+import { useStudent } from '../queries';
+import { studentLocalizedName } from '../utils';
+import { STUDENT_GENDER_NAMES, STUDENT_QR } from '../constants';
+import type { StudentDto } from '../types';
 
 export function StudentQrModal({ id, onClose }: { id: string; onClose: () => void }): JSX.Element {
   const { t } = useTranslation();

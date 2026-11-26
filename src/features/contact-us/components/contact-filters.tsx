@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Button, Input } from '@/shared/components';
-import type { useContactControls } from '../contact-us.controls';
+import type { useContactControls } from '../utils';
 export function ContactFilters({
   state,
 }: {

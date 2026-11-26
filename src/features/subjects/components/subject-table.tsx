@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { DataTable, StatusSwitch, useConfirm, type Column } from '@/shared/components';
 import { useOnline } from '@/shared/hooks';
 import { toast } from 'sonner';
-import type { SubjectDto } from '../subjects.types';
-import { useDeleteSubjects, useToggleSubjectStatus } from '../subjects.queries';
+import type { SubjectDto } from '../types';
+import { useDeleteSubjects, useToggleSubjectStatus } from '../commands';
 import { SubjectRowActions } from './subject-row-actions';
 export function SubjectTable({
   rows,

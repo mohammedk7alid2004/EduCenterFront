@@ -1,19 +1,18 @@
-export { TeachersPage } from './teachers-page';
-export type {
-  TeacherDto,
-  TeacherSubjectRef,
-  TeacherFilters,
-  CreateTeacherPayload,
-  UpdateTeacherPayload,
-  DeleteTeachersPayload,
-  PaginatedList,
-  ApiResult,
-} from './teachers.types';
+export { useTeachers, useTeacher } from './queries';
 export {
-  useTeachers,
-  useTeacher,
   useCreateTeacher,
   useUpdateTeacher,
   useDeleteTeachers,
   useToggleTeacherStatus,
-} from './teachers.queries';
+  useTeachersExport,
+} from './commands';
+export type {
+  TeacherDto,
+  TeacherFilters,
+  CreateTeacherPayload,
+  UpdateTeacherPayload,
+  DeleteTeachersPayload,
+} from './types';
+export { TeacherTable } from './components/teacher-table';
+export { TeacherFormModal } from './components/teacher-form-modal';
+export { ViewTeacherModal } from './components/view-teacher-modal';

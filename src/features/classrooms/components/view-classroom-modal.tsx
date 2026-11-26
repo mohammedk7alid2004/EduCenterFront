@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { DetailField, ErrorState, LoadingState, Modal, StatusBadge } from '@/shared/components';
-import { useClassroom } from '../classrooms.queries';
+import { useClassroom } from '../queries';
 export function ViewClassroomModal({
   id,
   onClose,

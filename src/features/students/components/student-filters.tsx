@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { Button, ErrorState, Select } from '@/shared/components';
-import { STUDENT_GENDER } from '../students.constants';
-import { studentLocalizedName } from '../students.lib';
-import { useStudentEducation } from '../students.queries';
+import { STUDENT_GENDER } from '../constants';
+import { studentLocalizedName } from '../utils';
+import { useStudentEducation } from '../queries';
 export function StudentFilters({
   level,
   grade,

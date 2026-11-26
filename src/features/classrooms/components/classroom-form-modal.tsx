@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
@@ -15,9 +14,11 @@ import {
 } from '@/shared/components';
 import { useOnline } from '@/shared/hooks';
 import { setServerErrors } from '@/shared/utils';
-import type { ClassroomDto, ClassroomValues } from '../classrooms.types';
-import { useClassroom, useSaveClassroom } from '../classrooms.queries';
-import { CLASSROOM_CAPACITY } from '../classrooms.constants';
+import type { ClassroomDto, ClassroomValues } from '../types';
+import { useClassroom } from '../queries';
+import { useSaveClassroom } from '../commands';
+import { CLASSROOM_CAPACITY } from '../constants';
+import { createClassroomSchema } from '../schemas';
 import { CapacityField } from './capacity-field';
 export function ClassroomFormModal({
   classroom,
@@ -52,23 +53,7 @@ function ClassroomForm({
   const arabic = i18n.language.startsWith('ar');
   const online = useOnline();
   const [success, setSuccess] = useState(false);
-  const schema = z
-    .object({
-      nameAr: z.string().trim(),
-      nameEn: z.string().trim(),
-      noteAr: z.string(),
-      noteEn: z.string(),
-      capacity: z
-        .number({ invalid_type_error: t('classrooms.validation.capacity') })
-        .int(t('classrooms.validation.capacity'))
-        .min(CLASSROOM_CAPACITY.minimum, t('classrooms.validation.capacity'))
-        .max(CLASSROOM_CAPACITY.maximum, t('classrooms.validation.capacity')),
-      isActive: z.boolean(),
-    })
-    .refine((values) => Boolean(arabic ? values.nameAr : values.nameEn), {
-      path: [arabic ? 'nameAr' : 'nameEn'],
-      message: t('validation.required'),
-    });
+  const schema = createClassroomSchema(t, arabic);
   const {
     register,
     control,

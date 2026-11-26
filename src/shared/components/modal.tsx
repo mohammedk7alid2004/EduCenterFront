@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, type PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { IconName } from '@/config';
+import type { IconName } from '@/app/config';
 import { Icon } from './icon';
 
 interface ModalProps {

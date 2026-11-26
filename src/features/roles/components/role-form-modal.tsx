@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
@@ -14,8 +13,10 @@ import {
 } from '@/shared/components';
 import { useOnline } from '@/shared/hooks';
 import { setServerErrors } from '@/shared/utils';
-import type { RoleDto, RoleValues, PermissionDto } from '../roles.types';
-import { usePermissionCatalog, useRole, useSaveRole } from '../roles.queries';
+import type { RoleDto, RoleValues, PermissionDto } from '../types';
+import { usePermissionCatalog, useRole } from '../queries';
+import { useSaveRole } from '../commands';
+import { createRoleSchema } from '../schemas';
 import { PermissionGrid } from './permission-grid';
 export function RoleFormModal({
   role,
@@ -73,16 +74,7 @@ function RoleFormFields({
   const { t } = useTranslation();
   const online = useOnline();
   const [success, setSuccess] = useState(false);
-  const schema = z.object({
-    name: z
-      .string()
-      .trim()
-      .min(1, t('validation.required'))
-      .max(50, t('validation.maxLength', { count: 50 })),
-    permissionIds: role
-      ? z.array(z.string())
-      : z.array(z.string()).min(1, t('roleManagement.form.permissionsRequired')),
-  });
+  const schema = createRoleSchema(t, Boolean(role));
   const {
     register,
     control,

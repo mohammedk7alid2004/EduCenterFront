@@ -1,8 +1,9 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
-import { PERMISSIONS, ROUTES } from '@/config';
+import { PERMISSIONS } from '@/app/config';
+import { ROUTES } from '@/shared/constants';
 import { SYSTEM_TABS } from '@/features/system-management';
-import { LoginPage, PasswordRecoveryPage } from '@/features/auth';
-import { AppLayout } from '@/layouts/app-layout';
+import { LoginPage, PasswordRecoveryPage } from '@/pages';
+import { AppLayout } from '@/app/layouts';
 import { RouteErrorBoundary } from '../error-boundary';
 import { GuestRoute, ProtectedRoute } from './guards';
 import { SimplePage } from './simple-page';
@@ -41,7 +42,7 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.students,
         lazy: async () => {
-          const { StudentsPage } = await import('@/features/students');
+          const { StudentsPage } = await import('@/pages/students-page');
           return {
             Component: () => (
               <ProtectedRoute permission={PERMISSIONS.students.read}>
@@ -54,7 +55,7 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.contactUs,
         lazy: async () => {
-          const { ContactUsPage } = await import('@/features/contact-us');
+          const { ContactUsPage } = await import('@/pages/contact-us-page');
           return {
             Component: () => (
               <ProtectedRoute permission={PERMISSIONS.contactUs.read}>
@@ -67,7 +68,7 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.appointments,
         lazy: async () => {
-          const { AppointmentsPage } = await import('@/features/appointments');
+          const { AppointmentsPage } = await import('@/pages/appointments-page');
           return {
             Component: () => (
               <ProtectedRoute permission={PERMISSIONS.appointments.read}>
@@ -80,7 +81,7 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.groups,
         lazy: async () => {
-          const { GroupsPage } = await import('@/features/groups');
+          const { GroupsPage } = await import('@/pages/groups-page');
           return {
             Component: () => (
               <ProtectedRoute permission={PERMISSIONS.groups.read}>
@@ -93,7 +94,7 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.attendance,
         lazy: async () => {
-          const { AttendancePage } = await import('@/features/attendance');
+          const { AttendancePage } = await import('@/pages/attendance-page');
           return {
             Component: () => (
               <ProtectedRoute permission={PERMISSIONS.attendance.read}>
@@ -106,7 +107,7 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.notifications,
         lazy: async () => {
-          const { NotificationsPage } = await import('@/features/notifications');
+          const { NotificationsPage } = await import('@/pages/notifications-page');
           return {
             Component: () => (
               <ProtectedRoute permission={PERMISSIONS.notifications.read}>
@@ -119,7 +120,7 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.systemManagement,
         lazy: async () => {
-          const { SystemManagementPage } = await import('@/features/system-management');
+          const { SystemManagementPage } = await import('@/pages/system-management-page');
           return {
             Component: () => (
               <ProtectedRoute anyPermissions={SYSTEM_TABS.map((tab) => tab.read)}>
@@ -132,7 +133,7 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.classrooms,
         lazy: async () => {
-          const { ClassroomsPage } = await import('@/features/classrooms');
+          const { ClassroomsPage } = await import('@/pages/classrooms-page');
           return {
             Component: () => (
               <ProtectedRoute permission={PERMISSIONS.classrooms.read}>
@@ -144,12 +145,12 @@ export const router = createBrowserRouter([
       },
       {
         path: ROUTES.profile,
-        lazy: async () => ({ Component: (await import('@/features/profile')).ProfilePage }),
+        lazy: async () => ({ Component: (await import('@/pages/profile-page')).ProfilePage }),
       },
       {
         path: ROUTES.roles,
         lazy: async () => {
-          const { RolesPage } = await import('@/features/roles');
+          const { RolesPage } = await import('@/pages/roles-page');
           return {
             Component: () => (
               <ProtectedRoute permission={PERMISSIONS.roles.read}>
@@ -162,7 +163,7 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.employees,
         lazy: async () => {
-          const { EmployeesPage } = await import('@/features/employees');
+          const { EmployeesPage } = await import('@/pages/employees-page');
           return {
             Component: () => (
               <ProtectedRoute permission={PERMISSIONS.employees.read}>
@@ -172,11 +173,10 @@ export const router = createBrowserRouter([
           };
         },
       },
-
       {
         path: ROUTES.dashboard,
         lazy: async () => {
-          const { DashboardPage } = await import('@/features/dashboard');
+          const { DashboardPage } = await import('@/pages/dashboard-page');
           return {
             Component: () => (
               <ProtectedRoute permission={PERMISSIONS.dashboard.read}>
@@ -189,7 +189,7 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.subjects,
         lazy: async () => {
-          const { SubjectsPage } = await import('@/features/subjects');
+          const { SubjectsPage } = await import('@/pages/subjects-page');
           return {
             Component: () => (
               <ProtectedRoute permission={PERMISSIONS.subjects.read}>
@@ -202,7 +202,7 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.teachers,
         lazy: async () => {
-          const { TeachersPage } = await import('@/features/teachers');
+          const { TeachersPage } = await import('@/pages/teachers-page');
           return {
             Component: () => (
               <ProtectedRoute permission={PERMISSIONS.teachers.read}>

@@ -1,5 +1,5 @@
 import type { Config } from 'tailwindcss';
-import { semanticColorNames } from './src/config/theme';
+import { semanticColorNames } from './src/app/config/theme';
 
 const colors = Object.fromEntries(
   semanticColorNames.map((name) => [name, `rgb(var(--color-${name}) / <alpha-value>)`]),

@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { PERMISSIONS } from '@/config';
-import type { IconName } from '@/config';
-import { usePermission } from '@/infrastructure/auth';
+import { PERMISSIONS } from '@/app/config';
+import type { IconName } from '@/app/config';
+import { usePermission } from '@/shared/hooks';
 import { Button, Icon } from '@/shared/components';
 import { useOnline } from '@/shared/hooks';
 import { downloadBlob } from '@/shared/utils';
-import { STUDENT_FILE_NAMES } from '../students.constants';
-import { useStudentsExport, useStudentTemplate } from '../students.queries';
-import type { StudentFilters } from '../students.types';
+import { STUDENT_FILE_NAMES } from '../constants';
+import { useStudentsExport, useStudentTemplate } from '../commands';
+import type { StudentFilters } from '../types';
 
 interface ExcelMenuItem {
   key: string;

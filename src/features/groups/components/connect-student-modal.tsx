@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { Button, ErrorState, FeedbackDialog, Icon, LoadingState, Modal } from '@/shared/components';
 import { useOnline, useDebouncedValue } from '@/shared/hooks';
-import { useGroup, useConnectStudents, useStudentsOption } from '../groups.queries';
-import { groupLocalizedName } from '../groups.lib';
-import type { StudentOption } from '../groups.types';
+import { useGroup, useStudentsOption } from '../queries';
+import { useConnectStudents } from '../commands';
+import { groupLocalizedName } from '../utils';
+import type { StudentOption } from '../types';
 import { GroupStatusBadge } from './group-status-badge';
 
 export function ConnectStudentModal({

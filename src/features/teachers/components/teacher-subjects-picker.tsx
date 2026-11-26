@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useSubjectOptions } from '@/features/subjects';
 import { useDebouncedValue } from '@/shared/hooks';
 import { Button, ErrorState, Icon } from '@/shared/components';
-import type { TeacherSubjectRef } from '../teachers.types';
+import type { TeacherSubjectRef } from '../types';
 export function TeacherSubjectsPicker({
   selected,
   onChange,

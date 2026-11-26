@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import { useOnline } from '@/shared/hooks';
 import { setServerErrors } from '@/shared/utils';
@@ -15,17 +14,17 @@ import {
   Modal,
   RadioSelect,
 } from '@/shared/components';
-import { NOTIFICATION_TYPE, NOTIFICATION_VALIDATION } from '../notifications.constants';
-import { notificationLocalizedName } from '../notifications.lib';
+import { NOTIFICATION_TYPE, NOTIFICATION_VALIDATION } from '../constants';
+import { notificationLocalizedName } from '../utils';
 import {
   useNotification,
-  useCreateNotification,
-  useUpdateNotification,
   useNotificationGroups,
   useNotificationLevels,
   useNotificationGrades,
-} from '../notifications.queries';
-import type { NotificationDto, NotificationValues } from '../notifications.types';
+} from '../queries';
+import { useCreateNotification, useUpdateNotification } from '../commands';
+import { createNotificationSchema } from '../schemas';
+import type { NotificationDto, NotificationValues } from '../types';
 
 export function NotificationFormModal({
   notification,
@@ -76,28 +75,7 @@ function NotificationForm({
   const preview = removeImage ? null : (objectUrl ?? notification?.imageUrl ?? null);
 
   const rules = NOTIFICATION_VALIDATION;
-  const required = t('validation.required');
-
-  const schema = z.object({
-    title: z.string().trim().min(1, required).max(rules.titleMax),
-    type: z.coerce.number().refine((v) => v > 0, { message: required }),
-    groupId: z.string().optional().default(''),
-    levelId: z.string().optional().default(''),
-    gradeId: z.string().optional().default(''),
-    message: z.string().trim().min(1, required).max(rules.messageMax),
-    image: z
-      .instanceof(File)
-      .nullable()
-      .optional()
-      .refine(
-        (file) => !file || (rules.acceptedImageTypes as readonly string[]).includes(file.type),
-        t('notifications.validation.imageType'),
-      )
-      .refine(
-        (file) => !file || file.size <= rules.maxImageSizeMb * 1024 * 1024,
-        t('notifications.validation.imageSize', { max: rules.maxImageSizeMb }),
-      ),
-  });
+  const schema = createNotificationSchema(t);
 
   const {
     register,

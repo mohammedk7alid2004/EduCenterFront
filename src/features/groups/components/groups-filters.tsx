@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Button, ErrorState, Select } from '@/shared/components';
-import { useGroupOptions } from '../groups.queries';
-import { groupLocalizedName } from '../groups.lib';
+import { useGroupOptions } from '../queries';
+import { groupLocalizedName } from '../utils';
 
 export function GroupsFilters({
   subjectId,

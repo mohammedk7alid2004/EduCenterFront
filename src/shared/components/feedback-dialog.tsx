@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { FEEDBACK_DISMISS_DELAY_MS, type IconName } from '@/config';
+import { FEEDBACK_DISMISS_DELAY_MS } from '@/shared/constants';
+import { type IconName } from '@/app/config';
 import { Modal } from './modal';
 
 export function FeedbackDialog({

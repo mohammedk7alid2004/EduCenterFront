@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { Button, Icon, Input, Modal, Select } from '@/shared/components';
 import { useOnline } from '@/shared/hooks';
 import { setServerErrors } from '@/shared/utils';
-import { PROFILE_GENDER_OPTIONS, PROFILE_IMAGE, PROFILE_PHONE_PATTERN } from '../profile.constants';
-import type { ProfileDto, ProfileValues } from '../profile.types';
-import { useUpdateProfile } from '../profile.queries';
+import { PROFILE_GENDER_OPTIONS, PROFILE_IMAGE } from '../constants';
+import { createProfileSchema } from '../schemas';
+import type { ProfileDto, ProfileValues } from '../types';
+import { useUpdateProfile } from '../commands';
 import { ProfileAvatar } from './profile-avatar';
 
 export function ProfileForm({
@@ -24,30 +24,7 @@ export function ProfileForm({
   const mutation = useUpdateProfile();
   const upload = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string>();
-  const schema = z.object({
-    fullName: z
-      .string()
-      .trim()
-      .min(1, t('validation.required'))
-      .max(150, t('validation.maxLength', { count: 150 })),
-    phoneNumber: z
-      .string()
-      .trim()
-      .refine((value) => !value || PROFILE_PHONE_PATTERN.test(value), t('profile.validation.phone'))
-      .refine((value) => !profile.phone || Boolean(value), t('validation.required')),
-    gender: z.string().min(1, t('validation.required')),
-    image: z
-      .instanceof(File)
-      .optional()
-      .refine(
-        (file) => !file || (file.size > 0 && file.size <= PROFILE_IMAGE.maxBytes),
-        t('profile.validation.imageSize'),
-      )
-      .refine(
-        (file) => !file || PROFILE_IMAGE.extensions.test(file.name),
-        t('profile.validation.imageType'),
-      ),
-  });
+  const schema = createProfileSchema(t, Boolean(profile.phone));
   const {
     register,
     control,

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { PERMISSIONS } from '@/config';
-import { usePermission } from '@/infrastructure/auth';
+import { PERMISSIONS } from '@/app/config';
+import { usePermission } from '@/shared/hooks';
 import { useOnline } from '@/shared/hooks';
 import {
   DataTable,
@@ -11,8 +11,8 @@ import {
   useAuditColumns,
   type Column,
 } from '@/shared/components';
-import type { ClassroomDto } from '../classrooms.types';
-import { useDeleteClassrooms, useToggleClassroomStatus } from '../classrooms.queries';
+import type { ClassroomDto } from '../types';
+import { useDeleteClassrooms, useToggleClassroomStatus } from '../commands';
 export function ClassroomsTable({
   rows,
   startIndex,

@@ -1,19 +1,14 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import { useOnline } from '@/shared/hooks';
 import { setServerErrors } from '@/shared/utils';
 import { Button, FeedbackDialog, Icon, Input, Modal } from '@/shared/components';
-import { CONTACT_EMAIL_VALIDATION } from '../contact-us.constants';
-import { useSendContactEmail } from '../contact-us.queries';
-import type { ContactMessage, SendContactEmailValues } from '../contact-us.types';
-
-function hasAllowedExtension(file: File): boolean {
-  const lower = file.name.toLowerCase();
-  return CONTACT_EMAIL_VALIDATION.extensions.some((ext) => lower.endsWith(ext));
-}
+import { CONTACT_EMAIL_VALIDATION } from '../constants';
+import { useSendContactEmail } from '../commands';
+import { createContactEmailSchema } from '../schemas';
+import type { ContactMessage, SendContactEmailValues } from '../types';
 
 export function SendContactEmailModal({
   contact,
@@ -40,33 +35,7 @@ export function SendContactEmailModal({
   }, [previewUrl]);
 
   const rules = CONTACT_EMAIL_VALIDATION;
-  const required = t('validation.required');
-
-  const schema = z.object({
-    email: z.string().trim().min(1, required).email(t('contactUs.reply.validation.email')),
-    subject: z
-      .string()
-      .trim()
-      .min(1, required)
-      .max(rules.subjectMax, t('contactUs.reply.validation.subjectMax', { max: rules.subjectMax })),
-    message: z
-      .string()
-      .trim()
-      .min(1, required)
-      .max(rules.messageMax, t('contactUs.reply.validation.messageMax', { max: rules.messageMax })),
-    file: z
-      .instanceof(File)
-      .nullable()
-      .optional()
-      .refine(
-        (file) => !file || hasAllowedExtension(file),
-        t('contactUs.reply.validation.fileType'),
-      )
-      .refine(
-        (file) => !file || file.size <= rules.maxBytes,
-        t('contactUs.reply.validation.fileSize'),
-      ),
-  });
+  const schema = createContactEmailSchema(t);
 
   const {
     register,

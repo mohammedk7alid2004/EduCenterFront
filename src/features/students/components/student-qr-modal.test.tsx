@@ -27,7 +27,7 @@ vi.mock('@/shared/utils', async () => {
   };
 });
 
-vi.mock('../students.queries', () => ({
+vi.mock('../queries', () => ({
   useStudent: () => ({
     isPending: false,
     error: null,

@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Icon, Input } from '@/shared/components';
-import { CLASSROOM_CAPACITY } from '../classrooms.constants';
+import { CLASSROOM_CAPACITY } from '../constants';
 export function CapacityField({
   value,
   onChange,

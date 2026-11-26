@@ -2,16 +2,20 @@ import { useEffect, useRef, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
 import { Button, Icon, Input } from '@/shared/components';
-import { ApiError } from '@/infrastructure/api';
+import { ApiError } from '@/shared/api';
 import { setServerErrors } from '@/shared/utils';
+import {
+  createRecoveryCodeSchema,
+  createRecoveryEmailSchema,
+  createRecoveryPasswordSchema,
+} from '../schemas';
 import type {
   CodeFormValues,
   EmailFormValues,
   NewPasswordFormValues,
   PasswordRecoveryStep,
-} from '../password-recovery.types';
+} from '../types';
 import { AuthLogo } from './auth-logo';
 
 interface PasswordRecoveryCardProps {
@@ -34,29 +38,9 @@ export function PasswordRecoveryCard(props: PasswordRecoveryCardProps): JSX.Elem
   const [requestError, setRequestError] = useState<ApiError | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const emailSchema = z.object({
-    email: z
-      .string()
-      .min(1, t('auth.validation.emailRequired'))
-      .email(t('auth.validation.emailInvalid')),
-  });
-  const codeSchema = z.object({
-    code: z.string().regex(new RegExp(`^\\d{${CODE_LENGTH}}$`), t('auth.recovery.validation.code')),
-  });
-  const passwordSchema = z
-    .object({
-      password: z
-        .string()
-        .regex(
-          /(?=.*\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}/,
-          t('auth.recovery.validation.passwordStrength'),
-        ),
-      confirmPassword: z.string(),
-    })
-    .refine((values) => values.password === values.confirmPassword, {
-      path: ['confirmPassword'],
-      message: t('auth.recovery.validation.passwordMatch'),
-    });
+  const emailSchema = createRecoveryEmailSchema(t);
+  const codeSchema = createRecoveryCodeSchema(t, CODE_LENGTH);
+  const passwordSchema = createRecoveryPasswordSchema(t);
 
   const emailForm = useForm<EmailFormValues>({
     resolver: zodResolver(emailSchema),

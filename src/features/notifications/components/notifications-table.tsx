@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next';
-import { PERMISSIONS } from '@/config';
-import { usePermission } from '@/infrastructure/auth';
+import { PERMISSIONS } from '@/app/config';
+import { usePermission } from '@/shared/hooks';
 import { useOnline } from '@/shared/hooks';
 import { DataTable, Icon, RowActions, useConfirm, type Column } from '@/shared/components';
-import { notificationLocalizedName } from '../notifications.lib';
-import { NOTIFICATION_TYPE } from '../notifications.constants';
-import { useDeleteNotifications, useResendNotification } from '../notifications.queries';
-import type { NotificationDto } from '../notifications.types';
+import { notificationLocalizedName } from '../utils';
+import { NOTIFICATION_TYPE } from '../constants';
+import { useDeleteNotifications, useResendNotification } from '../commands';
+import type { NotificationDto } from '../types';
 
 export function NotificationsTable({
   rows,

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
@@ -13,41 +12,22 @@ import {
   Select,
 } from '@/shared/components';
 import { useOnline } from '@/shared/hooks';
-import { ATTENDANCE_STATUS, type AttendanceFormValues } from '../attendance.types';
-import { latestDateForWeekday, toIsoDate, weekdayOfIsoDate } from '../attendance.utils';
+import { ATTENDANCE_STATUS, type AttendanceFormValues } from '../types';
+import { latestDateForWeekday, toIsoDate } from '../utils';
+import { createAttendanceSchema } from '../schemas';
 import {
   useAttendanceAppointmentOptions,
   useAttendanceStudents,
-  useRecordAttendance,
   useRecordedAttendance,
-} from '../attendance.queries';
+} from '../queries';
+import { useRecordAttendance } from '../commands';
 export function AttendanceFormModal({ onClose }: { onClose: () => void }): JSX.Element {
   const { t } = useTranslation();
   const online = useOnline();
   const [success, setSuccess] = useState(false);
   const students = useAttendanceStudents();
   const mutation = useRecordAttendance();
-  const schema = z
-    .object({
-      studentId: z.string().min(1, t('validation.required')),
-      status: z.coerce
-        .number()
-        .refine(
-          (value) => Object.values(ATTENDANCE_STATUS).includes(value as 1 | 2 | 3 | 4),
-          t('validation.required'),
-        ),
-      appointmentId: z.string().min(1, t('validation.required')),
-      sessionDay: z.string().min(1, t('validation.required')),
-      sessionDate: z
-        .string()
-        .min(1, t('validation.required'))
-        .refine((value) => value <= toIsoDate(new Date()), t('attendance.sessionDateFuture')),
-      notes: z.string().max(2000, t('validation.maxLength', { count: 2000 })),
-    })
-    .refine((values) => weekdayOfIsoDate(values.sessionDate) === Number(values.sessionDay), {
-      path: ['sessionDate'],
-      message: t('attendance.sessionDateWrongDay'),
-    });
+  const schema = createAttendanceSchema(t);
   const {
     register,
     handleSubmit,
@@ -75,7 +55,11 @@ export function AttendanceFormModal({ onClose }: { onClose: () => void }): JSX.E
   const appointmentField = register('appointmentId');
   const sessionDayField = register('sessionDay');
   const selectedSessionDate = watch('sessionDate');
-  const recorded = useRecordedAttendance(selectedStudentId, selectedAppointmentId, selectedSessionDate);
+  const recorded = useRecordedAttendance(
+    selectedStudentId,
+    selectedAppointmentId,
+    selectedSessionDate,
+  );
   const lockedRecord = recorded.data?.isStatusLocked ? recorded.data : null;
   const wasLocked = useRef(false);
   useEffect(() => {
@@ -234,9 +218,7 @@ export function AttendanceFormModal({ onClose }: { onClose: () => void }): JSX.E
               />
             </fieldset>
             {lockedRecord && (
-              <p className="text-xs opacity-70 sm:col-span-2">
-                {t('attendance.statusLocked')}
-              </p>
+              <p className="text-xs opacity-70 sm:col-span-2">{t('attendance.statusLocked')}</p>
             )}
             <div className="sm:col-span-2">
               <label htmlFor="attendance-notes" className="mb-2 block text-sm font-medium">

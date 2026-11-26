@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ROUTES } from '@/config';
+import { ROUTES } from '@/shared/constants';
 import { Icon } from '@/shared/components';
-import { useGroups } from '@/features/groups/groups.queries';
-import { groupLocalizedName } from '@/features/groups/groups.lib';
+import { useGroups, groupLocalizedName } from '@/features/groups';
 
 export function DashboardGroupsCapacity(): JSX.Element {
   const { t, i18n } = useTranslation();

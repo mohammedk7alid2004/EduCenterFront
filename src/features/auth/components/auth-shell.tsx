@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
-import { setLanguage } from '@/infrastructure/i18n';
+import { setLanguage } from '@/app/config';
 import { Icon } from '@/shared/components';
 import { AuthLogo } from './auth-logo';
 import { LoginHero } from './login-hero';

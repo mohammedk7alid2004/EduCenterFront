@@ -1,0 +1,16 @@
+export { AppointmentsPage } from './appointments-page';
+export { AttendancePage } from './attendance-page';
+export { ClassroomsPage } from './classrooms-page';
+export { ContactUsPage } from './contact-us-page';
+export { DashboardPage } from './dashboard-page';
+export { EmployeesPage } from './employees-page';
+export { GroupsPage } from './groups-page';
+export { LoginPage } from './login-page';
+export { NotificationsPage } from './notifications-page';
+export { PasswordRecoveryPage } from './password-recovery-page';
+export { ProfilePage } from './profile-page';
+export { RolesPage } from './roles-page';
+export { StudentsPage } from './students-page';
+export { SubjectsPage } from './subjects-page';
+export { SystemManagementPage } from './system-management-page';
+export { TeachersPage } from './teachers-page';

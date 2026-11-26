@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
-import { PERMISSIONS } from '@/config';
-import { usePermission } from '@/infrastructure/auth';
+import { PERMISSIONS } from '@/app/config';
+import { usePermission } from '@/shared/hooks';
 import { useOnline } from '@/shared/hooks';
 import { setServerErrors } from '@/shared/utils';
 import {
@@ -18,10 +17,12 @@ import {
   Select,
   StatusSwitch,
 } from '@/shared/components';
-import { STUDENT_GENDER, STUDENT_GENDER_NAMES, STUDENT_VALIDATION } from '../students.constants';
-import { studentLocalizedName } from '../students.lib';
-import { useStudent, useStudentEducation, useSaveStudent } from '../students.queries';
-import type { StudentDto, StudentValues } from '../students.types';
+import { STUDENT_GENDER, STUDENT_GENDER_NAMES, STUDENT_VALIDATION } from '../constants';
+import { createStudentSchema } from '../schemas';
+import { studentLocalizedName } from '../utils';
+import { useStudent, useStudentEducation } from '../queries';
+import { useSaveStudent } from '../commands';
+import type { StudentDto, StudentValues } from '../types';
 
 export function StudentFormModal({
   student,
@@ -57,56 +58,8 @@ function StudentForm({
   const can = usePermission();
   const [success, setSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const required = t('validation.required');
   const rules = STUDENT_VALIDATION;
-  const schema = z
-    .object({
-      fullName: z
-        .string()
-        .trim()
-        .min(1, required)
-        .max(rules.fullNameMax, t('students.validation.name')),
-      email: z
-        .string()
-        .trim()
-        .min(1, required)
-        .email(t('students.validation.email'))
-        .max(rules.emailMax, t('students.validation.email')),
-      phoneNumber: z
-        .string()
-        .trim()
-        .min(1, required)
-        .max(rules.phoneMax)
-        .regex(rules.phone, t('students.validation.phone')),
-      parentPhoneNumber: z
-        .string()
-        .trim()
-        .min(1, required)
-        .max(rules.phoneMax)
-        .regex(rules.phone, t('students.validation.phone')),
-      educationLevelId: z.string().min(1, required),
-      educationGradeId: z.string().min(1, required),
-      gender: z.enum([STUDENT_GENDER.male, STUDENT_GENDER.female], {
-        errorMap: () => ({ message: required }),
-      }),
-      isActive: z.boolean(),
-      password: z.string(),
-      confirmPassword: z.string(),
-    })
-    .superRefine((values, ctx) => {
-      if ((!student || values.password) && !rules.password.test(values.password))
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['password'],
-          message: t('students.validation.password'),
-        });
-      if (values.password !== values.confirmPassword)
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['confirmPassword'],
-          message: t('students.validation.confirmPassword'),
-        });
-    });
+  const schema = createStudentSchema(t, Boolean(student));
   const {
     register,
     control,

@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { usePermission } from '@/infrastructure/auth';
+import { usePermission } from '@/shared/hooks';
 import { useOnline } from '@/shared/hooks';
 import {
   DataTable,
@@ -10,9 +10,9 @@ import {
   useConfirm,
   type Column,
 } from '@/shared/components';
-import { FAQ_PERMISSIONS } from '../system-management.constants';
-import { useDeleteFaqs, useToggleFaq } from '../system-management.queries';
-import type { FaqDto } from '../system-management.types';
+import { FAQ_PERMISSIONS } from '../constants';
+import { useDeleteFaqs, useToggleFaq } from '../commands';
+import type { FaqDto } from '../types';
 export function FaqTable({
   rows,
   startIndex,

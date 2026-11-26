@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { PERMISSIONS } from '@/config';
-import { usePermission } from '@/infrastructure/auth';
+import { PERMISSIONS } from '@/app/config';
+import { usePermission } from '@/shared/hooks';
 import { DataTable, Icon, type Column } from '@/shared/components';
-import type { AttendanceDto } from '../attendance.types';
+import type { AttendanceDto } from '../types';
 import { AttendanceStatusBadge } from './attendance-status-badge';
 export function AttendanceTable({
   rows,

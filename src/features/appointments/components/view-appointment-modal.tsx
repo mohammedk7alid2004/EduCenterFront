@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { DetailField, ErrorState, LoadingState, Modal } from '@/shared/components';
-import { useAppointment } from '../appointments.queries';
-import { localizedName, formatAppointmentTime } from '../appointments.lib';
-import { APPOINTMENT_ITERATION, APPOINTMENT_STATUS } from '../appointments.constants';
+import { useAppointment } from '../queries';
+import { localizedName, formatAppointmentTime } from '../utils';
+import { APPOINTMENT_ITERATION, APPOINTMENT_STATUS } from '../constants';
 export function ViewAppointmentModal({
   id,
   onClose,

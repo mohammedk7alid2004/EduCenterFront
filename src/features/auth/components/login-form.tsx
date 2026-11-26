@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import type { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import { Button, Icon } from '@/shared/components';
 import { AuthLogo } from './auth-logo';
-import { ApiError } from '@/infrastructure/api';
+import { ApiError } from '@/shared/api';
 import { useOnline } from '@/shared/hooks';
 import { setServerErrors } from '@/shared/utils';
+import { createLoginSchema } from '../schemas';
 import type { LoginCredentials } from '../types';
 
 interface LoginFormProps {
@@ -27,14 +28,7 @@ export function LoginForm({
   const online = useOnline();
   const [showPassword, setShowPassword] = useState(false);
 
-  const loginSchema = z.object({
-    email: z
-      .string()
-      .min(1, t('auth.validation.emailRequired'))
-      .email(t('auth.validation.emailInvalid')),
-    password: z.string().min(1, t('auth.validation.passwordRequired')),
-    rememberMe: z.boolean().default(false),
-  });
+  const loginSchema = createLoginSchema(t);
 
   type LoginFormValues = z.infer<typeof loginSchema>;
 

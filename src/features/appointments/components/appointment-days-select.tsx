@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '@/shared/components';
-import { WEEK_DAYS } from '../appointments.constants';
+import { WEEK_DAYS } from '../constants';
 
 interface AppointmentDaysSelectProps {
   value: number[];

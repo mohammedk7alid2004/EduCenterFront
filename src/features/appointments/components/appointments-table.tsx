@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { PERMISSIONS } from '@/config';
-import { usePermission } from '@/infrastructure/auth';
+import { PERMISSIONS } from '@/app/config';
+import { usePermission } from '@/shared/hooks';
 import { useOnline } from '@/shared/hooks';
 import {
   DataTable,
@@ -10,10 +10,10 @@ import {
   useConfirm,
   type Column,
 } from '@/shared/components';
-import { useDeleteAppointments, useSetAppointmentStatus } from '../appointments.queries';
-import { APPOINTMENT_STATUS, APPOINTMENT_ITERATION } from '../appointments.constants';
-import { localizedName, formatAppointmentTime } from '../appointments.lib';
-import type { AppointmentDto } from '../appointments.types';
+import { useDeleteAppointments, useSetAppointmentStatus } from '../commands';
+import { APPOINTMENT_STATUS, APPOINTMENT_ITERATION } from '../constants';
+import { localizedName, formatAppointmentTime } from '../utils';
+import type { AppointmentDto } from '../types';
 export function AppointmentsTable({
   rows,
   startIndex,

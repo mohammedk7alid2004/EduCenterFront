@@ -1,7 +1,7 @@
 import { useEffect, useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '@/shared/components';
-import { SETTINGS_IMAGE } from '../system-management.constants';
+import { SETTINGS_IMAGE } from '../constants';
 export function LogoUpload({
   label,
   value,

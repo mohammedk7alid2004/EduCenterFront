@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import { Button, FeedbackDialog, Icon, Input, Modal, StatusSwitch } from '@/shared/components';
 import { useOnline } from '@/shared/hooks';
 import { setServerErrors } from '@/shared/utils';
-import type { ApiError } from '@/infrastructure/api';
-import type { SubjectDto } from '../subjects.types';
-import { useSaveSubject } from '../subjects.queries';
+import type { ApiError } from '@/shared/api';
+import { createSubjectSchema, type SubjectFormValues as Values } from '../schemas';
+import type { SubjectDto } from '../types';
+import { useSaveSubject } from '../commands';
 export function SubjectFormModal({
   subject,
   onClose,
@@ -21,19 +21,7 @@ export function SubjectFormModal({
   const isEdit = Boolean(subject);
   const online = useOnline();
   const [success, setSuccess] = useState(false);
-  const schema = z
-    .object({
-      nameAr: z.string().trim(),
-      nameEn: z.string().trim(),
-      noteAr: z.string(),
-      noteEn: z.string(),
-      isActive: z.boolean(),
-    })
-    .refine((values) => values.nameAr || values.nameEn, {
-      path: [arabic ? 'nameAr' : 'nameEn'],
-      message: t('validation.subjectName'),
-    });
-  type Values = z.infer<typeof schema>;
+  const schema = createSubjectSchema(t, arabic);
   const {
     register,
     handleSubmit,

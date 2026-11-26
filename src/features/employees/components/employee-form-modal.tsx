@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
-import { PERMISSIONS } from '@/config';
-import { usePermission } from '@/infrastructure/auth';
+import { PERMISSIONS } from '@/app/config';
+import { usePermission } from '@/shared/hooks';
 import { useRoleOptions, type RoleDto } from '@/features/roles';
 import {
   Button,
@@ -18,9 +17,11 @@ import {
 } from '@/shared/components';
 import { useOnline } from '@/shared/hooks';
 import { setServerErrors } from '@/shared/utils';
-import type { EmployeeDto, EmployeeValues } from '../employees.types';
-import { EMPLOYEE_GENDER, EMPLOYEE_GENDER_NAMES } from '../employees.constants';
-import { useEmployee, useSaveEmployee } from '../employees.queries';
+import type { EmployeeDto, EmployeeValues } from '../types';
+import { EMPLOYEE_GENDER, EMPLOYEE_GENDER_NAMES } from '../constants';
+import { useEmployee } from '../queries';
+import { useSaveEmployee } from '../commands';
+import { createEmployeeSchema } from '../schemas';
 export function EmployeeFormModal({
   employee,
   onClose,
@@ -67,46 +68,7 @@ function EmployeeFormFields({
   const can = usePermission();
   const [success, setSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const schema = z.object({
-    fullName: z
-      .string()
-      .trim()
-      .min(1, t('validation.required'))
-      .max(100, t('validation.maxLength', { count: 100 })),
-    phoneNumber: z
-      .string()
-      .trim()
-      .max(20, t('validation.maxLength', { count: 20 }))
-      .refine(
-        (value) => !value || /^\+?[0-9\s\-()]+$/.test(value),
-        t('profile.validation.employeePhone'),
-      )
-      .optional(),
-    email: z
-      .string()
-      .trim()
-      .min(1, t('validation.required'))
-      .email(t('auth.validation.emailInvalid'))
-      .max(150, t('validation.maxLength', { count: 150 })),
-    password: z
-      .string()
-      .refine(
-        (value) =>
-          Boolean(employee && !value) ||
-          (value.length >= 8 &&
-            /[A-Z]/.test(value) &&
-            /[a-z]/.test(value) &&
-            /[0-9]/.test(value) &&
-            /[\W_]/.test(value)),
-        t('auth.recovery.validation.passwordStrength'),
-      ),
-    roleId: z.string().min(1, t('validation.required')),
-    gender: z
-      .enum([EMPLOYEE_GENDER.male, EMPLOYEE_GENDER.female])
-      .or(z.literal(''))
-      .refine((value) => Boolean(employee) || Boolean(value), t('validation.required')),
-    isActive: z.boolean(),
-  });
+  const schema = createEmployeeSchema(t, Boolean(employee));
   const gender =
     employee?.gender === EMPLOYEE_GENDER_NAMES.male
       ? EMPLOYEE_GENDER.male

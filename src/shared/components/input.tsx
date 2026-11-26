@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { forwardRef, type InputHTMLAttributes } from 'react';
 import { Icon } from './icon';
-import type { IconName } from '@/config';
+import type { IconName } from '@/app/config';
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;

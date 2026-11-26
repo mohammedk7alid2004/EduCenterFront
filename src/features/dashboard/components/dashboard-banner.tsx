@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ROUTES } from '@/config';
-import { useAuthStore } from '@/infrastructure/auth';
+import { ROUTES } from '@/shared/constants';
+import { useAuthStore } from '@/shared/hooks';
 import { Icon } from '@/shared/components';
 
 export function DashboardBanner(): JSX.Element {

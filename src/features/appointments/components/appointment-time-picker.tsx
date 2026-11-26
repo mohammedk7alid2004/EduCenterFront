@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState, type PointerEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Icon } from '@/shared/components';
-import { TIME_PICKER } from '../appointments.constants';
+import { TIME_PICKER } from '../constants';
 
 export function AppointmentTimePicker({
   label,

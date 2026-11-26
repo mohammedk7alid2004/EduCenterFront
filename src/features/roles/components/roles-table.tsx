@@ -1,11 +1,11 @@
 import { useAuditColumns } from '@/shared/components';
 import { useTranslation } from 'react-i18next';
-import { PERMISSIONS, isReservedRole } from '@/config';
-import { usePermission } from '@/infrastructure/auth';
+import { PERMISSIONS, isReservedRole } from '@/app/config';
+import { usePermission } from '@/shared/hooks';
 import { useOnline } from '@/shared/hooks';
 import { DataTable, Icon, RowActions, useConfirm, type Column } from '@/shared/components';
-import { useDeleteRoles } from '../roles.queries';
-import type { RoleDto } from '../roles.types';
+import { useDeleteRoles } from '../commands';
+import type { RoleDto } from '../types';
 export function RolesTable({
   rows,
   startIndex,

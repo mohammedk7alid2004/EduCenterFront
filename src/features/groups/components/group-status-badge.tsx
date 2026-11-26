@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { GROUP_STATUS } from '../groups.constants';
+import { GROUP_STATUS } from '../constants';
 
 export function GroupStatusBadge({ status }: { status: number }): JSX.Element {
   const { t } = useTranslation();

@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useOnline } from '@/shared/hooks';
 import { setServerErrors } from '@/shared/utils';
 import { Button, Icon, Modal } from '@/shared/components';
-import { STUDENT_IMPORT } from '../students.constants';
-import { useImportStudents } from '../students.queries';
+import { STUDENT_IMPORT } from '../constants';
+import { useImportStudents } from '../commands';
 
 export function ImportStudentsModal({ onClose }: { onClose: () => void }): JSX.Element {
   const { t } = useTranslation();

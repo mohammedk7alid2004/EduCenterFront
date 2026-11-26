@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { PAGE_SIZES, STATUS_FILTER } from '@/config';
-import { usePermission } from '@/infrastructure/auth';
+import { PAGE_SIZES, STATUS_FILTER } from '@/shared/constants';
+import { usePermission } from '@/shared/hooks';
 import { useListControls, useOnline } from '@/shared/hooks';
 import { Button, ErrorState, Icon, LoadingState } from '@/shared/components';
-import { FAQ_PERMISSIONS, SETTINGS_DIALOG } from '../system-management.constants';
-import { useFaqs } from '../system-management.queries';
+import { FAQ_PERMISSIONS, SETTINGS_DIALOG } from '../constants';
+import { useFaqs } from '../queries';
 import { FaqTable } from './faq-table';
 import { FaqModal } from './faq-modal';
 

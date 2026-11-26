@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { DetailField, ErrorState, LoadingState, Modal } from '@/shared/components';
-import { useNotification } from '../notifications.queries';
-import { notificationLocalizedName } from '../notifications.lib';
-import { NOTIFICATION_TYPE } from '../notifications.constants';
+import { useNotification } from '../queries';
+import { notificationLocalizedName } from '../utils';
+import { NOTIFICATION_TYPE } from '../constants';
 
 export function ViewNotificationModal({
   id,
