@@ -996,14 +996,20 @@
       "imageType": "Only PNG, JPG, and WebP images are supported.",
       "imageSize": "Image size must not exceed {{max}} MB."
     },
+    "resendConfirm": {
+      "title": "Resend Notification",
+      "description": "Do You Want To Resend This Notification ?"
+    },
     "delete": {
-      "title": "Delete Notifications"
+      "title": "Delete Notifications",
+      "singleTitle": "Delete Notification",
+      "singleDescription": "Do You Want To Delete This Notification ?"
     },
     "feedback": {
       "created": "Notification sent successfully.",
-      "updated": "Notification updated successfully.",
+      "updated": "The Changes Have Been Saved Successfully.",
       "deleted": "Notifications deleted successfully.",
-      "resent": "Notification resent successfully."
+      "resent": "The Message Was Successfully Resent."
     }
   }
 }

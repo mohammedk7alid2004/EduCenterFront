@@ -1,16 +1,21 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { IconName } from '@/config';
 import { ApiError } from '@/infrastructure/api';
 import { useOnline } from '@/shared/hooks';
 import { Button } from './button';
+import { Icon } from './icon';
 import { Modal } from './modal';
 import { FeedbackDialog } from './feedback-dialog';
 export interface ConfirmOptions {
   title: string;
   description?: string;
   onConfirm: () => void | Promise<void>;
+  variant?: 'danger' | 'confirm';
+  icon?: IconName;
   successTitle?: string;
   successDescription?: string;
+  successIcon?: IconName;
 }
 export function useConfirm(): {
   confirm: (options: ConfirmOptions) => void;
@@ -52,15 +57,16 @@ export function useConfirm(): {
         <FeedbackDialog
           title={options.successTitle ?? options.title}
           description={options.successDescription ?? ''}
+          icon={options.successIcon}
           onClose={close}
         />
       ) : (
         <Modal
           title={options.title}
-          icon="trash"
+          icon={options.icon ?? 'trash'}
           onClose={close}
           pending={pending}
-          variant="danger"
+          variant={options.variant ?? 'danger'}
           showCloseButton={false}
         >
           {options.description && (
@@ -76,18 +82,24 @@ export function useConfirm(): {
           <div className="grid grid-cols-2 gap-4">
             <Button
               variant="ghost"
-              className="border border-danger text-danger"
+              className={
+                options.variant === 'confirm'
+                  ? 'border border-primary text-primary'
+                  : 'border border-danger text-danger'
+              }
               onClick={close}
               disabled={pending}
             >
+              <Icon name="close" className="size-4" />
               {t('common.no')}
             </Button>
             <Button
-              variant="danger"
+              variant={options.variant === 'confirm' ? 'primary' : 'danger'}
               loading={pending}
               disabled={!online}
               onClick={() => void submit()}
             >
+              <Icon name="checkCircle" className="size-4" />
               {t('common.yes')}
             </Button>
           </div>

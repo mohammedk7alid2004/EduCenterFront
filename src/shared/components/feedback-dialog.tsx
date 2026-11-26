@@ -1,14 +1,16 @@
 import { useEffect, useRef } from 'react';
-import { FEEDBACK_DISMISS_DELAY_MS } from '@/config';
+import { FEEDBACK_DISMISS_DELAY_MS, type IconName } from '@/config';
 import { Modal } from './modal';
 
 export function FeedbackDialog({
   title,
   description,
+  icon = 'check',
   onClose,
 }: {
   title: string;
   description: string;
+  icon?: IconName;
   onClose: () => void;
 }): JSX.Element {
   const close = useRef(onClose);
@@ -20,7 +22,7 @@ export function FeedbackDialog({
     return () => window.clearTimeout(timer);
   }, []);
   return (
-    <Modal title={title} icon="check" onClose={onClose} variant="feedback" showCloseButton={false}>
+    <Modal title={title} icon={icon} onClose={onClose} variant="feedback" showCloseButton={false}>
       <p role="status" className="text-center text-xs leading-5 text-tableHeading">
         {description}
       </p>

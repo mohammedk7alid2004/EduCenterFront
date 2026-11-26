@@ -1,17 +1,8 @@
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
 import { PERMISSIONS } from '@/config';
 import { usePermission } from '@/infrastructure/auth';
 import { useOnline } from '@/shared/hooks';
-import {
-  DataTable,
-  FeedbackDialog,
-  Icon,
-  RowActions,
-  useConfirm,
-  type Column,
-} from '@/shared/components';
+import { DataTable, Icon, RowActions, useConfirm, type Column } from '@/shared/components';
 import { notificationLocalizedName } from '../notifications.lib';
 import { NOTIFICATION_TYPE } from '../notifications.constants';
 import { useDeleteNotifications, useResendNotification } from '../notifications.queries';
@@ -34,7 +25,6 @@ export function NotificationsTable({
   const remove = useDeleteNotifications();
   const resend = useResendNotification();
   const { confirm, dialog } = useConfirm();
-  const [resentSuccess, setResentSuccess] = useState(false);
   const pending = !online || remove.isPending || resend.isPending;
 
   const typeName = (type: number) => {
@@ -44,11 +34,31 @@ export function NotificationsTable({
 
   function deleteSelection(ids: string[]) {
     confirm({
-      title: t('notifications.delete.title'),
-      description: t('common.deleteSelection', { count: ids.length }),
+      title: t(
+        ids.length === 1 ? 'notifications.delete.singleTitle' : 'notifications.delete.title',
+      ),
+      description: t(
+        ids.length === 1 ? 'notifications.delete.singleDescription' : 'common.deleteSelection',
+        { count: ids.length },
+      ),
       onConfirm: () => remove.mutateAsync(ids),
-      successTitle: t('notifications.delete.title'),
+      successTitle: t(
+        ids.length === 1 ? 'notifications.delete.singleTitle' : 'notifications.delete.title',
+      ),
       successDescription: t('notifications.feedback.deleted'),
+    });
+  }
+
+  function confirmResend(id: string) {
+    confirm({
+      title: t('notifications.resendConfirm.title'),
+      description: t('notifications.resendConfirm.description'),
+      variant: 'confirm',
+      icon: 'resend',
+      onConfirm: () => resend.mutateAsync(id),
+      successTitle: t('notifications.resendConfirm.title'),
+      successDescription: t('notifications.feedback.resent'),
+      successIcon: 'resend',
     });
   }
 
@@ -146,13 +156,7 @@ export function NotificationsTable({
                 aria-label={t('notifications.resend')}
                 title={t('notifications.resend')}
                 disabled={pending}
-                onClick={() =>
-                  resend.mutate(row.id, {
-                    onSuccess: () => setResentSuccess(true),
-                    onError: (error) =>
-                      toast.error(t(error.message, { defaultValue: error.message })),
-                  })
-                }
+                onClick={() => confirmResend(row.id)}
                 className="grid size-[38px] place-items-center rounded-lg bg-iconSurface text-primary transition hover:bg-primary/15 disabled:opacity-50"
               >
                 <Icon name="resend" className="size-5" />
@@ -167,13 +171,6 @@ export function NotificationsTable({
   return (
     <>
       {dialog}
-      {resentSuccess && (
-        <FeedbackDialog
-          title={t('notifications.resend')}
-          description={t('notifications.feedback.resent')}
-          onClose={() => setResentSuccess(false)}
-        />
-      )}
       <DataTable
         columns={columns}
         rows={rows}
