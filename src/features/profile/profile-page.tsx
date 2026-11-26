@@ -42,10 +42,10 @@ export function ProfilePage(): JSX.Element {
       ) : query.error ? (
         <ErrorState error={query.error} onRetry={() => void query.refetch()} />
       ) : profile ? (
-        <section className="rounded-3xl border border-border/40 bg-card p-5 shadow-sm sm:p-6">
-          <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-            <h2 className="flex items-center gap-2 text-lg font-semibold">
-              <span className="grid size-8 place-items-center rounded-full bg-iconSurface text-primary">
+        <section className="rounded-3xl border border-border/40 bg-card p-5 shadow-sm sm:p-8">
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-border/50 pb-5">
+            <h2 className="flex items-center gap-2.5 text-lg font-semibold">
+              <span className="grid size-9 place-items-center rounded-xl bg-iconSurface text-primary">
                 <Icon name="profile" className="size-5" />
               </span>
               {t('profile.details')}
@@ -70,31 +70,65 @@ export function ProfilePage(): JSX.Element {
               </Button>
             </div>
           </div>
-          <div className="flex flex-col items-start gap-5 sm:flex-row sm:gap-6">
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-8">
             <ProfileAvatar
               rounded
               name={profile.fullName}
               imageUrl={profile.imageUrl}
-              className="size-40 text-4xl sm:size-44"
+              className="mx-auto size-36 text-4xl shadow-sm ring-1 ring-border/50 sm:mx-0 sm:size-44"
             />
-            <dl className="grid min-w-0 gap-4">
-              <DetailField label={t('profile.fullName')}>
-                {profile.fullName || t('common.noValue')}
-              </DetailField>
-              <DetailField label={t('profile.email')}>
-                <bdi>{profile.email || t('common.noValue')}</bdi>
-              </DetailField>
-              <DetailField label={t('profile.phone')}>
-                <bdi>{profile.phone || t('common.noValue')}</bdi>
-              </DetailField>
-              <DetailField label={t('profile.role')}>
-                {profile.role || t('common.noValue')}
-              </DetailField>
-              <DetailField label={t('profile.gender')}>
-                {genderOption
-                  ? t(genderOption.translationKey)
-                  : profile.gender || t('common.noValue')}
-              </DetailField>
+            <dl className="grid min-w-0 flex-1 grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="rounded-2xl border border-border/40 bg-subtle/70 px-4 py-3.5">
+                <DetailField label={t('profile.fullName')}>
+                  {profile.fullName || t('common.noValue')}
+                </DetailField>
+              </div>
+              <div className="rounded-2xl border border-border/40 bg-subtle/70 px-4 py-3.5">
+                <DetailField label={t('profile.email')}>
+                  {profile.email ? (
+                    <a
+                      href={`mailto:${profile.email}`}
+                      className="break-all hover:text-primary hover:underline"
+                    >
+                      <bdi>{profile.email}</bdi>
+                    </a>
+                  ) : (
+                    t('common.noValue')
+                  )}
+                </DetailField>
+              </div>
+              <div className="rounded-2xl border border-border/40 bg-subtle/70 px-4 py-3.5">
+                <DetailField label={t('profile.phone')}>
+                  {profile.phone ? (
+                    <a
+                      href={`tel:${profile.phone.replace(/[^+\d]/g, '')}`}
+                      className="hover:text-primary hover:underline"
+                    >
+                      <bdi>{profile.phone}</bdi>
+                    </a>
+                  ) : (
+                    t('common.noValue')
+                  )}
+                </DetailField>
+              </div>
+              <div className="rounded-2xl border border-border/40 bg-subtle/70 px-4 py-3.5">
+                <DetailField label={t('profile.role')}>
+                  {profile.role ? (
+                    <span className="mt-0.5 inline-flex items-center rounded-full border border-primary/20 bg-permissionSurface px-3 py-0.5 text-xs font-medium text-primary">
+                      {t(`roles.${profile.role.toLowerCase()}`, { defaultValue: profile.role })}
+                    </span>
+                  ) : (
+                    t('common.noValue')
+                  )}
+                </DetailField>
+              </div>
+              <div className="rounded-2xl border border-border/40 bg-subtle/70 px-4 py-3.5">
+                <DetailField label={t('profile.gender')}>
+                  {genderOption
+                    ? t(genderOption.translationKey)
+                    : profile.gender || t('common.noValue')}
+                </DetailField>
+              </div>
             </dl>
           </div>
         </section>
