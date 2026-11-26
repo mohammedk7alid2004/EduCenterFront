@@ -104,6 +104,19 @@ export const router = createBrowserRouter([
         },
       },
       {
+        path: ROUTES.notifications,
+        lazy: async () => {
+          const { NotificationsPage } = await import('@/features/notifications');
+          return {
+            Component: () => (
+              <ProtectedRoute permission={PERMISSIONS.notifications.read}>
+                <NotificationsPage />
+              </ProtectedRoute>
+            ),
+          };
+        },
+      },
+      {
         path: ROUTES.systemManagement,
         lazy: async () => {
           const { SystemManagementPage } = await import('@/features/system-management');

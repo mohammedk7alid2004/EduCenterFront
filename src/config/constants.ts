@@ -37,6 +37,7 @@ export const ROUTES = {
   students: '/students',
   groups: '/groups',
   attendance: '/attendance',
+  notifications: '/notifications',
 } as const;
 export const API_ENDPOINTS = {
   students: {
@@ -150,6 +151,17 @@ export const API_ENDPOINTS = {
     appointmentOptions: '/v1/Attendance/AppointmentOptions',
     recorded: '/v1/Attendance/Recorded',
   },
+  notifications: {
+    getAll: '/v1/Notifications/GetAll',
+    detail: (id: string) => `/v1/Notifications/GetById/${encodeURIComponent(id)}`,
+    create: '/v1/Notifications/Create',
+    update: '/v1/Notifications/Update',
+    delete: '/v1/Notifications/Delete',
+    resend: (id: string) => `/v1/Notifications/Resend/${encodeURIComponent(id)}`,
+    groups: '/v1/select-menu/GetGroups',
+    levels: '/v1/select-menu/GetEducationLevels',
+    grades: '/v1/select-menu/GetEducationGrades',
+  },
 } as const;
 export const QUERY_KEYS = {
   students: ['students'],
@@ -168,4 +180,5 @@ export const QUERY_KEYS = {
   classrooms: ['classrooms'],
   subjects: ['subjects'],
   teachers: ['teachers'],
+  notifications: ['notifications'],
 } as const;

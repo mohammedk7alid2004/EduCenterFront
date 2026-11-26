@@ -171,7 +171,8 @@
     "access": "Users & Access",
     "contactUs": "Contact Us",
     "students": "Students",
-    "attendance": "Attendance"
+    "attendance": "Attendance",
+    "notifications": "Send Notifications"
   },
   "auth": {
     "splash": {
@@ -440,11 +441,15 @@
     "Students": "Students",
     "students": "Students",
     "Groups": "Groups",
-    "groups": "Groups"
+    "groups": "Groups",
+    "Notifications": "Notifications",
+    "notifications": "Notifications"
   },
   "permissionActions": {
     "Record": "Record",
     "record": "Record",
+    "Resend": "Resend",
+    "resend": "Resend",
     "ConnectStudents": "Connect Students",
     "SetStatus": "Set Status",
     "View": "View",
@@ -926,6 +931,55 @@
       "period": "Period",
       "allDates": "All dates",
       "multipleGroups": "groups"
+    }
+  },
+  "notifications": {
+    "title": "Send Notifications",
+    "description": "Manage and send notifications to students and teachers.",
+    "create": "Add New Notification",
+    "viewTitle": "View Notification",
+    "resend": "Resend Notification",
+    "fields": {
+      "id": "ID",
+      "title": "Title",
+      "type": "Type",
+      "group": "Group",
+      "level": "Level",
+      "grade": "Grade",
+      "message": "Message",
+      "image": "Image"
+    },
+    "types": {
+      "students": "Students",
+      "teachers": "Teachers"
+    },
+    "form": {
+      "createTitle": "Add New Notification",
+      "editTitle": "Edit Notification",
+      "titlePlaceholder": "Enter Your Title",
+      "typePlaceholder": "Select Type",
+      "groupPlaceholder": "Select Group",
+      "levelPlaceholder": "Select Level",
+      "gradePlaceholder": "Select Grade",
+      "selectLevelFirst": "Select Level First",
+      "messagePlaceholder": "Enter Message...",
+      "uploadFile": "Upload File",
+      "dragDrop": "Drag & Drop File Here",
+      "dragDropHint": "Drag And Drop Your PNG , JPG , WebP",
+      "send": "Send"
+    },
+    "validation": {
+      "imageType": "Only PNG, JPG, and WebP images are supported.",
+      "imageSize": "Image size must not exceed {{max}} MB."
+    },
+    "delete": {
+      "title": "Delete Notifications"
+    },
+    "feedback": {
+      "created": "Notification sent successfully.",
+      "updated": "Notification updated successfully.",
+      "deleted": "Notifications deleted successfully.",
+      "resent": "Notification resent successfully."
     }
   }
 }

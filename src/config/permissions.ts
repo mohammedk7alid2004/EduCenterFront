@@ -102,6 +102,14 @@ export const PERMISSIONS = {
     help: 'Help.View',
     center: 'CenterSettings.View',
   },
+  notifications: {
+    read: 'Notifications.GetAll',
+    detail: 'Notifications.GetById',
+    create: 'Notifications.Create',
+    update: 'Notifications.Update',
+    delete: 'Notifications.Delete',
+    resend: 'Notifications.Resend',
+  },
 } as const;
 export const RESERVED_ROLE_NAMES = ['superadmin', 'customer', 'user'] as const;
 export function isReservedRole(name: string): boolean {

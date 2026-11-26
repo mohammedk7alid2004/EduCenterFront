@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Icon } from './icon';
 export function RowActions({
@@ -8,6 +9,7 @@ export function RowActions({
   canView = true,
   canEdit = true,
   canDelete = true,
+  extraAction,
 }: {
   onView: () => void;
   onEdit: () => void;
@@ -16,6 +18,7 @@ export function RowActions({
   canView?: boolean;
   canEdit?: boolean;
   canDelete?: boolean;
+  extraAction?: ReactNode;
 }): JSX.Element {
   const { t } = useTranslation();
   return (
@@ -41,6 +44,7 @@ export function RowActions({
           <Icon name="pencil" className="size-5" />
         </button>
       )}
+      {extraAction}
       {canDelete && (
         <button
           type="button"

@@ -150,6 +150,18 @@ export function DashboardSidebar({
               {t('nav.students')}
             </NavLink>
           )}
+          {can(PERMISSIONS.notifications.read) && (
+            <NavLink
+              to={ROUTES.notifications}
+              onClick={handleNavigation}
+              className={({ isActive }) =>
+                `flex min-h-12 items-center gap-3 rounded-xl px-2 ${isActive ? 'bg-card text-primary' : 'text-card hover:bg-card/5'}`
+              }
+            >
+              <Icon name="bell" className="size-5 shrink-0" />
+              {t('nav.notifications')}
+            </NavLink>
+          )}
           {can(PERMISSIONS.attendance.read) && (
             <NavLink
               to={ROUTES.attendance}

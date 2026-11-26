@@ -171,7 +171,8 @@
     "access": "إدارة المستخدمين والصلاحيات",
     "contactUs": "تواصل معنا",
     "students": "إدارة الطلاب",
-    "attendance": "الحضور"
+    "attendance": "الحضور",
+    "notifications": "إرسال الإشعارات"
   },
   "auth": {
     "splash": {
@@ -440,11 +441,15 @@
     "Students": "الطلاب",
     "students": "الطلاب",
     "Groups": "المجموعات",
-    "groups": "المجموعات"
+    "groups": "المجموعات",
+    "Notifications": "الإشعارات",
+    "notifications": "الإشعارات"
   },
   "permissionActions": {
     "Record": "تسجيل",
     "record": "تسجيل",
+    "Resend": "إعادة إرسال",
+    "resend": "إعادة إرسال",
     "ConnectStudents": "ربط الطلاب",
     "SetStatus": "تغيير الحالة",
     "View": "عرض",
@@ -926,6 +931,55 @@
       "period": "الفترة",
       "allDates": "كل التواريخ",
       "multipleGroups": "مجموعات"
+    }
+  },
+  "notifications": {
+    "title": "إرسال الإشعارات",
+    "description": "إدارة وإرسال الإشعارات للطلاب والمعلمين.",
+    "create": "إضافة إشعار جديد",
+    "viewTitle": "عرض الإشعار",
+    "resend": "إعادة إرسال الإشعار",
+    "fields": {
+      "id": "المعرف",
+      "title": "العنوان",
+      "type": "النوع",
+      "group": "المجموعة",
+      "level": "المرحلة التعليمية",
+      "grade": "الصف الدراسي",
+      "message": "الرسالة",
+      "image": "الصورة"
+    },
+    "types": {
+      "students": "الطلاب",
+      "teachers": "المعلمون"
+    },
+    "form": {
+      "createTitle": "إضافة إشعار جديد",
+      "editTitle": "تعديل الإشعار",
+      "titlePlaceholder": "أدخل العنوان",
+      "typePlaceholder": "اختر النوع",
+      "groupPlaceholder": "اختر المجموعة",
+      "levelPlaceholder": "اختر المرحلة التعليمية",
+      "gradePlaceholder": "اختر الصف الدراسي",
+      "selectLevelFirst": "اختر المرحلة التعليمية أولاً",
+      "messagePlaceholder": "أدخل الرسالة...",
+      "uploadFile": "رفع ملف",
+      "dragDrop": "اسحب وأفلت الملف هنا",
+      "dragDropHint": "اسحب وأفلت صورة PNG أو JPG أو WebP",
+      "send": "إرسال"
+    },
+    "validation": {
+      "imageType": "يُسمح فقط بصور PNG و JPG و WebP.",
+      "imageSize": "يجب ألا يتجاوز حجم الصورة {{max}} ميجابايت."
+    },
+    "delete": {
+      "title": "حذف الإشعارات"
+    },
+    "feedback": {
+      "created": "تم إرسال الإشعار بنجاح.",
+      "updated": "تم تعديل الإشعار بنجاح.",
+      "deleted": "تم حذف الإشعارات بنجاح.",
+      "resent": "تم إعادة إرسال الإشعار بنجاح."
     }
   }
 }
