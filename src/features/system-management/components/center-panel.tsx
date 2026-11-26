@@ -80,7 +80,31 @@ export function CenterPanel({ tab }: { tab: SystemTab }): JSX.Element {
               </dl>
             </div>
 
-            {/* 2. Contact Phone Numbers */}
+            {/* 2. Attendance Timing */}
+            <div className="rounded-xl border border-border/70 bg-subtle/30 p-5">
+              <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold text-foreground">
+                <Icon name="schedule" className="size-4 text-primary" />
+                {t('systemManagement.attendanceSection')}
+              </h3>
+              <dl className="grid gap-4">
+                <DetailField label={t('systemManagement.lateMinutes')}>
+                  <span className="font-medium text-foreground">
+                    {settings
+                      ? t('systemManagement.minutesValue', { count: settings.lateMinutes })
+                      : t('common.noValue')}
+                  </span>
+                </DetailField>
+                <DetailField label={t('systemManagement.absentMinutes')}>
+                  <span className="font-medium text-foreground">
+                    {settings
+                      ? t('systemManagement.minutesValue', { count: settings.absentMinutes })
+                      : t('common.noValue')}
+                  </span>
+                </DetailField>
+              </dl>
+            </div>
+
+            {/* 3. Contact Phone Numbers */}
             <div className="rounded-xl border border-border/70 bg-subtle/30 p-5">
               <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold text-foreground">
                 <Icon name="phone" className="size-4 text-primary" />

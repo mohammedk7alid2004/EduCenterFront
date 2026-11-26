@@ -39,6 +39,8 @@ describe('system management command API contracts', () => {
 
   it('serializes all locations and files and explicitly clears empty collections', () => {
     const values: CenterValues = {
+      lateMinutes: 15,
+      absentMinutes: 30,
       centerNameAr: 'مركز',
       centerNameEn: 'Center',
       workingHoursAr: '',
@@ -52,6 +54,8 @@ describe('system management command API contracts', () => {
     expect(empty.get('ClearOtherPhoneNumbers')).toBe('true');
     expect(empty.get('ClearLocations')).toBe('true');
     expect(empty.get('invoiceLogo')).toBeInstanceOf(File);
+    expect(empty.get('LateMinutes')).toBe('15');
+    expect(empty.get('AbsentMinutes')).toBe('30');
     const multiple = centerFormData({
       ...values,
       othersPhoneNumbers: ['01234567890'],

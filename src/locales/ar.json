@@ -608,6 +608,13 @@
     "emptyPolicyAction": "اضغط على تحديث لإضافة نص السياسة.",
     "identitySection": "المعلومات الأساسية",
     "phonesSection": "أرقام التواصل",
+    "attendanceSection": "مواعيد الحضور والغياب",
+    "lateMinutes": "يعتبر متأخر بعد",
+    "absentMinutes": "يعتبر غائب بعد",
+    "minutesValue": "{{count}} دقيقة",
+    "attendanceTimingHint": "يفتح تسجيل الحضور قبل بداية الحصة بـ 30 دقيقة. الطالب المسجل بعد وقت التأخير يُسجل متأخرًا، وبعد وقت الغياب يُسجل غائبًا.",
+    "invalidMinutes": "أدخل رقمًا صحيحًا بين 1 و240",
+    "lateExceedsAbsent": "وقت التأخير لا يمكن أن يتجاوز وقت الغياب.",
     "locationsSection": "الفروع والمواقع",
     "logosSection": "الشعارات الرسمية",
     "tabs": {
