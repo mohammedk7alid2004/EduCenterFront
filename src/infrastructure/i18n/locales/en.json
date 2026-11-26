@@ -488,6 +488,7 @@
     "title": "My Profile",
     "description": "Manage your personal details and account password",
     "details": "Profile Details",
+    "personalInfo": "Personal Information",
     "fullName": "Full Name",
     "phone": "Phone Number",
     "email": "Email",
