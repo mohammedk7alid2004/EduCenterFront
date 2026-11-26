@@ -64,5 +64,14 @@ describe('NotificationFormModal group selection', () => {
     expect(gradeSelect.value).toBe('');
     expect(levelSelect.disabled).toBe(false);
     expect(gradeSelect.disabled).toBe(true);
+
+    const groupButtons = screen.getAllByRole('button', { expanded: false, hidden: true });
+    fireEvent.click(groupButtons[1]);
+    const radio = screen.getByRole('radio', { name: 'Physics 3rd', hidden: true });
+    fireEvent.click(radio);
+
+    expect(levelSelect.value).toBe('l-1');
+    expect(gradeSelect.value).toBe('gr-1');
+    expect(levelSelect.disabled).toBe(true);
   });
 });

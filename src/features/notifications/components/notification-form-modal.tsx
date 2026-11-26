@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
@@ -13,7 +13,7 @@ import {
   Input,
   LoadingState,
   Modal,
-  Select,
+  RadioSelect,
 } from '@/shared/components';
 import { NOTIFICATION_TYPE, NOTIFICATION_VALIDATION } from '../notifications.constants';
 import { notificationLocalizedName } from '../notifications.lib';
@@ -101,6 +101,7 @@ function NotificationForm({
 
   const {
     register,
+    control,
     handleSubmit,
     watch,
     setValue,
@@ -220,71 +221,114 @@ function NotificationForm({
             error={errors.title?.message}
             maxLength={rules.titleMax}
           />
-          <Select
-            {...register('type')}
-            label={t('notifications.fields.type')}
-            requiredAsterisk
-            error={errors.type?.message}
-            options={Object.entries(NOTIFICATION_TYPE).map(([key, value]) => ({
-              id: String(value),
-              name: t(`notifications.types.${key}`),
-            }))}
-            placeholder={t('notifications.form.typePlaceholder')}
+          <Controller
+            name="type"
+            control={control}
+            render={({ field }) => (
+              <RadioSelect
+                ref={field.ref}
+                name={field.name}
+                value={field.value ? String(field.value) : ''}
+                onBlur={field.onBlur}
+                onChange={(event) => field.onChange(Number(event.target.value))}
+                label={t('notifications.fields.type')}
+                requiredAsterisk
+                error={errors.type?.message}
+                options={Object.entries(NOTIFICATION_TYPE).map(([key, value]) => ({
+                  id: String(value),
+                  name: t(`notifications.types.${key}`),
+                }))}
+                placeholder={t('notifications.form.typePlaceholder')}
+              />
+            )}
           />
           <div className="sm:col-span-2">
-            <Select
-              {...register('groupId', {
-                onChange: (event) => {
-                  const nextId = event.target.value;
-                  const match = groups.data?.find((g) => g.id === nextId);
-                  setValue('levelId', nextId && match?.levelId ? match.levelId : '', {
-                    shouldValidate: false,
-                  });
-                  setValue('gradeId', nextId && match?.gradeId ? match.gradeId : '', {
-                    shouldValidate: false,
-                  });
-                },
-              })}
-              label={t('notifications.fields.group')}
-              error={errors.groupId?.message}
-              options={(groups.data ?? []).map((g) => ({ id: g.id, name: g.name }))}
-              placeholder={t(
-                groups.isPending ? 'common.loading' : 'notifications.form.groupPlaceholder',
+            <Controller
+              name="groupId"
+              control={control}
+              render={({ field }) => (
+                <RadioSelect
+                  ref={field.ref}
+                  name={field.name}
+                  value={field.value ?? ''}
+                  onBlur={field.onBlur}
+                  onChange={(event) => {
+                    const nextId = event.target.value;
+                    field.onChange(nextId);
+                    const match = groups.data?.find((g) => g.id === nextId);
+                    setValue('levelId', nextId && match?.levelId ? match.levelId : '', {
+                      shouldValidate: false,
+                    });
+                    setValue('gradeId', nextId && match?.gradeId ? match.gradeId : '', {
+                      shouldValidate: false,
+                    });
+                  }}
+                  clearable
+                  label={t('notifications.fields.group')}
+                  error={errors.groupId?.message}
+                  options={(groups.data ?? []).map((g) => ({ id: g.id, name: g.name }))}
+                  placeholder={t(
+                    groups.isPending ? 'common.loading' : 'notifications.form.groupPlaceholder',
+                  )}
+                  disabled={groups.isPending || Boolean(groups.error)}
+                />
               )}
-              disabled={groups.isPending || Boolean(groups.error)}
             />
           </div>
-          <Select
-            {...register('levelId', {
-              onChange: () => setValue('gradeId', '', { shouldValidate: false }),
-            })}
-            label={t('notifications.fields.level')}
-            error={errors.levelId?.message}
-            options={(levels.data ?? []).map((l) => ({
-              id: l.id,
-              name: notificationLocalizedName(l.name, i18n.language),
-            }))}
-            placeholder={t(
-              levels.isPending ? 'common.loading' : 'notifications.form.levelPlaceholder',
+          <Controller
+            name="levelId"
+            control={control}
+            render={({ field }) => (
+              <RadioSelect
+                ref={field.ref}
+                name={field.name}
+                value={field.value ?? ''}
+                onBlur={field.onBlur}
+                onChange={(event) => {
+                  field.onChange(event.target.value);
+                  setValue('gradeId', '', { shouldValidate: false });
+                }}
+                clearable
+                label={t('notifications.fields.level')}
+                error={errors.levelId?.message}
+                options={(levels.data ?? []).map((l) => ({
+                  id: l.id,
+                  name: notificationLocalizedName(l.name, i18n.language),
+                }))}
+                placeholder={t(
+                  levels.isPending ? 'common.loading' : 'notifications.form.levelPlaceholder',
+                )}
+                disabled={hasGroup || levels.isPending || Boolean(levels.error)}
+              />
             )}
-            disabled={hasGroup || levels.isPending || Boolean(levels.error)}
           />
-          <Select
-            {...register('gradeId')}
-            label={t('notifications.fields.grade')}
-            error={errors.gradeId?.message}
-            options={(grades.data ?? []).map((g) => ({
-              id: g.id,
-              name: notificationLocalizedName(g.name, i18n.language),
-            }))}
-            placeholder={t(
-              !levelId
-                ? 'notifications.form.selectLevelFirst'
-                : grades.isPending
-                  ? 'common.loading'
-                  : 'notifications.form.gradePlaceholder',
+          <Controller
+            name="gradeId"
+            control={control}
+            render={({ field }) => (
+              <RadioSelect
+                ref={field.ref}
+                name={field.name}
+                value={field.value ?? ''}
+                onBlur={field.onBlur}
+                onChange={(event) => field.onChange(event.target.value)}
+                clearable
+                label={t('notifications.fields.grade')}
+                error={errors.gradeId?.message}
+                options={(grades.data ?? []).map((g) => ({
+                  id: g.id,
+                  name: notificationLocalizedName(g.name, i18n.language),
+                }))}
+                placeholder={t(
+                  !levelId
+                    ? 'notifications.form.selectLevelFirst'
+                    : grades.isPending
+                      ? 'common.loading'
+                      : 'notifications.form.gradePlaceholder',
+                )}
+                disabled={hasGroup || !levelId || grades.isPending || Boolean(grades.error)}
+              />
             )}
-            disabled={hasGroup || !levelId || grades.isPending || Boolean(grades.error)}
           />
           <div className="sm:col-span-2">
             <label htmlFor={messageId} className="mb-1 block text-sm font-medium text-foreground">
