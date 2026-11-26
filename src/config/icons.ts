@@ -2,6 +2,7 @@ import { createElement, type ComponentProps } from 'react';
 import {
   QrCode,
   Image,
+  FileSpreadsheet,
   FileText,
   Download,
   Clock,
@@ -161,6 +162,7 @@ export const icons = {
   students: StudentsIcon,
   qrCode: QrCode,
   imageFile: Image,
+  excel: FileSpreadsheet,
   pdfFile: FileText,
   scheduleGrid: ScheduleGridIcon,
   scheduleList: ScheduleListIcon,

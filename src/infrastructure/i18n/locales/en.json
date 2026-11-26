@@ -812,6 +812,7 @@
   },
   "students": {
     "title": "Students",
+    "excel": "Excel",
     "export": "Export Excel",
     "template": "Download Template",
     "import": "Import Excel",
