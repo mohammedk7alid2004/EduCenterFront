@@ -23,7 +23,7 @@ export function ProfileAvatar({
       src={source}
       alt=""
       onError={() => setFailed(source)}
-      className={`${className} shrink-0 ${rounded ? 'rounded-2xl' : 'rounded-full'} object-cover`}
+      className={`${className} shrink-0 ${rounded ? 'rounded-2xl' : 'rounded-full'} object-cover object-top`}
     />
   ) : (
     <span

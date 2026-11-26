@@ -76,7 +76,7 @@ export function ProfilePage(): JSX.Element {
               rounded
               name={profile.fullName}
               imageUrl={profile.imageUrl}
-              className="size-44 text-4xl sm:h-44 sm:w-56"
+              className="size-44 text-4xl sm:size-48"
             />
             <dl className="grid min-w-0 flex-1 grid-cols-1 gap-x-10 gap-y-5 sm:max-w-xl sm:grid-cols-2">
               <DetailField label={t('profile.fullName')}>
