@@ -22,18 +22,3 @@ export const TIME_PICKER = {
   modes: { hour: 'hour', minute: 'minute' },
   periods: { am: 'am', pm: 'pm' },
 } as const;
-
-export const APPOINTMENT_QR = {
-  defaultLogo: '/logo-3m2a.svg',
-  logoRatio: 0.2,
-  logoPaddingRatio: 0.02,
-  previewSize: 320,
-  exportSize: 1000,
-  margin: 4,
-  cardWidth: 1200,
-  codeTop: 60,
-  labelFontSize: 34,
-  lineHeight: 52,
-  footerPadding: 60,
-} as const;
-export const QR_EXPORT_FORMAT = { png: 'png', pdf: 'pdf' } as const;

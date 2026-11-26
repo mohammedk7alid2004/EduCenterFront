@@ -18,3 +18,6 @@ export const STUDENT_IMPORT = {
   maxBytes: 10 * 1024 * 1024,
   accept: '.xlsx,.xls',
 } as const;
+export const STUDENT_QR = {
+  filePrefix: 'student',
+} as const;

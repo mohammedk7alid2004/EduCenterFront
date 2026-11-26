@@ -5,7 +5,6 @@ import { usePermission } from '@/infrastructure/auth';
 import { useOnline } from '@/shared/hooks';
 import {
   DataTable,
-  Icon,
   RowActions,
   useAuditColumns,
   useConfirm,
@@ -20,13 +19,11 @@ export function AppointmentsTable({
   startIndex,
   onView,
   onEdit,
-  onQr,
 }: {
   rows: AppointmentDto[];
   startIndex?: number;
   onView: (row: AppointmentDto) => void;
   onEdit: (row: AppointmentDto) => void;
-  onQr: (id: string, day?: number) => void;
 }): JSX.Element {
   const { t, i18n } = useTranslation();
   const can = usePermission();
@@ -146,27 +143,15 @@ export function AppointmentsTable({
       header: t('common.actions'),
       headerClassName: 'min-w-40',
       cell: (row) => (
-        <div className="flex items-center gap-2">
-          {can(PERMISSIONS.appointments.detail) && (
-            <button
-              type="button"
-              aria-label={t('appointments.qr.open', { name: row.groupName })}
-              onClick={() => onQr(row.id)}
-              className="grid size-[38px] place-items-center rounded-lg bg-permissionSurface text-primary hover:bg-primary/15"
-            >
-              <Icon name="qrCode" className="size-5" />
-            </button>
-          )}
-          <RowActions
-            onView={() => onView(row)}
-            onEdit={() => onEdit(row)}
-            onDelete={() => deleteSelection([row.id])}
-            disabled={pending}
-            canView={can(PERMISSIONS.appointments.detail)}
-            canEdit={can(PERMISSIONS.appointments.update) && can(PERMISSIONS.appointments.detail)}
-            canDelete={can(PERMISSIONS.appointments.delete)}
-          />
-        </div>
+        <RowActions
+          onView={() => onView(row)}
+          onEdit={() => onEdit(row)}
+          onDelete={() => deleteSelection([row.id])}
+          disabled={pending}
+          canView={can(PERMISSIONS.appointments.detail)}
+          canEdit={can(PERMISSIONS.appointments.update) && can(PERMISSIONS.appointments.detail)}
+          canDelete={can(PERMISSIONS.appointments.delete)}
+        />
       ),
     },
   ];

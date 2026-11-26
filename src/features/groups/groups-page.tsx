@@ -176,7 +176,6 @@ export function GroupsPage(): JSX.Element {
           <AppointmentsCalendar
             rows={query.data?.items ?? []}
             onView={(group) => setViewingId(group.id)}
-            onQr={(id) => setViewingId(id)}
           />
         ) : (
           <GroupsTable

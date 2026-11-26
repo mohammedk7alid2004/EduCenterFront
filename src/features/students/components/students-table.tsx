@@ -7,6 +7,7 @@ import { useOnline } from '@/shared/hooks';
 import {
   DataTable,
   FeedbackDialog,
+  Icon,
   RowActions,
   StatusSwitch,
   useConfirm,
@@ -22,11 +23,13 @@ export function StudentsTable({
   startIndex,
   onView,
   onEdit,
+  onQr,
 }: {
   rows: StudentDto[];
   startIndex?: number;
   onView: (row: StudentDto) => void;
   onEdit: (row: StudentDto) => void;
+  onQr: (id: string) => void;
 }): JSX.Element {
   const { t, i18n } = useTranslation();
   const can = usePermission();
@@ -113,16 +116,30 @@ export function StudentsTable({
     {
       id: 'actions',
       header: t('common.actions'),
+      headerClassName: 'min-w-40',
       cell: (row) => (
-        <RowActions
-          onView={() => onView(row)}
-          onEdit={() => onEdit(row)}
-          onDelete={() => deleteSelection([row.id])}
-          disabled={pending}
-          canView={can(PERMISSIONS.students.detail)}
-          canEdit={can(PERMISSIONS.students.update) && can(PERMISSIONS.students.detail)}
-          canDelete={can(PERMISSIONS.students.delete)}
-        />
+        <div className="flex items-center gap-2">
+          {can(PERMISSIONS.students.detail) && (
+            <button
+              type="button"
+              aria-label={t('students.qr.open', { name: row.name })}
+              title={t('students.qr.title')}
+              onClick={() => onQr(row.id)}
+              className="grid size-[38px] place-items-center rounded-lg bg-permissionSurface text-primary hover:bg-primary/15"
+            >
+              <Icon name="qrCode" className="size-5" />
+            </button>
+          )}
+          <RowActions
+            onView={() => onView(row)}
+            onEdit={() => onEdit(row)}
+            onDelete={() => deleteSelection([row.id])}
+            disabled={pending}
+            canView={can(PERMISSIONS.students.detail)}
+            canEdit={can(PERMISSIONS.students.update) && can(PERMISSIONS.students.detail)}
+            canDelete={can(PERMISSIONS.students.delete)}
+          />
+        </div>
       ),
     },
   ];

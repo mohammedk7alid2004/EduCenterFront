@@ -14,7 +14,6 @@ import { AppointmentsTable } from './components/appointments-table';
 import { AppointmentsCalendar } from './components/appointments-calendar';
 import { AppointmentFormModal } from './components/appointment-form-modal';
 import { ViewAppointmentModal } from './components/view-appointment-modal';
-import { AppointmentQrModal } from './components/appointment-qr-modal';
 import { AppointmentFilters } from './components/appointment-filters';
 export function AppointmentsPage(): JSX.Element {
   const { t } = useTranslation();
@@ -25,7 +24,6 @@ export function AppointmentsPage(): JSX.Element {
   const calendar = params.get(APPOINTMENT_PARAMS.view) !== APPOINTMENT_VIEW.list;
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<AppointmentDto | null>(null);
-  const [qrTarget, setQrTarget] = useState<{ id: string; day?: number } | null>(null);
   const [viewing, setViewing] = useState<AppointmentDto | null>(null);
   const subject = params.get(APPOINTMENT_PARAMS.subject) ?? '';
   const teacher = params.get(APPOINTMENT_PARAMS.teacher) ?? '';
@@ -140,17 +138,12 @@ export function AppointmentsPage(): JSX.Element {
         }
       >
         {calendar ? (
-          <AppointmentsCalendar
-            rows={query.data?.items ?? []}
-            onView={setViewing}
-            onQr={(id, day) => setQrTarget({ id, day })}
-          />
+          <AppointmentsCalendar rows={query.data?.items ?? []} onView={setViewing} />
         ) : (
           <AppointmentsTable
             rows={query.data?.items ?? []}
             startIndex={(controls.page - 1) * controls.pageSize}
             onView={setViewing}
-            onQr={(id, day) => setQrTarget({ id, day })}
             onEdit={(row) => {
               setEditing(row);
               setFormOpen(true);
@@ -160,13 +153,6 @@ export function AppointmentsPage(): JSX.Element {
       </ManagementList>
       {formOpen && (
         <AppointmentFormModal appointment={editing} onClose={() => setFormOpen(false)} />
-      )}
-      {qrTarget && (
-        <AppointmentQrModal
-          id={qrTarget.id}
-          initialDay={qrTarget.day}
-          onClose={() => setQrTarget(null)}
-        />
       )}
       {viewing && <ViewAppointmentModal id={viewing.id} onClose={() => setViewing(null)} />}
     </>

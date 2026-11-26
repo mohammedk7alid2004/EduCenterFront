@@ -14,6 +14,7 @@ import { StudentFormModal } from './components/student-form-modal';
 import { ViewStudentModal } from './components/view-student-modal';
 import { ImportStudentsModal } from './components/import-students-modal';
 import { StudentExcelMenu } from './components/student-excel-menu';
+import { StudentQrModal } from './components/student-qr-modal';
 export function StudentsPage(): JSX.Element {
   const { t } = useTranslation();
   const controls = useListControls();
@@ -36,6 +37,7 @@ export function StudentsPage(): JSX.Element {
   const [formOpen, setFormOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
   const [viewing, setViewing] = useState<StudentDto | null>(null);
+  const [qrId, setQrId] = useState<string | null>(null);
   function changeFilter(key: keyof typeof STUDENT_FILTER_PARAMS, value: string) {
     setParams((current) => {
       const next = new URLSearchParams(current);
@@ -87,6 +89,7 @@ export function StudentsPage(): JSX.Element {
           rows={query.data?.items ?? []}
           startIndex={(controls.page - 1) * controls.pageSize}
           onView={setViewing}
+          onQr={setQrId}
           onEdit={(student) => {
             setEditing(student);
             setFormOpen(true);
@@ -95,7 +98,17 @@ export function StudentsPage(): JSX.Element {
       </ManagementList>
       {formOpen && <StudentFormModal student={editing} onClose={() => setFormOpen(false)} />}
       {importOpen && <ImportStudentsModal onClose={() => setImportOpen(false)} />}
-      {viewing && <ViewStudentModal id={viewing.id} onClose={() => setViewing(null)} />}
+      {qrId && <StudentQrModal id={qrId} onClose={() => setQrId(null)} />}
+      {viewing && (
+        <ViewStudentModal
+          id={viewing.id}
+          onClose={() => setViewing(null)}
+          onOpenQr={(id) => {
+            setViewing(null);
+            setQrId(id);
+          }}
+        />
+      )}
     </>
   );
 }

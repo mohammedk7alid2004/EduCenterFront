@@ -1,14 +1,24 @@
 import { useTranslation } from 'react-i18next';
-import { DetailField, ErrorState, LoadingState, Modal, StatusBadge } from '@/shared/components';
+import {
+  Button,
+  DetailField,
+  ErrorState,
+  Icon,
+  LoadingState,
+  Modal,
+  StatusBadge,
+} from '@/shared/components';
 import { useStudent } from '../students.queries';
 import { studentLocalizedName } from '../students.lib';
 import { STUDENT_GENDER_NAMES } from '../students.constants';
 export function ViewStudentModal({
   id,
   onClose,
+  onOpenQr,
 }: {
   id: string;
   onClose: () => void;
+  onOpenQr?: (id: string) => void;
 }): JSX.Element {
   const { t, i18n } = useTranslation();
   const query = useStudent(id);
@@ -60,6 +70,19 @@ export function ViewStudentModal({
           <DetailField label={t('students.fees')}>
             {student.fees || t('students.empty.fees')}
           </DetailField>
+          {onOpenQr && (
+            <div className="flex justify-end sm:col-span-2">
+              <Button
+                type="button"
+                variant="ghost"
+                className="rounded-xl border border-primary/40 bg-primary/5 text-primary"
+                onClick={() => onOpenQr(student.id)}
+              >
+                <Icon name="qrCode" className="size-4" />
+                {t('students.qr.title')}
+              </Button>
+            </div>
+          )}
         </dl>
       ) : null}
     </Modal>

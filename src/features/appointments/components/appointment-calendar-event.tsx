@@ -24,16 +24,14 @@ export function AppointmentCalendarEvent<T extends CalendarAppointment>({
   color,
   style,
   onView,
-  onQr,
 }: {
   row: T;
   title: string;
   color: string;
   style: CSSProperties;
   onView: (row: T) => void;
-  onQr: (id: string) => void;
 }): JSX.Element {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const can = usePermission();
   const canView = can(PERMISSIONS.appointments.detail);
   const compact = Number(style.height) < 120;
@@ -59,17 +57,6 @@ export function AppointmentCalendarEvent<T extends CalendarAppointment>({
             <Icon name="bookOpen" className={minimal ? 'size-3 shrink-0' : 'size-4 shrink-0'} />
             <span className="truncate">{row.groupName}</span>
           </span>
-          {canView && (
-            <button
-              type="button"
-              aria-label={t('appointments.qr.open', { name: row.groupName })}
-              title={t('appointments.qr.title')}
-              onClick={() => onQr(row.id)}
-              className={`pointer-events-auto grid shrink-0 place-items-center rounded-lg bg-permissionSurface text-primary transition hover:bg-card focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary ${minimal ? 'size-5' : compact ? 'size-6' : 'size-7'}`}
-            >
-              <Icon name="qrCode" className="size-4" />
-            </button>
-          )}
         </div>
         {!minimal && (
           <span

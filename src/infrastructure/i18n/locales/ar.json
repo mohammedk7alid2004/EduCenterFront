@@ -741,21 +741,7 @@
       "minuteValue": "الدقيقة {{count}}"
     },
     "classroomCapacity": "سعة القاعة: {{count}} طالب",
-    "selectClassroomFirst": "اختر القاعة أولًا لتحديد السعة.",
-    "qr": {
-      "title": "تصدير QR Code للمواعيد",
-      "open": "تصدير QR للموعد {{name}}",
-      "alt": "QR بيانات يوم {{day}} للمجموعة {{name}}",
-      "sessionDates": "تواريخ الحصص القادمة",
-      "dayBarcode": "باركود يوم {{day}}",
-      "exportDayPng": "تصدير باركود اليوم (PNG)",
-      "exportDayPdf": "تصدير باركود اليوم (PDF)",
-      "exportAllDaysPdf": "تصدير كل الأيام (PDF)",
-      "png": "تصدير بصيغة PNG",
-      "pdf": "تصدير بصيغة PDF",
-      "generationFailed": "تعذر إنشاء QR. حاول مرة أخرى.",
-      "exportFailed": "تعذر تصدير الملف. حاول مرة أخرى."
-    }
+    "selectClassroomFirst": "اختر القاعة أولًا لتحديد السعة."
   },
   "contactUs": {
     "title": "تواصل معنا",
@@ -833,6 +819,15 @@
     "create": "إضافة طالب جديد",
     "studentName": "اسم الطالب",
     "viewTitle": "عرض بيانات الطالب",
+    "qr": {
+      "title": "رمز QR للطالب",
+      "open": "عرض رمز QR للطالب {{name}}",
+      "alt": "رمز QR لبيانات الطالب {{name}}",
+      "png": "تصدير بصيغة PNG",
+      "pdf": "تصدير بصيغة PDF",
+      "generationFailed": "تعذر إنشاء رمز QR. حاول مرة أخرى.",
+      "exportFailed": "تعذر تصدير الملف. حاول مرة أخرى."
+    },
     "expand": "عرض تفاصيل {{name}}",
     "subjects": "المواد",
     "groups": "المجموعات",
