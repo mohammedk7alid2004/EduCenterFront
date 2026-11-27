@@ -57,17 +57,18 @@ function scheduleTone(
   startOffset: number,
   duration: number,
   peakGain: number,
+  waveType: OscillatorType = 'triangle',
 ): void {
   const start = ctx.currentTime + startOffset;
   const oscillator = ctx.createOscillator();
   const gain = ctx.createGain();
 
-  oscillator.type = 'sine';
+  oscillator.type = waveType;
   oscillator.frequency.setValueAtTime(frequency, start);
 
-  // Soft attack and exponential decay for a gentle, non-jarring chime.
+  // Clean attack and exponential decay for a clear, pleasant chime.
   gain.gain.setValueAtTime(0.0001, start);
-  gain.gain.linearRampToValueAtTime(peakGain, start + 0.015);
+  gain.gain.linearRampToValueAtTime(peakGain, start + 0.012);
   gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
 
   oscillator.connect(gain);
@@ -85,9 +86,9 @@ export function playNotificationSound(force = false): void {
 
   const triggerChime = () => {
     try {
-      // Gentle two-note warm chime (C5 -> E5) at low gain.
-      scheduleTone(ctx, 523.25, 0, 0.28, 0.055);
-      scheduleTone(ctx, 659.25, 0.095, 0.36, 0.05);
+      // Clear, audible two-note chime (E5 -> A5) with soft harmonics.
+      scheduleTone(ctx, 659.25, 0, 0.28, 0.38, 'triangle');
+      scheduleTone(ctx, 880, 0.095, 0.4, 0.42, 'triangle');
     } catch {
       // Ignore audio scheduling failures.
     }
