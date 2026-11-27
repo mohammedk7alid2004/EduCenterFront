@@ -57,6 +57,8 @@ export const PERMISSIONS = {
     delete: 'Appointments.Delete',
     toggleStatus: 'Appointments.ToggleStatus',
     export: 'Appointments.ExportData',
+    template: 'Appointments.GetExcelTemplate',
+    import: 'Appointments.UploadExcel',
   },
   groups: {
     read: 'Appointments.GetAll',

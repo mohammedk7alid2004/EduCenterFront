@@ -1,12 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/shared/constants';
 import type { ApiError } from '@/shared/api';
+import type { ExcelImportResult } from '@/shared/types';
 import type { AppointmentFilters, AppointmentValues } from '../types';
 import {
   saveAppointment,
   deleteAppointments,
   setAppointmentStatus,
   exportAppointments,
+  fetchAppointmentTemplate,
+  importAppointments,
 } from './appointments.commands.api';
 
 export function useSaveAppointment(id?: string) {
@@ -42,5 +45,22 @@ export function useSetAppointmentStatus() {
 export function useAppointmentsExport() {
   return useMutation<Blob, ApiError, AppointmentFilters>({
     mutationFn: (filters) => exportAppointments(filters),
+  });
+}
+
+export function useAppointmentTemplate() {
+  return useMutation<Blob, ApiError, void>({
+    mutationFn: () => fetchAppointmentTemplate(),
+  });
+}
+
+export function useImportAppointments() {
+  const client = useQueryClient();
+  return useMutation<ExcelImportResult, ApiError, File>({
+    mutationFn: (file) => importAppointments(file),
+    onSuccess: () => {
+      void client.invalidateQueries({ queryKey: QUERY_KEYS.appointments });
+      void client.invalidateQueries({ queryKey: QUERY_KEYS.groups });
+    },
   });
 }

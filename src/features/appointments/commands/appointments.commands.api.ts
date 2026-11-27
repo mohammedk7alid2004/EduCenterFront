@@ -1,6 +1,6 @@
 import { API_ENDPOINTS } from '@/shared/constants';
-import { apiClient, assertApiSuccess, normalizeApiError } from '@/shared/api';
-import type { ApiResult } from '@/shared/types';
+import { apiClient, assertApiSuccess, normalizeApiError, unwrapExcelBlob } from '@/shared/api';
+import type { ApiResult, ExcelImportResult } from '@/shared/types';
 import type { AppointmentFilters, AppointmentValues } from '../types';
 
 const endpoints = API_ENDPOINTS.appointments;
@@ -69,12 +69,36 @@ export async function exportAppointments(
         ClassroomId: filters.classroomId,
       },
     });
-    if (data.type.includes('json')) {
-      const result: ApiResult<unknown> = JSON.parse(await data.text());
-      assertApiSuccess(result);
-      throw new Error('errors.unknown');
-    }
-    return data;
+    return await unwrapExcelBlob(data);
+  } catch (error) {
+    throw normalizeApiError(error);
+  }
+}
+
+export async function fetchAppointmentTemplate(signal?: AbortSignal): Promise<Blob> {
+  try {
+    const { data } = await apiClient.get<Blob>(endpoints.template, {
+      responseType: 'blob',
+      signal,
+    });
+    return await unwrapExcelBlob(data);
+  } catch (error) {
+    throw normalizeApiError(error);
+  }
+}
+
+export async function importAppointments(
+  file: File,
+  signal?: AbortSignal,
+): Promise<ExcelImportResult> {
+  const payload = new FormData();
+  payload.append('file', file);
+  try {
+    const { data } = await apiClient.post<ApiResult<ExcelImportResult>>(endpoints.import, payload, {
+      signal,
+    });
+    assertApiSuccess(data);
+    return data.data;
   } catch (error) {
     throw normalizeApiError(error);
   }

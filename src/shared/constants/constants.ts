@@ -119,6 +119,8 @@ export const API_ENDPOINTS = {
     delete: '/v1/Appointments/Delete',
     setStatus: (id: string) => `/v1/Appointments/SetStatus/${encodeURIComponent(id)}`,
     export: '/v1/Appointments/ExportExcel',
+    template: '/v1/Appointments/Template',
+    import: '/v1/Appointments/ImportExcelFile',
     teachers: '/v1/Appointments/GetTeachers',
     subjects: '/v1/select-menu/GetSubjects',
     classrooms: '/v1/select-menu/GetClassrooms',

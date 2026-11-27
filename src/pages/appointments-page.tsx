@@ -1,33 +1,32 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
 import { LIST_PARAMS } from '@/shared/constants';
 import { PERMISSIONS } from '@/app/config';
-import { usePermission } from '@/shared/hooks';
-import { useListControls, useOnline } from '@/shared/hooks';
-import { Button, Icon, ManagementList } from '@/shared/components';
-import { downloadBlob } from '@/shared/utils';
+import { useListControls, usePermission } from '@/shared/hooks';
+import { Icon, ManagementList } from '@/shared/components';
 import {
   useAppointments,
-  useAppointmentsExport,
   APPOINTMENT_PARAMS,
   APPOINTMENT_VIEW,
+  AppointmentExcelMenu,
   AppointmentsTable,
   AppointmentsCalendar,
   AppointmentFormModal,
+  ImportAppointmentsModal,
   ViewAppointmentModal,
   AppointmentFilters,
 } from '@/features/appointments';
 import type { AppointmentDto } from '@/features/appointments';
+
 export function AppointmentsPage(): JSX.Element {
   const { t } = useTranslation();
   const can = usePermission();
   const controls = useListControls();
-  const online = useOnline();
   const [params, setParams] = useSearchParams();
   const calendar = params.get(APPOINTMENT_PARAMS.view) !== APPOINTMENT_VIEW.list;
   const [formOpen, setFormOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
   const [editing, setEditing] = useState<AppointmentDto | null>(null);
   const [viewing, setViewing] = useState<AppointmentDto | null>(null);
   const subject = params.get(APPOINTMENT_PARAMS.subject) ?? '';
@@ -40,7 +39,7 @@ export function AppointmentsPage(): JSX.Element {
     classroomId: classroom || undefined,
   };
   const query = useAppointments(filters, calendar);
-  const exporter = useAppointmentsExport();
+
   const changeFilter = (key: 'subject' | 'teacher' | 'classroom', value: string) =>
     setParams((current) => {
       const next = new URLSearchParams(current);
@@ -50,6 +49,7 @@ export function AppointmentsPage(): JSX.Element {
       next.delete(LIST_PARAMS.page);
       return next;
     });
+
   return (
     <>
       <ManagementList
@@ -93,25 +93,7 @@ export function AppointmentsPage(): JSX.Element {
         }
         searchActions={
           <>
-            {can(PERMISSIONS.appointments.export) && (
-              <Button
-                type="button"
-                variant="ghost"
-                className="h-[43px] rounded-xl border border-primary/20 bg-card text-primary"
-                disabled={!online || exporter.isPending}
-                loading={exporter.isPending}
-                onClick={() =>
-                  exporter.mutate(filters, {
-                    onSuccess: (file) => downloadBlob(file, 'Appointments.xlsx'),
-                    onError: (error) =>
-                      toast.error(t(error.message, { defaultValue: error.message })),
-                  })
-                }
-              >
-                <Icon name="download" className="size-4" />
-                {t('appointments.export')}
-              </Button>
-            )}
+            <AppointmentExcelMenu filters={filters} onImport={() => setImportOpen(true)} />
             <div
               role="group"
               aria-label={t('appointments.viewMode')}
@@ -159,6 +141,7 @@ export function AppointmentsPage(): JSX.Element {
       {formOpen && (
         <AppointmentFormModal appointment={editing} onClose={() => setFormOpen(false)} />
       )}
+      {importOpen && <ImportAppointmentsModal onClose={() => setImportOpen(false)} />}
       {viewing && <ViewAppointmentModal id={viewing.id} onClose={() => setViewing(null)} />}
     </>
   );

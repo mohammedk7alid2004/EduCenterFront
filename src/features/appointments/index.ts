@@ -10,6 +10,8 @@ export {
   useDeleteAppointments,
   useSetAppointmentStatus,
   useAppointmentsExport,
+  useAppointmentTemplate,
+  useImportAppointments,
 } from './commands';
 export * from './constants';
 export { formatAppointmentTime, localizedName } from './utils';
@@ -19,3 +21,5 @@ export { AppointmentsCalendar } from './components/appointments-calendar';
 export { AppointmentFormModal } from './components/appointment-form-modal';
 export { ViewAppointmentModal } from './components/view-appointment-modal';
 export { AppointmentFilters } from './components/appointment-filters';
+export { AppointmentExcelMenu } from './components/appointment-excel-menu';
+export { ImportAppointmentsModal } from './components/import-appointments-modal';

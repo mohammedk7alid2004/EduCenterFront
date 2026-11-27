@@ -715,6 +715,7 @@
   "appointments": {
     "title": "Appointments",
     "export": "Export Excel",
+    "importHint": "Download the template, fill in the appointment details (enter comma-separated days such as Saturday, Monday and times as HH:mm such as 15:00), then upload an Excel file. Maximum file size: 10 MB.",
     "description": "Manage group schedules, teachers and classrooms",
     "create": "Add New Appointment",
     "edit": "Edit Appointment",
