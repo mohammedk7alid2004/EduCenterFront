@@ -1,1 +1,7 @@
-export * from './employees.constants';
+export {
+  EMPLOYEE_GENDER,
+  EMPLOYEE_GENDER_NAMES,
+  EMPLOYEE_FILTER_PARAMS,
+  EMPLOYEE_FILE_NAMES,
+  EMPLOYEE_IMPORT,
+} from './employees.constants';

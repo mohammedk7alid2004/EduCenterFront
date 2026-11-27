@@ -1,10 +1,10 @@
 import { API_ENDPOINTS } from '@/shared/constants';
 import { apiClient, assertApiSuccess, normalizeApiError } from '@/shared/api';
-import type { ApiResult, PaginatedResult, ListFilters } from '@/shared/types';
-import type { EmployeeDto } from '../types';
+import type { ApiResult, PaginatedResult } from '@/shared/types';
+import type { EmployeeDto, EmployeeFilters } from '../types';
 
 export async function fetchEmployees(
-  filters: ListFilters = {},
+  filters: EmployeeFilters = {},
   signal?: AbortSignal,
 ): Promise<PaginatedResult<EmployeeDto>> {
   try {
@@ -12,10 +12,11 @@ export async function fetchEmployees(
       API_ENDPOINTS.employees.getAll,
       {
         params: {
-          Name: filters.name,
+          Search: filters.name,
           PageNumber: filters.pageNumber,
           PageSize: filters.pageSize,
           IsActive: filters.isActive,
+          RoleId: filters.roleId,
         },
         signal,
       },

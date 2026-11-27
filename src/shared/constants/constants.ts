@@ -90,6 +90,9 @@ export const API_ENDPOINTS = {
     update: '/v1/SubAdminEmployee',
     delete: '/v1/SubAdminEmployee',
     toggleStatus: (id: string) => `/v1/SubAdminEmployee/toggle-status/${encodeURIComponent(id)}`,
+    export: '/v1/SubAdminEmployee/ExportExcel',
+    template: '/v1/SubAdminEmployee/Template',
+    import: '/v1/SubAdminEmployee/ImportExcelFile',
   },
   classrooms: {
     getAll: '/v1/Classrooms/GetAll',

@@ -8,18 +8,18 @@ import {
   ViewContactModal,
   ContactTools,
   ContactFilters,
-  ImportContactModal,
   SendContactEmailModal,
 } from '@/features/contact-us';
 import type { ContactMessage } from '@/features/contact-us';
+
 export function ContactUsPage(): JSX.Element {
   const { t } = useTranslation();
   const state = useContactControls();
   const query = useContacts(state.filters);
   const [viewing, setViewing] = useState<string | null>(null);
   const [replying, setReplying] = useState<ContactMessage | null>(null);
-  const [importOpen, setImportOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
+
   return (
     <>
       <ManagementList
@@ -36,7 +36,7 @@ export function ContactUsPage(): JSX.Element {
         fetching={query.isFetching}
         error={query.error}
         onRetry={() => void query.refetch()}
-        beforeSearch={<ContactTools filters={state.filters} onImport={() => setImportOpen(true)} />}
+        beforeSearch={<ContactTools filters={state.filters} />}
         searchActions={
           <Button
             variant="ghost"
@@ -63,7 +63,6 @@ export function ContactUsPage(): JSX.Element {
       </ManagementList>
       {viewing && <ViewContactModal id={viewing} onClose={() => setViewing(null)} />}
       {replying && <SendContactEmailModal contact={replying} onClose={() => setReplying(null)} />}
-      {importOpen && <ImportContactModal onClose={() => setImportOpen(false)} />}
     </>
   );
 }

@@ -94,6 +94,8 @@ export const PERMISSIONS = {
     update: 'SubAdminEmployee.Update',
     delete: 'SubAdminEmployee.Delete',
     toggleStatus: 'SubAdminEmployee.ToggleStatus',
+    template: 'SubAdminEmployee.GetTemplateExcelFile',
+    import: 'SubAdminEmployee.ImportExcelFile',
   },
   systemManagement: {
     privacy: 'PrivacyPolicy.View',

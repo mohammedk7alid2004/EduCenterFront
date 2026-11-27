@@ -1,7 +1,7 @@
 import { API_ENDPOINTS } from '@/shared/constants';
 import { apiClient, assertApiSuccess, normalizeApiError } from '@/shared/api';
 import type { ApiResult } from '@/shared/types';
-import type { EmployeeDto, EmployeePayload } from '../types';
+import type { EmployeeDto, EmployeeFilters, EmployeeImportResult, EmployeePayload } from '../types';
 
 function employeeForm(values: EmployeePayload, id?: string): FormData {
   const form = new FormData();
@@ -72,6 +72,67 @@ export async function toggleEmployeeStatus(id: string, signal?: AbortSignal): Pr
       { signal },
     );
     assertApiSuccess(data);
+  } catch (error) {
+    throw normalizeApiError(error);
+  }
+}
+
+export async function exportEmployees(
+  filters: EmployeeFilters = {},
+  signal?: AbortSignal,
+): Promise<Blob> {
+  try {
+    const { data } = await apiClient.get<Blob>(API_ENDPOINTS.employees.export, {
+      responseType: 'blob',
+      signal,
+      params: {
+        Search: filters.name,
+        IsActive: filters.isActive,
+        RoleId: filters.roleId,
+      },
+    });
+    if (data.type.includes('json')) {
+      const result: ApiResult<unknown> = JSON.parse(await data.text());
+      assertApiSuccess(result);
+      throw new Error('errors.unknown');
+    }
+    return data;
+  } catch (error) {
+    throw normalizeApiError(error);
+  }
+}
+
+export async function fetchEmployeeTemplate(signal?: AbortSignal): Promise<Blob> {
+  try {
+    const { data } = await apiClient.get<Blob>(API_ENDPOINTS.employees.template, {
+      responseType: 'blob',
+      signal,
+    });
+    if (data.type.includes('json')) {
+      const result: ApiResult<unknown> = JSON.parse(await data.text());
+      assertApiSuccess(result);
+      throw new Error('errors.unknown');
+    }
+    return data;
+  } catch (error) {
+    throw normalizeApiError(error);
+  }
+}
+
+export async function importEmployees(
+  file: File,
+  signal?: AbortSignal,
+): Promise<EmployeeImportResult> {
+  const payload = new FormData();
+  payload.append('file', file);
+  try {
+    const { data } = await apiClient.post<ApiResult<EmployeeImportResult>>(
+      API_ENDPOINTS.employees.import,
+      payload,
+      { signal },
+    );
+    assertApiSuccess(data);
+    return data.data;
   } catch (error) {
     throw normalizeApiError(error);
   }

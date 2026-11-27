@@ -23,6 +23,8 @@ interface ManagementListProps {
   onCreate: () => void;
   canCreate?: boolean;
   statusFilter?: boolean;
+  filterActive?: boolean;
+  searchPlaceholder?: string;
   children: ReactNode;
   beforeSearch?: ReactNode;
   searchActions?: ReactNode;
@@ -87,7 +89,7 @@ export function ManagementList(props: ManagementListProps): JSX.Element {
             type="search"
             value={controls.search}
             aria-label={t('common.search')}
-            placeholder={t('common.searchPlaceholder')}
+            placeholder={props.searchPlaceholder ?? t('common.searchPlaceholder')}
             onChange={(event) => controls.setSearch(event.target.value)}
             className="h-[43px] w-full rounded-[10px] border border-muted bg-card pe-4 ps-10 text-xs shadow-sm outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/10"
           />
@@ -97,7 +99,7 @@ export function ManagementList(props: ManagementListProps): JSX.Element {
             variant="ghost"
             aria-expanded={filterOpen}
             onClick={() => setFilterOpen(!filterOpen)}
-            className={`h-[43px] rounded-xl border ${controls.status ? 'border-primary text-primary' : 'border-muted text-muted'}`}
+            className={`h-[43px] rounded-xl border ${controls.status || props.filterActive ? 'border-primary text-primary' : 'border-muted text-muted'}`}
           >
             <Icon name="filter" className="size-5" />
             {t('common.filter')}

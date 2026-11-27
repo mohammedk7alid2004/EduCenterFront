@@ -3,7 +3,7 @@ export const CONTACT_FILTER_PARAMS = {
   phone: 'phone',
   subject: 'subject',
 } as const;
-export const CONTACT_FILE_ACTION = { export: 'export', template: 'template' } as const;
+export const CONTACT_FILE_ACTION = { export: 'export' } as const;
 export const CONTACT_FILE_NAMES = {
   export: 'ContactUs.xlsx',
   template: 'ContactUsImportTemplate.xlsx',

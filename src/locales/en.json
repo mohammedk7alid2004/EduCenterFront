@@ -382,6 +382,24 @@
     "title": "Sub Admin Employee",
     "description": "Manage administrative employees and their roles",
     "create": "Add New Sub Admin Employee",
+    "searchPlaceholder": "Search by name, phone, or email...",
+    "excel": "Excel",
+    "export": "Export Excel",
+    "template": "Download Template",
+    "import": "Import Excel",
+    "file": "Excel File",
+    "importHint": "Download the template, fill in the employee details, then upload an Excel file. Maximum file size: 10 MB.",
+    "invalidFile": "Choose a non-empty .xlsx or .xls file up to 10 MB.",
+    "imported": "Processed {{total}} rows: {{uploaded}} imported, {{skipped}} skipped.",
+    "skippedRows": "Skipped Rows",
+    "row": "Row {{count}}",
+    "separator": ", ",
+    "skipReasons": {
+      "1": "Already exists in the database",
+      "2": "Duplicate in the file",
+      "3": "Missing unique identifier",
+      "4": "Invalid row data"
+    },
     "viewTitle": "View Sub Admin Employee",
     "table": {
       "name": "Employee Name"

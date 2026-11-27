@@ -2,12 +2,15 @@ import { useRef } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/shared/constants';
 import type { ApiError } from '@/shared/api';
-import type { EmployeeDto, EmployeeValues } from '../types';
+import type { EmployeeDto, EmployeeFilters, EmployeeImportResult, EmployeeValues } from '../types';
 import {
   createEmployee,
   updateEmployee,
   deleteEmployees,
   toggleEmployeeStatus,
+  exportEmployees,
+  fetchEmployeeTemplate,
+  importEmployees,
 } from './employees.commands.api';
 import { fetchEmployee } from '../queries';
 
@@ -55,6 +58,28 @@ export function useToggleEmployeeStatus() {
   const client = useQueryClient();
   return useMutation<void, ApiError, string>({
     mutationFn: (id) => toggleEmployeeStatus(id),
+    onSuccess: () => {
+      void client.invalidateQueries({ queryKey: QUERY_KEYS.employees });
+    },
+  });
+}
+
+export function useEmployeesExport() {
+  return useMutation<Blob, ApiError, EmployeeFilters>({
+    mutationFn: (filters) => exportEmployees(filters),
+  });
+}
+
+export function useEmployeeTemplate() {
+  return useMutation<Blob, ApiError, void>({
+    mutationFn: () => fetchEmployeeTemplate(),
+  });
+}
+
+export function useImportEmployees() {
+  const client = useQueryClient();
+  return useMutation<EmployeeImportResult, ApiError, File>({
+    mutationFn: (file) => importEmployees(file),
     onSuccess: () => {
       void client.invalidateQueries({ queryKey: QUERY_KEYS.employees });
     },

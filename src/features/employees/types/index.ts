@@ -1,1 +1,7 @@
-export * from './employees.types';
+export type {
+  EmployeeDto,
+  EmployeeValues,
+  EmployeePayload,
+  EmployeeFilters,
+  EmployeeImportResult,
+} from './employees.types';
