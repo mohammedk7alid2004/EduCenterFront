@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/shared/constants';
 import type { ApiError } from '@/shared/api';
+import type { ExcelImportResult } from '@/shared/types';
 import type {
   CreateTeacherPayload,
   DeleteTeachersPayload,
@@ -12,6 +13,8 @@ import {
   deleteTeachers,
   toggleTeacherStatus,
   exportTeachers,
+  fetchTeacherTemplate,
+  importTeachers,
   updateTeacher,
 } from './teachers.commands.api';
 
@@ -58,5 +61,21 @@ export function useToggleTeacherStatus() {
 export function useTeachersExport() {
   return useMutation<Blob, ApiError, TeacherFilters>({
     mutationFn: (filters) => exportTeachers(filters),
+  });
+}
+
+export function useTeacherTemplate() {
+  return useMutation<Blob, ApiError, void>({
+    mutationFn: () => fetchTeacherTemplate(),
+  });
+}
+
+export function useImportTeachers() {
+  const queryClient = useQueryClient();
+  return useMutation<ExcelImportResult, ApiError, File>({
+    mutationFn: (file) => importTeachers(file),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: QUERY_KEYS.teachers });
+    },
   });
 }

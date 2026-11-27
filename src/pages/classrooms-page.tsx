@@ -1,29 +1,28 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
 import { PERMISSIONS } from '@/app/config';
-import { usePermission } from '@/shared/hooks';
-import { useListControls, useOnline } from '@/shared/hooks';
-import { Button, Icon, ManagementList } from '@/shared/components';
-import { downloadBlob } from '@/shared/utils';
+import { useListControls, usePermission } from '@/shared/hooks';
+import { ManagementList } from '@/shared/components';
 import {
   useClassrooms,
-  useClassroomsExport,
   ClassroomsTable,
+  ClassroomExcelMenu,
   ClassroomFormModal,
+  ImportClassroomsModal,
   ViewClassroomModal,
 } from '@/features/classrooms';
 import type { ClassroomDto } from '@/features/classrooms';
+
 export function ClassroomsPage(): JSX.Element {
   const { t } = useTranslation();
   const controls = useListControls();
-  const online = useOnline();
   const query = useClassrooms(controls.filters);
   const can = usePermission();
-  const exporter = useClassroomsExport();
   const [editing, setEditing] = useState<ClassroomDto | null>(null);
   const [formOpen, setFormOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
   const [viewing, setViewing] = useState<ClassroomDto | null>(null);
+
   return (
     <>
       <ManagementList
@@ -43,25 +42,7 @@ export function ClassroomsPage(): JSX.Element {
           setFormOpen(true);
         }}
         searchActions={
-          can(PERMISSIONS.classrooms.export) ? (
-            <Button
-              type="button"
-              variant="ghost"
-              className="h-[43px] rounded-xl border border-primary/20 bg-card text-primary"
-              disabled={!online || exporter.isPending}
-              loading={exporter.isPending}
-              onClick={() =>
-                exporter.mutate(controls.filters, {
-                  onSuccess: (file) => downloadBlob(file, 'Classrooms.xlsx'),
-                  onError: (error) =>
-                    toast.error(t(error.message, { defaultValue: error.message })),
-                })
-              }
-            >
-              <Icon name="download" className="size-4" />
-              {t('classrooms.export')}
-            </Button>
-          ) : undefined
+          <ClassroomExcelMenu filters={controls.filters} onImport={() => setImportOpen(true)} />
         }
       >
         <ClassroomsTable
@@ -75,6 +56,7 @@ export function ClassroomsPage(): JSX.Element {
         />
       </ManagementList>
       {formOpen && <ClassroomFormModal classroom={editing} onClose={() => setFormOpen(false)} />}
+      {importOpen && <ImportClassroomsModal onClose={() => setImportOpen(false)} />}
       {viewing && <ViewClassroomModal id={viewing.id} onClose={() => setViewing(null)} />}
     </>
   );

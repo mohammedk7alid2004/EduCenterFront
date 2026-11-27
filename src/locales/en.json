@@ -64,6 +64,24 @@
     "details": "Details",
     "noOptions": "No available options."
   },
+  "excel": {
+    "label": "Excel",
+    "export": "Export Excel",
+    "template": "Download Template",
+    "import": "Import Excel",
+    "file": "Excel File",
+    "invalidFile": "Choose a non-empty .xlsx or .xls file up to 10 MB.",
+    "imported": "Processed {{total}} rows: {{uploaded}} imported, {{skipped}} skipped.",
+    "skippedRows": "Skipped Rows",
+    "row": "Row {{count}}",
+    "separator": ", ",
+    "skipReasons": {
+      "1": "Already exists in the database",
+      "2": "Duplicate in the file",
+      "3": "Missing unique identifier",
+      "4": "Invalid row data"
+    }
+  },
   "dashboardNotifications": {
     "title": "Dashboard Notifications",
     "markAllRead": "Mark all as read",
@@ -258,6 +276,7 @@
     "title": "Subjects",
     "export": "Export",
     "exportExcel": "Export Excel",
+    "importHint": "Download the template, fill in the subject details, then upload an Excel file. Maximum file size: 10 MB.",
     "exportPdf": "Export PDF",
     "create": "Add New Subject",
     "search": "Search subjects…",
@@ -295,6 +314,7 @@
   "teachers": {
     "title": "Teachers",
     "export": "Export Excel",
+    "importHint": "Download the template, fill in the teacher details and subjects, then upload an Excel file. Maximum file size: 10 MB.",
     "create": "Add New Teacher",
     "search": "Search teachers…",
     "table": {
@@ -557,6 +577,7 @@
   "classrooms": {
     "title": "Classroom",
     "export": "Export Excel",
+    "importHint": "Download the template, fill in the classroom details, then upload an Excel file. Maximum file size: 10 MB.",
     "description": "Manage your classrooms and their capacity",
     "create": "Add New Classroom",
     "viewTitle": "View Classroom",

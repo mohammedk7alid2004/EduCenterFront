@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/shared/constants';
 import type { ApiError } from '@/shared/api';
+import type { ExcelImportResult } from '@/shared/types';
 import type {
   CreateSubjectPayload,
   DeleteSubjectsPayload,
@@ -13,6 +14,8 @@ import {
   deleteSubjects,
   toggleSubjectStatus,
   exportSubjects,
+  fetchSubjectTemplate,
+  importSubjects,
   updateSubject,
 } from './subjects.commands.api';
 import { fetchSubject } from '../queries';
@@ -60,6 +63,22 @@ export function useToggleSubjectStatus() {
 export function useSubjectsExport() {
   return useMutation<Blob, ApiError, SubjectFilters>({
     mutationFn: (filters) => exportSubjects(filters),
+  });
+}
+
+export function useSubjectTemplate() {
+  return useMutation<Blob, ApiError, void>({
+    mutationFn: () => fetchSubjectTemplate(),
+  });
+}
+
+export function useImportSubjects() {
+  const queryClient = useQueryClient();
+  return useMutation<ExcelImportResult, ApiError, File>({
+    mutationFn: (file) => importSubjects(file),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: QUERY_KEYS.subjects });
+    },
   });
 }
 

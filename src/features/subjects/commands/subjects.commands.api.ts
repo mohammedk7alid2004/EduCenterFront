@@ -1,5 +1,5 @@
 import { API_ENDPOINTS } from '@/shared/constants';
-import { apiClient, assertApiSuccess, normalizeApiError } from '@/shared/api';
+import { apiClient, assertApiSuccess, normalizeApiError, unwrapExcelBlob } from '@/shared/api';
 import type {
   ApiResult,
   CreateSubjectPayload,
@@ -7,6 +7,7 @@ import type {
   SubjectFilters,
   UpdateSubjectPayload,
 } from '../types';
+import type { ExcelImportResult } from '@/shared/types';
 
 export async function createSubject(
   payload: CreateSubjectPayload,
@@ -79,12 +80,35 @@ export async function exportSubjects(filters: SubjectFilters, signal?: AbortSign
       params,
       signal,
     });
-    if (data.type.includes('json')) {
-      const result: ApiResult<unknown> = JSON.parse(await data.text());
-      assertApiSuccess(result);
-      throw new Error('errors.unknown');
-    }
-    return data;
+    return await unwrapExcelBlob(data);
+  } catch (error) {
+    throw normalizeApiError(error);
+  }
+}
+
+export async function fetchSubjectTemplate(signal?: AbortSignal): Promise<Blob> {
+  try {
+    const { data } = await apiClient.get<Blob>(API_ENDPOINTS.subjects.template, {
+      responseType: 'blob',
+      signal,
+    });
+    return await unwrapExcelBlob(data);
+  } catch (error) {
+    throw normalizeApiError(error);
+  }
+}
+
+export async function importSubjects(file: File, signal?: AbortSignal): Promise<ExcelImportResult> {
+  const payload = new FormData();
+  payload.append('file', file);
+  try {
+    const { data } = await apiClient.post<ApiResult<ExcelImportResult>>(
+      API_ENDPOINTS.subjects.import,
+      payload,
+      { signal },
+    );
+    assertApiSuccess(data);
+    return data.data;
   } catch (error) {
     throw normalizeApiError(error);
   }

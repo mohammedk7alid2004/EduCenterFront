@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/shared/constants';
 import type { ApiError } from '@/shared/api';
-import type { ListFilters } from '@/shared/types';
+import type { ExcelImportResult, ListFilters } from '@/shared/types';
 import type { ClassroomValues } from '../types';
 import {
   createClassroom,
@@ -9,6 +9,8 @@ import {
   deleteClassrooms,
   toggleClassroomStatus,
   exportClassrooms,
+  fetchClassroomTemplate,
+  importClassrooms,
 } from './classrooms.commands.api';
 
 export function useSaveClassroom(id?: string) {
@@ -47,5 +49,21 @@ export function useToggleClassroomStatus() {
 export function useClassroomsExport() {
   return useMutation<Blob, ApiError, ListFilters>({
     mutationFn: (filters) => exportClassrooms(filters),
+  });
+}
+
+export function useClassroomTemplate() {
+  return useMutation<Blob, ApiError, void>({
+    mutationFn: () => fetchClassroomTemplate(),
+  });
+}
+
+export function useImportClassrooms() {
+  const client = useQueryClient();
+  return useMutation<ExcelImportResult, ApiError, File>({
+    mutationFn: (file) => importClassrooms(file),
+    onSuccess: () => {
+      void client.invalidateQueries({ queryKey: QUERY_KEYS.classrooms });
+    },
   });
 }

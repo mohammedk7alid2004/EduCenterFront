@@ -37,6 +37,8 @@ export const PERMISSIONS = {
   },
   teachers: {
     read: 'Teachers.GetAll',
+    template: 'Teachers.GetTemplateExcelFile',
+    import: 'Teachers.ImportExcelFile',
   },
   contactUs: {
     read: 'ContactUs.ViewAll',
@@ -72,6 +74,8 @@ export const PERMISSIONS = {
   classrooms: {
     read: 'Classrooms.GetAll',
     export: 'Classrooms.ExportData',
+    template: 'Classrooms.GetExcelTemplate',
+    import: 'Classrooms.UploadExcel',
     create: 'Classrooms.Create',
     update: 'Classrooms.Update',
     delete: 'Classrooms.Delete',
@@ -80,6 +84,8 @@ export const PERMISSIONS = {
   subjects: {
     read: 'Subjects.GetAll',
     export: 'Subjects.ExportData',
+    template: 'Subjects.GetExcelTemplate',
+    import: 'Subjects.UploadExcel',
   },
   roles: {
     read: 'Roles.Read',

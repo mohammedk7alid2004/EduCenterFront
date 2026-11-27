@@ -23,3 +23,11 @@ export interface AuditFields {
   createdAt?: string | null;
   updatedAt?: string | null;
 }
+
+export interface ExcelImportResult {
+  totalRows: number;
+  uploadedCount: number;
+  skippedCount: number;
+  skippedRows: number[];
+  skippedDetails: { rowNumber: number; reason: number; message?: string | null }[];
+}

@@ -1,16 +1,13 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
-import { Button, Icon, ManagementList } from '@/shared/components';
-import { useListControls, useOnline } from '@/shared/hooks';
-import { downloadBlob } from '@/shared/utils';
-import { PERMISSIONS } from '@/app/config';
-import { usePermission } from '@/shared/hooks';
+import { ManagementList } from '@/shared/components';
+import { useListControls } from '@/shared/hooks';
 import {
   useTeachers,
-  useTeachersExport,
   TeacherTable,
+  TeacherExcelMenu,
   TeacherFormModal,
+  ImportTeachersModal,
   ViewTeacherModal,
 } from '@/features/teachers';
 import type { TeacherDto } from '@/features/teachers';
@@ -18,13 +15,12 @@ import type { TeacherDto } from '@/features/teachers';
 export function TeachersPage(): JSX.Element {
   const { t } = useTranslation();
   const controls = useListControls();
-  const online = useOnline();
-  const can = usePermission();
   const query = useTeachers(controls.filters);
-  const exporter = useTeachersExport();
   const [formOpen, setFormOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
   const [editing, setEditing] = useState<TeacherDto | null>(null);
   const [viewing, setViewing] = useState<TeacherDto | null>(null);
+
   return (
     <>
       <ManagementList
@@ -43,25 +39,7 @@ export function TeachersPage(): JSX.Element {
           setFormOpen(true);
         }}
         searchActions={
-          can(PERMISSIONS.teachers.read) ? (
-            <Button
-              type="button"
-              variant="ghost"
-              className="h-[43px] rounded-xl border border-primary/20 bg-card text-primary"
-              disabled={!online || exporter.isPending}
-              loading={exporter.isPending}
-              onClick={() =>
-                exporter.mutate(controls.filters, {
-                  onSuccess: (file) => downloadBlob(file, 'Teachers.xlsx'),
-                  onError: (error) =>
-                    toast.error(t(error.message, { defaultValue: error.message })),
-                })
-              }
-            >
-              <Icon name="download" className="size-4" />
-              {t('teachers.export')}
-            </Button>
-          ) : undefined
+          <TeacherExcelMenu filters={controls.filters} onImport={() => setImportOpen(true)} />
         }
       >
         <TeacherTable
@@ -75,6 +53,7 @@ export function TeachersPage(): JSX.Element {
         />
       </ManagementList>
       {formOpen && <TeacherFormModal teacher={editing} onClose={() => setFormOpen(false)} />}
+      {importOpen && <ImportTeachersModal onClose={() => setImportOpen(false)} />}
       {viewing && <ViewTeacherModal teacher={viewing} onClose={() => setViewing(null)} />}
     </>
   );

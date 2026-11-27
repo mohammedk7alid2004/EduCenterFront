@@ -1,16 +1,13 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
-import { Button, Icon, ManagementList } from '@/shared/components';
-import { useListControls, useOnline } from '@/shared/hooks';
-import { downloadBlob } from '@/shared/utils';
-import { PERMISSIONS } from '@/app/config';
-import { usePermission } from '@/shared/hooks';
+import { ManagementList } from '@/shared/components';
+import { useListControls } from '@/shared/hooks';
 import {
   useSubjects,
-  useSubjectsExport,
   SubjectTable,
+  SubjectExcelMenu,
   SubjectFormModal,
+  ImportSubjectsModal,
   ViewSubjectModal,
 } from '@/features/subjects';
 import type { SubjectDto } from '@/features/subjects';
@@ -18,13 +15,12 @@ import type { SubjectDto } from '@/features/subjects';
 export function SubjectsPage(): JSX.Element {
   const { t } = useTranslation();
   const controls = useListControls();
-  const online = useOnline();
-  const can = usePermission();
   const query = useSubjects(controls.filters);
-  const exporter = useSubjectsExport();
   const [formOpen, setFormOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
   const [editing, setEditing] = useState<SubjectDto | null>(null);
   const [viewing, setViewing] = useState<SubjectDto | null>(null);
+
   return (
     <>
       <ManagementList
@@ -43,25 +39,7 @@ export function SubjectsPage(): JSX.Element {
           setFormOpen(true);
         }}
         searchActions={
-          can(PERMISSIONS.subjects.export) ? (
-            <Button
-              type="button"
-              variant="ghost"
-              className="h-[43px] rounded-xl border border-primary/20 bg-card text-primary"
-              disabled={!online || exporter.isPending}
-              loading={exporter.isPending}
-              onClick={() =>
-                exporter.mutate(controls.filters, {
-                  onSuccess: (file) => downloadBlob(file, 'Subjects.xlsx'),
-                  onError: (error) =>
-                    toast.error(t(error.message, { defaultValue: error.message })),
-                })
-              }
-            >
-              <Icon name="download" className="size-4" />
-              {t('subjects.export')}
-            </Button>
-          ) : undefined
+          <SubjectExcelMenu filters={controls.filters} onImport={() => setImportOpen(true)} />
         }
       >
         <SubjectTable
@@ -75,6 +53,7 @@ export function SubjectsPage(): JSX.Element {
         />
       </ManagementList>
       {formOpen && <SubjectFormModal subject={editing} onClose={() => setFormOpen(false)} />}
+      {importOpen && <ImportSubjectsModal onClose={() => setImportOpen(false)} />}
       {viewing && <ViewSubjectModal subject={viewing} onClose={() => setViewing(null)} />}
     </>
   );

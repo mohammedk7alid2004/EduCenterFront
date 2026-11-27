@@ -1,6 +1,6 @@
 import { API_ENDPOINTS } from '@/shared/constants';
-import { apiClient, assertApiSuccess, normalizeApiError } from '@/shared/api';
-import type { ApiResult, ListFilters } from '@/shared/types';
+import { apiClient, assertApiSuccess, normalizeApiError, unwrapExcelBlob } from '@/shared/api';
+import type { ApiResult, ExcelImportResult, ListFilters } from '@/shared/types';
 import type { ClassroomValues } from '../types';
 
 export async function createClassroom(
@@ -69,12 +69,38 @@ export async function exportClassrooms(filters: ListFilters, signal?: AbortSigna
       signal,
       params: { Name: filters.name, IsActive: filters.isActive },
     });
-    if (data.type.includes('json')) {
-      const result: ApiResult<unknown> = JSON.parse(await data.text());
-      assertApiSuccess(result);
-      throw new Error('errors.unknown');
-    }
-    return data;
+    return await unwrapExcelBlob(data);
+  } catch (error) {
+    throw normalizeApiError(error);
+  }
+}
+
+export async function fetchClassroomTemplate(signal?: AbortSignal): Promise<Blob> {
+  try {
+    const { data } = await apiClient.get<Blob>(API_ENDPOINTS.classrooms.template, {
+      responseType: 'blob',
+      signal,
+    });
+    return await unwrapExcelBlob(data);
+  } catch (error) {
+    throw normalizeApiError(error);
+  }
+}
+
+export async function importClassrooms(
+  file: File,
+  signal?: AbortSignal,
+): Promise<ExcelImportResult> {
+  const payload = new FormData();
+  payload.append('file', file);
+  try {
+    const { data } = await apiClient.post<ApiResult<ExcelImportResult>>(
+      API_ENDPOINTS.classrooms.import,
+      payload,
+      { signal },
+    );
+    assertApiSuccess(data);
+    return data.data;
   } catch (error) {
     throw normalizeApiError(error);
   }

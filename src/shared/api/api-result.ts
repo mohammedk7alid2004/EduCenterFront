@@ -10,3 +10,14 @@ export function assertApiSuccess(result: {
   if (result.message) error.message = result.message;
   throw error;
 }
+
+export async function unwrapExcelBlob(data: Blob): Promise<Blob> {
+  if (data.type.includes('json')) {
+    const result: { isSuccess: boolean; statusCode: number; message?: string } = JSON.parse(
+      await data.text(),
+    );
+    assertApiSuccess(result);
+    throw new Error('errors.unknown');
+  }
+  return data;
+}

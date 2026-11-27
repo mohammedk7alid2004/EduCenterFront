@@ -1,5 +1,6 @@
 import { API_ENDPOINTS } from '@/shared/constants';
-import { apiClient, assertApiSuccess, normalizeApiError } from '@/shared/api';
+import { apiClient, assertApiSuccess, normalizeApiError, unwrapExcelBlob } from '@/shared/api';
+import type { ExcelImportResult } from '@/shared/types';
 import type {
   ApiResult,
   CreateTeacherPayload,
@@ -81,12 +82,35 @@ export async function exportTeachers(filters: TeacherFilters, signal?: AbortSign
       params,
       signal,
     });
-    if (data.type.includes('json')) {
-      const result: ApiResult<unknown> = JSON.parse(await data.text());
-      assertApiSuccess(result);
-      throw new Error('errors.unknown');
-    }
-    return data;
+    return await unwrapExcelBlob(data);
+  } catch (error) {
+    throw normalizeApiError(error);
+  }
+}
+
+export async function fetchTeacherTemplate(signal?: AbortSignal): Promise<Blob> {
+  try {
+    const { data } = await apiClient.get<Blob>(API_ENDPOINTS.teachers.template, {
+      responseType: 'blob',
+      signal,
+    });
+    return await unwrapExcelBlob(data);
+  } catch (error) {
+    throw normalizeApiError(error);
+  }
+}
+
+export async function importTeachers(file: File, signal?: AbortSignal): Promise<ExcelImportResult> {
+  const payload = new FormData();
+  payload.append('file', file);
+  try {
+    const { data } = await apiClient.post<ApiResult<ExcelImportResult>>(
+      API_ENDPOINTS.teachers.import,
+      payload,
+      { signal },
+    );
+    assertApiSuccess(data);
+    return data.data;
   } catch (error) {
     throw normalizeApiError(error);
   }

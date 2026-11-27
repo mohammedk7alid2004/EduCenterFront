@@ -9,6 +9,11 @@ export const LIST_PARAMS = {
 } as const;
 export const PAGE_SIZES = [10, 25, 50] as const;
 export const STATUS_FILTER = { all: '', active: 'active', inactive: 'inactive' } as const;
+export const EXCEL_IMPORT = {
+  extensions: ['.xlsx', '.xls'],
+  maxBytes: 10 * 1024 * 1024,
+  accept: '.xlsx,.xls',
+} as const;
 export const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ?? 'https://educenter2.runasp.net/api';
 export const SIGNALR_BASE_URL = API_BASE_URL.replace(/\/api\/?$/, '');
@@ -102,6 +107,8 @@ export const API_ENDPOINTS = {
     delete: '/v1/Classrooms/Delete',
     toggleStatus: (id: string) => `/v1/Classrooms/ToggleStatus/${encodeURIComponent(id)}`,
     export: '/v1/Classrooms/Export',
+    template: '/v1/Classrooms/Template',
+    import: '/v1/Classrooms/Import',
   },
   appointments: {
     getAll: '/v1/Appointments/GetAll',
@@ -128,6 +135,8 @@ export const API_ENDPOINTS = {
     delete: '/v1/Subjects/Delete',
     toggleStatus: (id: string) => `/v1/Subjects/ToggleStatus/${id}`,
     export: '/v1/Subjects/Export',
+    template: '/v1/Subjects/Template',
+    import: '/v1/Subjects/Import',
   },
   teachers: {
     getAll: '/v1/Teachers',
@@ -137,6 +146,8 @@ export const API_ENDPOINTS = {
     delete: '/v1/Teachers',
     toggleStatus: (id: string) => `/v1/Teachers/toggle-status/${id}`,
     export: '/v1/Teachers/ExportExcel',
+    template: '/v1/Teachers/Template',
+    import: '/v1/Teachers/ImportExcelFile',
   },
   groups: {
     getAll: '/v1/Appointments/GetAll',
