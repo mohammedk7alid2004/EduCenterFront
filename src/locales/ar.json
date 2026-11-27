@@ -64,6 +64,17 @@
     "details": "التفاصيل",
     "noOptions": "لا توجد خيارات متاحة."
   },
+  "dashboardNotifications": {
+    "title": "إشعارات لوحة التحكم",
+    "markAllRead": "تحديد الكل كمقروء",
+    "markRead": "تحديد كمقروء",
+    "viewStudents": "عرض الطلاب",
+    "unreadBadge": "{{count}} إشعارات غير مقروءة",
+    "liveConnected": "مباشر",
+    "reconnecting": "جاري إعادة الاتصال…",
+    "offline": "غير متصل",
+    "loadError": "تعذر تحميل الإشعارات."
+  },
   "errors": {
     "network": "يبدو أنك غير متصل بالإنترنت.",
     "timeout": "انتهت مهلة الطلب.",

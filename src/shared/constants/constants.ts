@@ -11,6 +11,7 @@ export const PAGE_SIZES = [10, 25, 50] as const;
 export const STATUS_FILTER = { all: '', active: 'active', inactive: 'inactive' } as const;
 export const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ?? 'https://educenter2.runasp.net/api';
+export const SIGNALR_BASE_URL = API_BASE_URL.replace(/\/api\/?$/, '');
 export const STORAGE_KEYS = {
   auth: 'educenter.auth',
   rememberSession: 'educenter.remember_session',
@@ -165,6 +166,12 @@ export const API_ENDPOINTS = {
     levels: '/v1/select-menu/GetEducationLevels',
     grades: '/v1/select-menu/GetEducationGrades',
   },
+  dashboardNotifications: {
+    getAll: '/v1/DashboardNotifications',
+    markRead: (id: string) => `/v1/DashboardNotifications/Read/${encodeURIComponent(id)}`,
+    markAllRead: '/v1/DashboardNotifications/ReadAll',
+    hub: `${SIGNALR_BASE_URL}/hubs/dashboard-notifications`,
+  },
 } as const;
 export const QUERY_KEYS = {
   students: ['students'],
@@ -184,4 +191,5 @@ export const QUERY_KEYS = {
   subjects: ['subjects'],
   teachers: ['teachers'],
   notifications: ['notifications'],
+  dashboardNotifications: ['dashboard-notifications'],
 } as const;

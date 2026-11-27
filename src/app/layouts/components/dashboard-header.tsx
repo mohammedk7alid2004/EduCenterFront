@@ -5,6 +5,7 @@ import { ROUTES } from '@/shared/constants';
 import { SYSTEM_TABS, SYSTEM_TAB_PARAM, useCenterBrand } from '@/features/system-management';
 import { useLogout } from '@/features/auth';
 import { useProfile, ProfileAvatar } from '@/features/profile';
+import { DashboardNotificationsBell } from '@/features/dashboard-notifications';
 import { usePermission, useAuthStore } from '@/shared/hooks';
 import { setLanguage } from '@/app/config';
 import { useDesktopMode } from '@/shared/hooks';
@@ -133,16 +134,7 @@ export function DashboardHeader({ onMenuClick }: { onMenuClick: () => void }): J
           />
           <span>{arabic ? 'AR' : 'EN'}</span>
         </button>
-        <span
-          title={t('common.notifications')}
-          className="header-control -ms-2 flex h-[34px] w-[52px] items-center justify-center rounded-[10px] bg-card"
-        >
-          <img
-            src="/images/dashboard/notification.png"
-            alt=""
-            className="h-[30px] w-[34px] object-contain"
-          />
-        </span>
+        <DashboardNotificationsBell />
         <div className="relative">
           <button
             type="button"
