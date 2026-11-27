@@ -11,7 +11,12 @@ import type {
   DashboardNotificationDto,
   DashboardNotificationsFeedDto,
 } from '../types';
-import { resolveNotificationMessage, resolveNotificationTitle } from '../utils';
+import {
+  playNotificationSound,
+  resolveNotificationMessage,
+  resolveNotificationTitle,
+  unlockNotificationAudio,
+} from '../utils';
 
 export function useDashboardNotificationsRealtime(enabled = true): DashboardHubStatus {
   const accessToken = useAuthStore((state) => state.accessToken);
@@ -28,6 +33,7 @@ export function useDashboardNotificationsRealtime(enabled = true): DashboardHubS
 
     let disposed = false;
     setStatus('connecting');
+    unlockNotificationAudio();
 
     const connection = new HubConnectionBuilder()
       .withUrl(API_ENDPOINTS.dashboardNotifications.hub, {
@@ -59,6 +65,7 @@ export function useDashboardNotificationsRealtime(enabled = true): DashboardHubS
       }
 
       const activeLang = i18n.resolvedLanguage ?? i18n.language;
+      playNotificationSound();
       toast.info(resolveNotificationTitle(incoming, activeLang, t), {
         description: resolveNotificationMessage(incoming, activeLang),
         duration: 6000,

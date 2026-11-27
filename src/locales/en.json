@@ -92,6 +92,8 @@
     "reconnecting": "Reconnecting…",
     "offline": "Offline",
     "loadError": "Could not load notifications.",
+    "soundOn": "Notification sound on",
+    "soundOff": "Notification sound muted",
     "titles": {
       "newStudent": "New Student Registration",
       "newContactUs": "New Contact Us Message"

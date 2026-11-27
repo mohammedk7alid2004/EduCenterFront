@@ -70,6 +70,8 @@ import {
   BarChart3,
   Sparkles,
   TrendingUp,
+  Volume2,
+  VolumeX,
 } from 'lucide-react';
 
 function brandIcon(path: string) {
@@ -250,6 +252,8 @@ export const icons = {
   chart: BarChart3,
   sparkles: Sparkles,
   trendingUp: TrendingUp,
+  volumeOn: Volume2,
+  volumeOff: VolumeX,
 } as const;
 
 export type IconName = keyof typeof icons;

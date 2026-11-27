@@ -14,9 +14,12 @@ import { useDashboardNotifications, useDashboardNotificationsRealtime } from '..
 import type { DashboardNotificationDto } from '../types';
 import {
   formatNotificationTime,
+  isNotificationSoundEnabled,
+  playNotificationSound,
   resolveNotificationMessage,
   resolveNotificationRoute,
   resolveNotificationTitle,
+  setNotificationSoundEnabled,
 } from '../utils';
 
 export function DashboardNotificationsBell(): JSX.Element {
@@ -28,7 +31,15 @@ export function DashboardNotificationsBell(): JSX.Element {
   const enabled = Boolean(accessToken);
 
   const [open, setOpen] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(() => isNotificationSoundEnabled());
   const containerRef = useRef<HTMLDivElement>(null);
+
+  function toggleSound() {
+    const next = !soundEnabled;
+    setSoundEnabled(next);
+    setNotificationSoundEnabled(next);
+    if (next) playNotificationSound(true);
+  }
 
   const hubStatus = useDashboardNotificationsRealtime(enabled);
   const query = useDashboardNotifications(1, DASHBOARD_NOTIFICATION_PAGE_SIZE, enabled);
@@ -139,18 +150,40 @@ export function DashboardNotificationsBell(): JSX.Element {
               </span>
             </div>
 
-            {unreadCount > 0 && (
+            <div className="flex shrink-0 items-center gap-2">
               <button
                 type="button"
-                onClick={() => markAllRead.mutate()}
-                disabled={markAllRead.isPending}
-                className="shrink-0 text-xs font-medium text-primary hover:underline disabled:opacity-50"
+                onClick={toggleSound}
+                aria-label={t(
+                  soundEnabled
+                    ? 'dashboardNotifications.soundOn'
+                    : 'dashboardNotifications.soundOff',
+                )}
+                title={t(
+                  soundEnabled
+                    ? 'dashboardNotifications.soundOn'
+                    : 'dashboardNotifications.soundOff',
+                )}
+                className={`grid size-7 place-items-center rounded-lg transition hover:bg-subtle ${
+                  soundEnabled ? 'text-primary' : 'text-muted'
+                }`}
               >
-                {markAllRead.isPending
-                  ? t('common.loading')
-                  : t('dashboardNotifications.markAllRead')}
+                <Icon name={soundEnabled ? 'volumeOn' : 'volumeOff'} className="size-4" />
               </button>
-            )}
+
+              {unreadCount > 0 && (
+                <button
+                  type="button"
+                  onClick={() => markAllRead.mutate()}
+                  disabled={markAllRead.isPending}
+                  className="shrink-0 text-xs font-medium text-primary hover:underline disabled:opacity-50"
+                >
+                  {markAllRead.isPending
+                    ? t('common.loading')
+                    : t('dashboardNotifications.markAllRead')}
+                </button>
+              )}
+            </div>
           </div>
 
           {!isOnline && (

@@ -23,6 +23,7 @@ export const STORAGE_KEYS = {
   ui: 'educenter.ui',
   language: 'educenter.language',
   splashShown: 'educenter.splash_shown',
+  notificationSound: 'educenter.notification_sound',
 } as const;
 export const ROUTES = {
   home: '/',
