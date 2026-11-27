@@ -17,7 +17,7 @@ export function useDashboardNotificationsRealtime(enabled = true): DashboardHubS
   const accessToken = useAuthStore((state) => state.accessToken);
   const isOnline = useOnline();
   const queryClient = useQueryClient();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [status, setStatus] = useState<DashboardHubStatus>('idle');
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export function useDashboardNotificationsRealtime(enabled = true): DashboardHubS
       }
 
       const activeLang = i18n.resolvedLanguage ?? i18n.language;
-      toast.info(resolveNotificationTitle(incoming, activeLang), {
+      toast.info(resolveNotificationTitle(incoming, activeLang, t), {
         description: resolveNotificationMessage(incoming, activeLang),
         duration: 6000,
       });
@@ -98,7 +98,7 @@ export function useDashboardNotificationsRealtime(enabled = true): DashboardHubS
       disposed = true;
       void connection.stop();
     };
-  }, [enabled, accessToken, isOnline, queryClient, i18n]);
+  }, [enabled, accessToken, isOnline, queryClient, i18n, t]);
 
   return status;
 }

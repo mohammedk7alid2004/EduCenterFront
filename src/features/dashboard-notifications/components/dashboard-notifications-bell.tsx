@@ -189,7 +189,7 @@ export function DashboardNotificationsBell(): JSX.Element {
               </div>
             ) : (
               items.map((item) => {
-                const title = resolveNotificationTitle(item, i18n.language);
+                const title = resolveNotificationTitle(item, i18n.language, t);
                 const message = resolveNotificationMessage(item, i18n.language);
                 const timestamp = formatNotificationTime(item.createdAt, i18n.language);
                 const route = resolveNotificationRoute(item);

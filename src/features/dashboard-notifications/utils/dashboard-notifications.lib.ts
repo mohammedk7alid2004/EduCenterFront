@@ -1,11 +1,34 @@
+import type { TFunction } from 'i18next';
 import { ROUTES } from '@/shared/constants';
 import { DASHBOARD_NOTIFICATION_TYPE } from '../constants';
 import type { DashboardNotificationDto } from '../types';
 
-export function resolveNotificationTitle(item: DashboardNotificationDto, language: string): string {
+const NEW_STUDENT_TITLES = new Set(['new student registration', 'تسجيل طالب جديد']);
+const NEW_CONTACT_US_TITLES = new Set(['new contact us message', 'رسالة تواصل جديدة']);
+
+export function resolveNotificationTitle(
+  item: DashboardNotificationDto,
+  language: string,
+  t?: TFunction,
+): string {
   const isArabic = language.startsWith('ar');
   const localized = isArabic ? item.titleAr : item.titleEn;
   if (localized?.trim()) return localized.trim();
+
+  const normalizedTitle = item.title?.trim().toLowerCase() ?? '';
+  if (
+    item.type === DASHBOARD_NOTIFICATION_TYPE.newStudent ||
+    NEW_STUDENT_TITLES.has(normalizedTitle)
+  ) {
+    if (t) return t('dashboardNotifications.titles.newStudent');
+  }
+  if (
+    item.type === DASHBOARD_NOTIFICATION_TYPE.newContactUs ||
+    NEW_CONTACT_US_TITLES.has(normalizedTitle)
+  ) {
+    if (t) return t('dashboardNotifications.titles.newContactUs');
+  }
+
   if (item.title?.trim()) return item.title.trim();
   return isArabic ? item.messageAr : item.messageEn;
 }

@@ -73,7 +73,11 @@
     "liveConnected": "مباشر",
     "reconnecting": "جاري إعادة الاتصال…",
     "offline": "غير متصل",
-    "loadError": "تعذر تحميل الإشعارات."
+    "loadError": "تعذر تحميل الإشعارات.",
+    "titles": {
+      "newStudent": "تسجيل طالب جديد",
+      "newContactUs": "رسالة تواصل جديدة"
+    }
   },
   "errors": {
     "network": "يبدو أنك غير متصل بالإنترنت.",

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { TFunction } from 'i18next';
 import { ROUTES } from '@/shared/constants';
 import { DASHBOARD_NOTIFICATION_TYPE } from '../constants';
 import type { DashboardNotificationDto } from '../types';
@@ -30,6 +31,26 @@ describe('dashboard notifications helpers', () => {
     expect(resolveNotificationMessage(sampleItem, 'en')).toBe(
       'Student Ahmed registered a new account',
     );
+  });
+
+  it('translates legacy single-language DB titles to active UI language', () => {
+    const arT = ((key: string) =>
+      key === 'dashboardNotifications.titles.newContactUs'
+        ? 'رسالة تواصل جديدة'
+        : 'تسجيل طالب جديد') as unknown as TFunction;
+
+    const legacyContactUs: DashboardNotificationDto = {
+      ...sampleItem,
+      id: 'n-2',
+      type: DASHBOARD_NOTIFICATION_TYPE.general,
+      title: 'New Contact Us Message',
+      titleAr: null,
+      titleEn: null,
+      messageAr: 'تم استقبال رسالة تواصل جديدة',
+      messageEn: 'A new contact us message has been received',
+    };
+
+    expect(resolveNotificationTitle(legacyContactUs, 'ar', arT)).toBe('رسالة تواصل جديدة');
   });
 
   it('resolves student route for new student registration notifications', () => {
